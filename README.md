@@ -1,4 +1,4 @@
 WOTers
 ======
 
-Image processing laboratory
+Image processing laboratory.
