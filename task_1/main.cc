@@ -2,8 +2,15 @@
 
 int main(int argc, char *argv[])
 {
-  Image img("img.bmp");
-  printf("%d\n", img.get_surface()->format->BitsPerPixel);
+  if (argc != 2)
+  {
+    fprintf(stderr, "usage\n");
+    return 1;
+  }
+
+  Image img(argv[1]);
+  img.negative();
+  img.save();
 
   return 0;
 }
