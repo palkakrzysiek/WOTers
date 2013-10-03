@@ -143,6 +143,66 @@ void Image::brightness(double by_percent)
   }
 }
 
+
+// todo:
+// nie działa zmniejszanie kontrastu
+void Image::contrast(double by_percent)
+{
+  int c = by_percent * 255;
+
+  double f = ((259* (c + 255)) / (255 * (259 - c)));
+
+  for (int i = 0; i < image->w; ++i)
+  {
+    for (int j = 0; j < image->h; ++j)
+    {
+      uint8_t r, g, b;
+      SDL_GetRGB(get_pixel(i, j), image->format, &r, &g, &b);
+
+      if (((r - 0x80) * f) + 0x80 > 0xff)
+      {
+        r = 0xff;
+      }
+      else if (((r - 0x80) * f) + 0x80 < 0)
+      {
+        r = 0;
+      }
+      else
+      {
+        r = ((r - 0x80) * f) + 0x80;
+      }
+
+      if (((g - 0x80) * f) + 0x80 > 0xff)
+      {
+        g = 0xff;
+      }
+      else if (((g - 0x80) * f) + 0x80 < 0)
+      {
+        g = 0;
+      }
+      else
+      {
+        g = ((g - 0x80) * f) + 0x80;
+      }
+
+      if (((b - 0x80) * f) + 0x80 > 0xff)
+      {
+        b = 0xff;
+      }
+      else if (((b - 0x80) * f) + 0x80 < 0)
+      {
+        b = 0;
+      }
+      else
+      {
+        b = ((b - 0x80) * f) + 0x80;
+      }
+
+      set_pixel(i, j, SDL_MapRGB(image->format, r, g, b));
+    }
+  }
+}
+
 void Image::negative()
 {
   for (int i = 0; i < image->w; ++i)
