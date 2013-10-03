@@ -9,7 +9,8 @@ int main(int argc, char *argv[])
   }
 
   Image img(argv[1]);
-  img.negative();
+  // img.negative();
+  img.brightness(0.5);
   img.save();
 
   return 0;

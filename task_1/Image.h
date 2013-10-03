@@ -6,6 +6,7 @@
 #include <string>
 #include <cstdio>
 #include <cstdint>
+#include <algorithm>
 
 class Image
 {
