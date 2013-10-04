@@ -1,13 +1,17 @@
 #include "Image.h"
 
-int main()
+int main(int argc, char *argv[])
 {
-  // IMG_Init();
+  if (argc != 2)
+  {
+    fprintf(stderr, "usage\n");
+    return 1;
+  }
 
-  Image img("img.bmp");
-  printf("%d\n", img.get_surface()->format->BitsPerPixel);
-
-  IMG_Quit();
+  Image img(argv[1]);
+  // img.negative();
+  img.brightness(0.5);
+  img.save();
 
   return 0;
 }
