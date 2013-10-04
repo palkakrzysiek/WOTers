@@ -144,13 +144,12 @@ void Image::brightness(double by_percent)
 }
 
 
-// todo:
-// nie działa zmniejszanie kontrastu
 void Image::contrast(double by_percent)
 {
-  int c = by_percent * 255;
+  double c = by_percent * 255;
 
-  double f = ((259* (c + 255)) / (255 * (259 - c)));
+  double f = ((259.0 * (c + 255.0)) / (255.0 * (259.0 - c)));
+  printf("f: %g\n", f);
 
   for (int i = 0; i < image->w; ++i)
   {
