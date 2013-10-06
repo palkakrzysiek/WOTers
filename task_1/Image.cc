@@ -12,6 +12,7 @@ Image::Image(const std::string &filename)
 
 Image::~Image()
 {
+  SDL_FreeSurface(image);
 }
 
 const SDL_Surface *Image::get_surface()
@@ -24,80 +25,106 @@ void Image::save()
   SDL_SaveBMP(image, "out.bmp");
 }
 
-void Image::set_pixel(int x, int y, uint32_t pixel)
+// function setting individual pixel value
+// depends on image format (bytes per pixel)
+// tak naprawdę to nie do końca rozumiem jak (i dlaczego tak) działa
+// znalazłem w internecie
+void Image::set_pixel(int x, int y, uint32_t pixel, SDL_Surface *surface = nullptr)
 {
-    int bpp = image->format->BytesPerPixel;
-    uint8_t *p = (uint8_t *)image->pixels + y * image->pitch + x * bpp;
+  if (surface == nullptr)
+    surface = image;
 
-    switch(bpp) {
+  int bpp = surface->format->BytesPerPixel;
+  uint8_t *p = (uint8_t *) surface->pixels + y * surface->pitch + x * bpp;
+
+  switch (bpp) {
+    // 8
     case 1:
-        *p = pixel;
-        break;
+      *p = pixel;
+      break;
 
+    // 16 bit
     case 2:
-        *(uint16_t *)p = pixel;
-        break;
+      *(uint16_t *) p = pixel;
+      break;
 
+    // 24 bit
     case 3:
-        if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-            p[0] = (pixel >> 16) & 0xff;
-            p[1] = (pixel >> 8) & 0xff;
-            p[2] = pixel & 0xff;
-        } else {
-            p[0] = pixel & 0xff;
-            p[1] = (pixel >> 8) & 0xff;
-            p[2] = (pixel >> 16) & 0xff;
-        }
-        break;
+      if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+          p[0] = (pixel >> 16) & 0xff;
+          p[1] = (pixel >> 8) & 0xff;
+          p[2] = pixel & 0xff;
+      } else {
+          p[0] = pixel & 0xff;
+          p[1] = (pixel >> 8) & 0xff;
+          p[2] = (pixel >> 16) & 0xff;
+      }
+      break;
 
+    // 32 bit
     case 4:
-        *(uint32_t *)p = pixel;
-        break;
-    }
+      *(uint32_t *) p = pixel;
+      break;
+  }
 }
 
-uint32_t Image::get_pixel(int x, int y)
+// function getting individual pixel value
+// depends on image format (bytes per pixel)
+// tak naprawdę to nie do końca rozumiem jak (i dlaczego tak) działa
+// znalazłem w internecie
+uint32_t Image::get_pixel(int x, int y, SDL_Surface *surface = nullptr)
 {
-    int bpp = image->format->BytesPerPixel;
-    uint8_t *p = (uint8_t *)image->pixels + y * image->pitch + x * bpp;
+  if (surface == nullptr)
+    surface = image;
 
-    switch(bpp) {
+  int bpp = surface->format->BytesPerPixel;
+  uint8_t *p = (uint8_t *)surface->pixels + y * surface->pitch + x * bpp;
+
+  switch (bpp) {
+    // 8 bit
     case 1:
-        return *(uint8_t *)p;
-        break;
+      return *(uint8_t *)p;
+      break;
 
+    // 16 bit
     case 2:
-        return *(uint16_t *)p;
-        break;
+      return *(uint16_t *)p;
+      break;
 
+    // 24 bit
     case 3:
-        if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
-        {
-            return p[0] << 16 | p[1] << 8 | p[2];
-        }
-        else
-        {
-            return p[0] | p[1] << 8 | p[2] << 16;
-        }
+      if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+      {
+          return p[0] << 16 | p[1] << 8 | p[2];
+      }
+      else
+      {
+          return p[0] | p[1] << 8 | p[2] << 16;
+      }
         
-        break;
+      break;
 
+    // 32 bit
     case 4:
-        return *(uint32_t *)p;
-        break;
-    }
+      return *(uint32_t *)p;
+      break;
+  }
 }
 
 void Image::brightness(double by_percent)
-{
+{ 
+  // birghtness can be changed from -255 to 255
+  int by = by_percent * 0xff;
+
+  uint8_t r, g, b;
+
+  // change value of each individual pixel color
+  // also check that color value is in range [0, 255]
   for (int i = 0; i < image->w; ++i)
   {
     for (int j = 0; j < image->h; ++j)
     {
-      uint8_t r, g, b;
       SDL_GetRGB(get_pixel(i, j), image->format, &r, &g, &b);
-
-      int by = by_percent * 0xff;
 
       if (r + by > 0xff)
       {
@@ -138,6 +165,7 @@ void Image::brightness(double by_percent)
         b += by;
       }
 
+      // setting new pixel value
       set_pixel(i, j, SDL_MapRGB(image->format, r, g, b));
     }
   }
@@ -146,16 +174,21 @@ void Image::brightness(double by_percent)
 
 void Image::contrast(double by_percent)
 {
+  // contrast change varies from -255 to 255
+  // thus c must be in range [-1.0, 1.0]
   double c = by_percent * 255;
 
+  // calculate contrast factor
   double f = ((259.0 * (c + 255.0)) / (255.0 * (259.0 - c)));
-  printf("f: %g\n", f);
 
+  uint8_t r, g, b;
+
+  // change contrast of each individual pixel color
+  // also check that color value is in range [0, 255]
   for (int i = 0; i < image->w; ++i)
   {
     for (int j = 0; j < image->h; ++j)
     {
-      uint8_t r, g, b;
       SDL_GetRGB(get_pixel(i, j), image->format, &r, &g, &b);
 
       if (((r - 0x80) * f) + 0x80 > 0xff)
@@ -197,6 +230,7 @@ void Image::contrast(double by_percent)
         b = ((b - 0x80) * f) + 0x80;
       }
 
+      // setting new pixel value
       set_pixel(i, j, SDL_MapRGB(image->format, r, g, b));
     }
   }
@@ -211,4 +245,56 @@ void Image::negative()
       set_pixel(i, j, ~get_pixel(i, j));
     }
   }
+}
+
+void Image::hflip()
+{
+  // create a copy of image
+  SDL_Surface *temp = SDL_ConvertSurface(image, image->format, image->flags);
+
+  // iterate through the lines of image
+  for (int j = 0; j < image->h; ++j)
+  {
+    for (int i = 0; i < image->w; ++i)
+    {
+      // assign the values of last pixels in the line of image
+      // to the first pixel values of temp
+      set_pixel(i, j, get_pixel(image->w - 1 - i, j), temp);
+    }
+  }
+
+  // free image
+  SDL_FreeSurface(image);
+
+  // use temp as new image
+  image = temp;
+}
+
+void Image::vflip()
+{
+  // create a copy of image
+  SDL_Surface *temp = SDL_ConvertSurface(image, image->format, image->flags);
+
+  // iterate through the lines of image
+  for (int i = 0; i < image->w; ++i)
+  {
+    for (int j = 0; j < image->h; ++j)
+    {
+      // assign the values of last pixels in the line of image
+      // to the first pixel values of temp
+      set_pixel(i, j, get_pixel(i, image->h - 1 -j), temp);
+    }
+  }
+
+  // free image
+  SDL_FreeSurface(image);
+
+  // use temp as new image
+  image = temp;
+}
+
+void Image::dflip()
+{
+  hflip();
+  vflip();
 }

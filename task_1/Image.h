@@ -19,8 +19,8 @@ public:
 private:
   SDL_Surface *image;
 
-  void set_pixel(int x, int y, uint32_t value);
-  uint32_t get_pixel(int x, int y);
+  void set_pixel(int x, int y, uint32_t value, SDL_Surface* surface);
+  uint32_t get_pixel(int x, int y, SDL_Surface* surface);
 
 public:
   void save();
