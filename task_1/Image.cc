@@ -249,48 +249,35 @@ void Image::negative()
 
 void Image::hflip()
 {
-  // create a copy of image
-  SDL_Surface *temp = SDL_ConvertSurface(image, image->format, image->flags);
-
   // iterate through the lines of image
   for (int j = 0; j < image->h; ++j)
   {
-    for (int i = 0; i < image->w; ++i)
+    for (int i = 0; i < image->w/2; ++i)
     {
       // assign the values of last pixels in the line of image
       // to the first pixel values of temp
-      set_pixel(i, j, get_pixel(image->w - 1 - i, j), temp);
+      uint32_t temp = get_pixel(i, j);
+      set_pixel(i, j, get_pixel(image->w - 1 - i, j));
+      set_pixel(image->w - 1 - i, j, temp);
     }
   }
-
-  // free image
-  SDL_FreeSurface(image);
-
-  // use temp as new image
-  image = temp;
 }
 
 void Image::vflip()
 {
-  // create a copy of image
-  SDL_Surface *temp = SDL_ConvertSurface(image, image->format, image->flags);
-
   // iterate through the lines of image
   for (int i = 0; i < image->w; ++i)
   {
-    for (int j = 0; j < image->h; ++j)
+    for (int j = 0; j < image->h/2; ++j)
     {
       // assign the values of last pixels in the line of image
       // to the first pixel values of temp
-      set_pixel(i, j, get_pixel(i, image->h - 1 -j), temp);
+      uint32_t temp = get_pixel(i, j);
+      set_pixel(i, j, get_pixel(i, image->h - 1 - j));
+      set_pixel(i, image->h - 1 - j, temp);
     }
   }
 
-  // free image
-  SDL_FreeSurface(image);
-
-  // use temp as new image
-  image = temp;
 }
 
 void Image::dflip()
