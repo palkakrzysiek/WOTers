@@ -4,22 +4,25 @@ BrightnessTransformation::BrightnessTransformation(double by)
   :
   by_percent(by)
 {
+  printf("Constructor\n");
 }
 
-void BrightnessTransformation::transform(Image *image)
+void BrightnessTransformation::transform(Image &image)
 {
   // birghtness can be changed from -255 to 255
   int by = by_percent * 0xff;
 
   uint8_t r, g, b;
 
+  printf("Before loop\n");
+
   // change value of each individual pixel color
   // also check that color value is in range [0, 255]
-  for (int i = 0; i < image->get_surface()->w; ++i)
+  for (int i = 0; i < image.get_surface()->w; ++i)
   {
-    for (int j = 0; j < image->get_surface()->h; ++j)
+    for (int j = 0; j < image.get_surface()->h; ++j)
     {
-      SDL_GetRGB(image->get_pixel(i, j), image->get_surface()->format, &r, &g, &b);
+      SDL_GetRGB(image.get_pixel(i, j), image.get_surface()->format, &r, &g, &b);
 
       if (r + by > 0xff)
       {
@@ -61,7 +64,7 @@ void BrightnessTransformation::transform(Image *image)
       }
 
       // setting new pixel value
-      image->set_pixel(i, j, SDL_MapRGB(image->get_surface()->format, r, g, b));
+      image.set_pixel(i, j, SDL_MapRGB(image.get_surface()->format, r, g, b));
     }
   }
 }

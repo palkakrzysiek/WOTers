@@ -22,34 +22,31 @@ public:
   void set_pixel(int x, int y, uint32_t value);
   uint32_t get_pixel(int x, int y);
 
+  void apply_transformation(Transformation *t);
+
+  void save(const std::string& filename);
+
 private:
   SDL_Surface *image;
 
-public:
-  void apply_transformation(Transformation *t);
+  // void brightness(double by_percent);
+  // void contrast(double by_percent);
+  // void negative();
 
-  void save();
+  // void hflip();
+  // void vflip();
+  // void dflip();
+  // void shrink(double by_percent);
+  // void enlarge(double by_percent);
 
-  void brightness(double by_percent);
-  void contrast(double by_percent);
-  void negative();
+  // void alpha();
+  // void cmean();
 
-  void hflip();
-  void vflip();
-  void dflip();
-  void shrink(double by_percent);
-  void enlarge(double by_percent);
-
-  void alpha();
-  void cmean();
-
-  void mse();
-  void pmse();
-  void snr();
-  void psnr();
-  void md();
-
-  void binarize();
+  // void mse();
+  // void pmse();
+  // void snr();
+  // void psnr();
+  // void md();
 
 };
 

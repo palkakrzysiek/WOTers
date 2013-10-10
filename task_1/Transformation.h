@@ -8,7 +8,7 @@ class Image;
 class Transformation
 {
 public:
-  virtual void transform(Image *image) = 0;
+  virtual void transform(Image &image) = 0;
 
 };
 

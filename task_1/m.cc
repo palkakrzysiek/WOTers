@@ -1,9 +1,10 @@
 #include "Image.h"
-#include "BrightnessTransformation.h"
+#include "Transformations.h"
 #include <sys/time.h>
 #include <cstdint>
 #include <iostream>
 #include <iomanip>
+#include <string>
 
 using namespace std;
 
@@ -18,13 +19,31 @@ static uint64_t now() {
 
 int main(int argc, char const *argv[])
 {
-  Image img(argv[1]);
+  Image img(argv[2]);
+
+  Transformation *t = nullptr;
+
+  string o = argv[1];
+
+  if (o == "b")
+    t = new BrightnessTransformation(0.5);
+  else if (o == "c") 
+    t = new ContrastTransformation(0.5);
+  else if (o == "c")
+    t = new NegativeTransformation();
+  else if (o == "h")   
+    t = new HorizontalFlip();
+  else if (o == "v")
+    t = new VerticalFlip();
+  else if (o == "d")
+    t = new DiagonalFlip();
+  
   
   uint64_t timer = now();
-  img.apply_transformation(new BrightnessTransformation(0.5));
+  img.apply_transformation(t);
   timer = now() - timer;
 
-  cout << setprecision(4) << (double)timer/1e6 << " s" << endl;
+  printf("%gs\n", (double)timer/1e6)
 
   img.save();
 
