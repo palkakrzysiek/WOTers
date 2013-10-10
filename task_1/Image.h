@@ -6,7 +6,10 @@
 #include <string>
 #include <cstdio>
 #include <cstdint>
-#include <algorithm>
+
+#include "Transformation.h"
+
+class Transformation;
 
 class Image
 {
@@ -16,13 +19,15 @@ public:
 
   const SDL_Surface *get_surface();
 
+  void set_pixel(int x, int y, uint32_t value);
+  uint32_t get_pixel(int x, int y);
+
 private:
   SDL_Surface *image;
 
-  void set_pixel(int x, int y, uint32_t value, SDL_Surface* surface);
-  uint32_t get_pixel(int x, int y, SDL_Surface* surface);
-
 public:
+  void apply_transformation(Transformation *t);
+
   void save();
 
   void brightness(double by_percent);
@@ -43,6 +48,8 @@ public:
   void snr();
   void psnr();
   void md();
+
+  void binarize();
 
 };
 

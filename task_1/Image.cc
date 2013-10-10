@@ -1,4 +1,5 @@
 #include "Image.h"
+#include <cmath>
 
 Image::Image(const std::string &filename)
 {
@@ -29,15 +30,13 @@ void Image::save()
 // depends on image format (bytes per pixel)
 // tak naprawdę to nie do końca rozumiem jak (i dlaczego tak) działa
 // znalazłem w internecie
-void Image::set_pixel(int x, int y, uint32_t pixel, SDL_Surface *surface = nullptr)
+void Image::set_pixel(int x, int y, uint32_t pixel)
 {
-  if (surface == nullptr)
-    surface = image;
+  int bpp = image->format->BytesPerPixel;
+  uint8_t *p = (uint8_t *) image->pixels + y * image->pitch + x * bpp;
 
-  int bpp = surface->format->BytesPerPixel;
-  uint8_t *p = (uint8_t *) surface->pixels + y * surface->pitch + x * bpp;
-
-  switch (bpp) {
+  switch (bpp)
+  {
     // 8
     case 1:
       *p = pixel;
@@ -50,11 +49,14 @@ void Image::set_pixel(int x, int y, uint32_t pixel, SDL_Surface *surface = nullp
 
     // 24 bit
     case 3:
-      if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+      if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+      {
           p[0] = (pixel >> 16) & 0xff;
           p[1] = (pixel >> 8) & 0xff;
           p[2] = pixel & 0xff;
-      } else {
+      } 
+      else 
+      {
           p[0] = pixel & 0xff;
           p[1] = (pixel >> 8) & 0xff;
           p[2] = (pixel >> 16) & 0xff;
@@ -72,15 +74,13 @@ void Image::set_pixel(int x, int y, uint32_t pixel, SDL_Surface *surface = nullp
 // depends on image format (bytes per pixel)
 // tak naprawdę to nie do końca rozumiem jak (i dlaczego tak) działa
 // znalazłem w internecie
-uint32_t Image::get_pixel(int x, int y, SDL_Surface *surface = nullptr)
+uint32_t Image::get_pixel(int x, int y)
 {
-  if (surface == nullptr)
-    surface = image;
+  int bpp = image->format->BytesPerPixel;
+  uint8_t *p = (uint8_t *) image->pixels + y * image->pitch + x * bpp;
 
-  int bpp = surface->format->BytesPerPixel;
-  uint8_t *p = (uint8_t *)surface->pixels + y * surface->pitch + x * bpp;
-
-  switch (bpp) {
+  switch (bpp)
+  {
     // 8 bit
     case 1:
       return *(uint8_t *)p;
@@ -108,7 +108,16 @@ uint32_t Image::get_pixel(int x, int y, SDL_Surface *surface = nullptr)
     case 4:
       return *(uint32_t *)p;
       break;
+
+    default:
+      return 0;
   }
+}
+
+void Image::apply_transformation(Transformation *t)
+{
+  t->transform(this);
+  delete t;
 }
 
 void Image::brightness(double by_percent)
@@ -265,7 +274,7 @@ void Image::hflip()
 
 void Image::vflip()
 {
-  // iterate through the lines of image
+  // iterate through the columns of image
   for (int i = 0; i < image->w; ++i)
   {
     for (int j = 0; j < image->h/2; ++j)
