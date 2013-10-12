@@ -4,11 +4,10 @@
 #include "HorizontalFlip.h"
 #include "VerticalFlip.h"
 
-class DiagonalFlip : public HorizontalFlip, public VerticalFlip
+class DiagonalFlip : public Transformation
 {
 public:
   void transform(Image &image);
-  void flip2(Image &image);
     
 };
 

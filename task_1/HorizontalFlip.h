@@ -3,7 +3,7 @@
 
 #include "Transformation.h"
 
-class HorizontalFlip : public virtual Transformation
+class HorizontalFlip : public Transformation
 {
 public:
   void transform(Image &image);

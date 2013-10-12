@@ -37,8 +37,6 @@ void Resize::transform(Image &image)
     height = scale_y * image.get_surface()->h;
   }
 
-  printf("%d\n", image.get_surface()->format->BitsPerPixel);
-
   // creating resized SDL_Surface
   SDL_Surface *sptr = SDL_CreateRGBSurface(image.get_surface()->flags,
                                            width,
@@ -57,7 +55,7 @@ void Resize::transform(Image &image)
   }
 
   // when depth is 8 SDL_CreateRGBSurface allocates empty palete
-  // which SDL_ConvertSurface consider an error causing 
+  // which SDL_ConvertSurface considers an error causing 
   // segmentation fault
   // 
   // manually copying palette

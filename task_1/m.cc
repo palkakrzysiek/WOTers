@@ -39,7 +39,7 @@ int main(int argc, char const *argv[])
   else if (o == "d")
     t = new DiagonalFlip();
   else if(o == "r")
-    t = new Resize(350, 1280, false);
+    t = new Resize(120);
   
   assert(t != nullptr);
   

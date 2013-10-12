@@ -10,7 +10,6 @@ void NegativeTransformation::transform(Image &image)
   {
     for (j = 0; j < image.get_surface()->h; ++j)
     {
-      // printf("%d\n", omp_get_thread_num());
       image.set_pixel(i, j, ~(image.get_pixel(i, j)));
     }
   }
