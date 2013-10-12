@@ -2,10 +2,13 @@
 
 void HorizontalFlip::transform(Image &image)
 {
+  int i, j;
+
   // iterate through the lines of image
-  for (int j = 0; j < image.get_surface()->h; ++j)
+# pragma omp parallel for private(i)
+  for (j = 0; j < image.get_surface()->h; ++j)
   {
-    for (int i = 0; i < image.get_surface()->w/2; ++i)
+    for (i = 0; i < image.get_surface()->w/2; ++i)
     {
       // assign the values of last pixels in the line of image
       // to the first pixel values of temp

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <cassert>
 
 using namespace std;
 
@@ -29,7 +30,7 @@ int main(int argc, char const *argv[])
     t = new BrightnessTransformation(0.5);
   else if (o == "c") 
     t = new ContrastTransformation(0.5);
-  else if (o == "c")
+  else if (o == "n")
     t = new NegativeTransformation();
   else if (o == "h")   
     t = new HorizontalFlip();
@@ -37,15 +38,18 @@ int main(int argc, char const *argv[])
     t = new VerticalFlip();
   else if (o == "d")
     t = new DiagonalFlip();
+  else if(o == "r")
+    t = new Resize(350, 1280, false);
   
+  assert(t != nullptr);
   
   uint64_t timer = now();
   img.apply_transformation(t);
   timer = now() - timer;
 
-  printf("%gs\n", (double)timer/1e6)
+  printf("%gs\n", (double)timer/1e6);
 
-  img.save();
+  img.save("out.bmp");
 
   return 0;
 }

@@ -10,6 +10,8 @@ class Transformation
 public:
   virtual void transform(Image &image) = 0;
 
+  uint8_t trunc(int value);
+
 };
 
 #endif

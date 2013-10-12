@@ -1,12 +1,17 @@
 #include "NegativeTransformation.h"
+#include <omp.h>
 
 void NegativeTransformation::transform(Image &image)
 {
-  for (int i = 0; i < image.get_surface()->w; ++i)
+  int i, j;
+
+# pragma omp parallel for private(j)
+  for (i = 0; i < image.get_surface()->w; ++i)
   {
-    for (int j = 0; j < image.get_surface()->h; ++j)
+    for (j = 0; j < image.get_surface()->h; ++j)
     {
-      image.set_pixel(i, j, ~image.get_pixel(i, j));
+      // printf("%d\n", omp_get_thread_num());
+      image.set_pixel(i, j, ~(image.get_pixel(i, j)));
     }
   }
 }

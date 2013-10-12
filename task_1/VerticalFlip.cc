@@ -2,10 +2,13 @@
 
 void VerticalFlip::transform(Image &image)
 {
+  int i, j;
+
   // iterate through the columns of image
-  for (int i = 0; i < image.get_surface()->w; ++i)
+# pragma omp parallel for private(j)
+  for (i = 0; i < image.get_surface()->w; ++i)
   {
-    for (int j = 0; j < image.get_surface()->h/2; ++j)
+    for (j = 0; j < image.get_surface()->h/2; ++j)
     {
       // assign the values of last pixels in the line of image
       // to the first pixel values of temp

@@ -7,5 +7,6 @@
 #include "HorizontalFlip.h"
 #include "VerticalFlip.h"
 #include "DiagonalFlip.h"
+#include "Resize.h"
 
 #endif

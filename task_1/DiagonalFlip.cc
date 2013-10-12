@@ -2,6 +2,24 @@
 
 void DiagonalFlip::transform(Image &image)
 {
-  HorizontalFlip::transform(image);
-  VerticalFlip::transform(image);
+  // HorizontalFlip::transform(image);
+  // VerticalFlip::transform(image);
+  flip2(image);
+}
+
+void DiagonalFlip::flip2(Image &image)
+{
+  // iterate through the lines of image
+  for (int i = 0; i < image.get_surface()->w; ++i)
+  {
+    for (int j = 0; j < image.get_surface()->h; ++j)
+    {
+      // assign the values of last pixels in the line of image
+      // to the first pixel values of temp
+      // uint32_t temp = image.get_pixel(i, j);
+      // image.set_pixel(i, j, image.get_pixel(image.get_surface()->w - 1 - i, image.get_surface()->h - 1 - j));
+      // image.set_pixel(image.get_surface()->w - 1 - i, image.get_surface()->h - 1 - j, temp);
+      image.set_pixel(i, j, image.get_pixel(image.get_surface()->w - 1 - i, image.get_surface()->h - 1 - j));
+    }
+  }
 }

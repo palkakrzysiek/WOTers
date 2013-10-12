@@ -15,6 +15,11 @@ class Image
 {
 public:
   Image(const std::string &filename);
+  Image(SDL_Surface *surface);
+  Image(Image &other);
+  const Image& operator=(Image &other);
+  const Image& operator=(SDL_Surface *surface);
+
   ~Image();
 
   const SDL_Surface *get_surface();

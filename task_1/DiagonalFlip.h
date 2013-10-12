@@ -8,6 +8,7 @@ class DiagonalFlip : public HorizontalFlip, public VerticalFlip
 {
 public:
   void transform(Image &image);
+  void flip2(Image &image);
     
 };
 

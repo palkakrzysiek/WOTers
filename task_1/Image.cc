@@ -1,5 +1,4 @@
 #include "Image.h"
-#include <cmath>
 
 Image::Image(const std::string &filename)
 {
@@ -9,6 +8,35 @@ Image::Image(const std::string &filename)
     fprintf(stderr, "Error: %s\n", IMG_GetError());
     exit(1);
   }
+}
+
+Image::Image(SDL_Surface *surface)
+{
+  image = surface;
+}
+
+Image::Image(Image &other)
+{
+  if (image != nullptr)
+    SDL_FreeSurface(image);
+
+  image = SDL_ConvertSurface((SDL_Surface *) other.get_surface(),
+                             other.get_surface()->format,
+                             other.get_surface()->flags);
+}
+
+const Image& Image::operator=(Image &other)
+{
+  if (image != nullptr)
+  {
+    SDL_FreeSurface(image);
+  }
+
+  image = SDL_ConvertSurface((SDL_Surface *) other.get_surface(),
+                             other.get_surface()->format,
+                             other.get_surface()->flags);
+
+  return *this;
 }
 
 Image::~Image()
@@ -23,14 +51,14 @@ const SDL_Surface *Image::get_surface()
 
 void Image::save(const std::string &filename)
 {
-  SDL_SaveBMP(image, filename);
+  SDL_SaveBMP(image, filename.c_str());
 }
 
 // function setting individual pixel value
 // depends on image format (bytes per pixel)
 void Image::set_pixel(int x, int y, uint32_t pixel)
 {
-  int bpp = image->format->BytesPerPixel;
+  int bpp = image->format->BitsPerPixel / 8;
   uint8_t *p = (uint8_t *) image->pixels + y * image->pitch + x * bpp;
 
   switch (bpp)
@@ -72,7 +100,7 @@ void Image::set_pixel(int x, int y, uint32_t pixel)
 // depends on image format (bytes per pixel)
 uint32_t Image::get_pixel(int x, int y)
 {
-  int bpp = image->format->BytesPerPixel;
+  int bpp = image->format->BitsPerPixel / 8;
   uint8_t *p = (uint8_t *) image->pixels + y * image->pitch + x * bpp;
 
   switch (bpp)
@@ -112,7 +140,7 @@ uint32_t Image::get_pixel(int x, int y)
 
 void Image::apply_transformation(Transformation *t)
 {
-  printf("Before transform\n");
   t->transform(*this);
   delete t;
 }
+
