@@ -11,6 +11,10 @@ Parser::Parser(int &argc, char** argv)
     desc.add_options()
         ("help,h", "produce help message")
         ("verbose,v", "rant and rave")
+        ("file,f", po::value<std::string>()->required(),
+         "input file")
+        ("output,o", po::value<std::string>()->default_value("out.bmp"),
+         "input file")
         ("brightness,b", po::value<double>(),
          "modify brightness (in percents) [-100:100]")
         ("contrast,c", po::value<double>(),
@@ -48,10 +52,15 @@ Parser::Parser(int &argc, char** argv)
                 << desc << std::endl; 
             exit(0);
         } 
-        std::cout << vm.count("brightness");
+        if ( !vm.count("file")  ) 
+        { 
+            std::cout << "Name of the file must be given\n\
+Command Line Image processing tool" << std::endl 
+                << desc << std::endl; 
+            exit(0);
+        } 
         po::notify(vm); // throws on error, so do after help in case 
         // there are any problems 
-        std::cout << vm.count("brightness");
     } 
     catch(po::error& e) 
     { 
@@ -61,6 +70,16 @@ Parser::Parser(int &argc, char** argv)
     } 
 
 
+}
+
+std::string Parser::getFilename()
+{
+    return vm["file"].as<std::string>();
+}
+
+std::string Parser::getOutFilename()
+{
+    return vm["output"].as<std::string>();
 }
 
 bool Parser::setBrightness()

@@ -24,6 +24,8 @@ class Parser{
 
     public:
 
+        std::string getFilename();
+        std::string getOutFilename();
         bool setBrightness();
         double getBrightnessValue();
         bool setContrast();
