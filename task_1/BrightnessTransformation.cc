@@ -6,62 +6,31 @@ BrightnessTransformation::BrightnessTransformation(double by)
 {
 }
 
-void BrightnessTransformation::transform(Image *image)
+void BrightnessTransformation::transform(Image &image)
 {
   // birghtness can be changed from -255 to 255
   int by = by_percent * 0xff;
 
-  uint8_t r, g, b;
+  int i, j;
 
   // change value of each individual pixel color
   // also check that color value is in range [0, 255]
-  for (int i = 0; i < image->get_surface()->w; ++i)
+# pragma omp parallel for private(i)
+  for (j = 0; j < image.get_surface()->h; ++j)
   {
-    for (int j = 0; j < image->get_surface()->h; ++j)
+    for (i = 0; i < image.get_surface()->w; ++i)
     {
-      SDL_GetRGB(image->get_pixel(i, j), image->get_surface()->format, &r, &g, &b);
+      uint8_t r, g, b, a;
 
-      if (r + by > 0xff)
-      {
-        r = 0xff;
-      }
-      else if (r + by < 0)
-      {
-        r = 0;
-      }
-      else
-      {
-        r += by;
-      }
+      SDL_GetRGBA(image.get_pixel(i, j), image.get_surface()->format, &r, &g, &b, &a);
 
-      if (g + by > 0xff)
-      {
-        g = 0xff;
-      }
-      else if (g + by < 0)
-      {
-        g = 0;
-      }
-      else
-      {
-        g += by;
-      }
-
-      if (b + by > 0xff)
-      {
-        b = 0xff;
-      }
-      else if (b + by < 0)
-      {
-        b = 0;
-      }
-      else
-      {
-        b += by;
-      }
+      r = trunc(r + by);
+      g = trunc(g + by);
+      b = trunc(b + by);
+      a = trunc(a + by);
 
       // setting new pixel value
-      image->set_pixel(i, j, SDL_MapRGB(image->get_surface()->format, r, g, b));
+      image.set_pixel(i, j, SDL_MapRGBA(image.get_surface()->format, r, g, b, a));
     }
   }
 }

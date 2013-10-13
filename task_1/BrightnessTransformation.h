@@ -9,7 +9,7 @@ class BrightnessTransformation : public Transformation
 public:
   BrightnessTransformation(double by);
 
-  virtual void transform(Image *image);
+  void transform(Image &image);
 
 private:
   double by_percent;

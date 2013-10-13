@@ -1,5 +1,4 @@
 #include "Image.h"
-#include <cmath>
 
 Image::Image(const std::string &filename)
 {
@@ -9,6 +8,35 @@ Image::Image(const std::string &filename)
     fprintf(stderr, "Error: %s\n", IMG_GetError());
     exit(1);
   }
+}
+
+Image::Image(SDL_Surface *surface)
+{
+  image = surface;
+}
+
+Image::Image(Image &other)
+{
+  if (image != nullptr)
+    SDL_FreeSurface(image);
+
+  image = SDL_ConvertSurface((SDL_Surface *) other.get_surface(),
+                             other.get_surface()->format,
+                             other.get_surface()->flags);
+}
+
+const Image& Image::operator=(Image &other)
+{
+  if (image != nullptr)
+  {
+    SDL_FreeSurface(image);
+  }
+
+  image = SDL_ConvertSurface((SDL_Surface *) other.get_surface(),
+                             other.get_surface()->format,
+                             other.get_surface()->flags);
+
+  return *this;
 }
 
 Image::~Image()
@@ -21,18 +49,16 @@ const SDL_Surface *Image::get_surface()
   return image;
 }
 
-void Image::save()
+void Image::save(const std::string &filename)
 {
-  SDL_SaveBMP(image, "out.bmp");
+  SDL_SaveBMP(image, filename.c_str());
 }
 
 // function setting individual pixel value
 // depends on image format (bytes per pixel)
-// tak naprawdę to nie do końca rozumiem jak (i dlaczego tak) działa
-// znalazłem w internecie
 void Image::set_pixel(int x, int y, uint32_t pixel)
 {
-  int bpp = image->format->BytesPerPixel;
+  int bpp = image->format->BitsPerPixel / 8;
   uint8_t *p = (uint8_t *) image->pixels + y * image->pitch + x * bpp;
 
   switch (bpp)
@@ -72,11 +98,9 @@ void Image::set_pixel(int x, int y, uint32_t pixel)
 
 // function getting individual pixel value
 // depends on image format (bytes per pixel)
-// tak naprawdę to nie do końca rozumiem jak (i dlaczego tak) działa
-// znalazłem w internecie
 uint32_t Image::get_pixel(int x, int y)
 {
-  int bpp = image->format->BytesPerPixel;
+  int bpp = image->format->BitsPerPixel / 8;
   uint8_t *p = (uint8_t *) image->pixels + y * image->pitch + x * bpp;
 
   switch (bpp)
@@ -116,181 +140,7 @@ uint32_t Image::get_pixel(int x, int y)
 
 void Image::apply_transformation(Transformation *t)
 {
-  t->transform(this);
+  t->transform(*this);
   delete t;
 }
 
-void Image::brightness(double by_percent)
-{ 
-  // birghtness can be changed from -255 to 255
-  int by = by_percent * 0xff;
-
-  uint8_t r, g, b;
-
-  // change value of each individual pixel color
-  // also check that color value is in range [0, 255]
-  for (int i = 0; i < image->w; ++i)
-  {
-    for (int j = 0; j < image->h; ++j)
-    {
-      SDL_GetRGB(get_pixel(i, j), image->format, &r, &g, &b);
-
-      if (r + by > 0xff)
-      {
-        r = 0xff;
-      }
-      else if (r + by < 0)
-      {
-        r = 0;
-      }
-      else
-      {
-        r += by;
-      }
-
-      if (g + by > 0xff)
-      {
-        g = 0xff;
-      }
-      else if (g + by < 0)
-      {
-        g = 0;
-      }
-      else
-      {
-        g += by;
-      }
-
-      if (b + by > 0xff)
-      {
-        b = 0xff;
-      }
-      else if (b + by < 0)
-      {
-        b = 0;
-      }
-      else
-      {
-        b += by;
-      }
-
-      // setting new pixel value
-      set_pixel(i, j, SDL_MapRGB(image->format, r, g, b));
-    }
-  }
-}
-
-
-void Image::contrast(double by_percent)
-{
-  // contrast change varies from -255 to 255
-  // thus c must be in range [-1.0, 1.0]
-  double c = by_percent * 255;
-
-  // calculate contrast factor
-  double f = ((259.0 * (c + 255.0)) / (255.0 * (259.0 - c)));
-
-  uint8_t r, g, b;
-
-  // change contrast of each individual pixel color
-  // also check that color value is in range [0, 255]
-  for (int i = 0; i < image->w; ++i)
-  {
-    for (int j = 0; j < image->h; ++j)
-    {
-      SDL_GetRGB(get_pixel(i, j), image->format, &r, &g, &b);
-
-      if (((r - 0x80) * f) + 0x80 > 0xff)
-      {
-        r = 0xff;
-      }
-      else if (((r - 0x80) * f) + 0x80 < 0)
-      {
-        r = 0;
-      }
-      else
-      {
-        r = ((r - 0x80) * f) + 0x80;
-      }
-
-      if (((g - 0x80) * f) + 0x80 > 0xff)
-      {
-        g = 0xff;
-      }
-      else if (((g - 0x80) * f) + 0x80 < 0)
-      {
-        g = 0;
-      }
-      else
-      {
-        g = ((g - 0x80) * f) + 0x80;
-      }
-
-      if (((b - 0x80) * f) + 0x80 > 0xff)
-      {
-        b = 0xff;
-      }
-      else if (((b - 0x80) * f) + 0x80 < 0)
-      {
-        b = 0;
-      }
-      else
-      {
-        b = ((b - 0x80) * f) + 0x80;
-      }
-
-      // setting new pixel value
-      set_pixel(i, j, SDL_MapRGB(image->format, r, g, b));
-    }
-  }
-}
-
-void Image::negative()
-{
-  for (int i = 0; i < image->w; ++i)
-  {
-    for (int j = 0; j < image->h; ++j)
-    {
-      set_pixel(i, j, ~get_pixel(i, j));
-    }
-  }
-}
-
-void Image::hflip()
-{
-  // iterate through the lines of image
-  for (int j = 0; j < image->h; ++j)
-  {
-    for (int i = 0; i < image->w/2; ++i)
-    {
-      // assign the values of last pixels in the line of image
-      // to the first pixel values of temp
-      uint32_t temp = get_pixel(i, j);
-      set_pixel(i, j, get_pixel(image->w - 1 - i, j));
-      set_pixel(image->w - 1 - i, j, temp);
-    }
-  }
-}
-
-void Image::vflip()
-{
-  // iterate through the columns of image
-  for (int i = 0; i < image->w; ++i)
-  {
-    for (int j = 0; j < image->h/2; ++j)
-    {
-      // assign the values of last pixels in the line of image
-      // to the first pixel values of temp
-      uint32_t temp = get_pixel(i, j);
-      set_pixel(i, j, get_pixel(i, image->h - 1 - j));
-      set_pixel(i, image->h - 1 - j, temp);
-    }
-  }
-
-}
-
-void Image::dflip()
-{
-  hflip();
-  vflip();
-}
