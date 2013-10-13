@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 {
  
     using namespace std;
-    
+
     Parser p(argc, argv);
 
     Image img(p.getFilename());
@@ -26,7 +26,7 @@ int main(int argc, char** argv)
     }
 
     assert(t != nullptr);
-    
+
     img.save(p.getOutFilename());
         
     return 0;
