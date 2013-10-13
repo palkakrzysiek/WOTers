@@ -2,9 +2,7 @@
 #define __IMAGE_H__
 
 #include <SDL.h>
-#include <SDL_image.h>
 #include <string>
-#include <cstdio>
 #include <cstdint>
 
 #include "Transformation.h"
@@ -12,16 +10,21 @@
 class Transformation;
 
 // wrapper class for SDL_Surface
-// simplifies operations on images
+// simplifies operations on surfaces
 class Image
 {
 public:
   // constructors
   Image(const std::string &filename);
+  
+  // copy constructors
   Image(Image &other);
-  Image(SDL_Surface *surface);
   const Image& operator=(Image &other);
-  const Image& operator=(SDL_Surface *surface);
+
+  // move constructors
+  Image(Image &&other);
+  Image(SDL_Surface *surface);
+  const Image& operator=(Image &&other);
 
   ~Image();
 
@@ -37,7 +40,7 @@ public:
   void save(const std::string& filename);
 
 private:
-  SDL_Surface *image;
+  SDL_Surface *surface = nullptr;
 
   // void brightness(double by_percent);
   // void contrast(double by_percent);

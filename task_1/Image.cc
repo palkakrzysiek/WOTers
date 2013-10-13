@@ -1,74 +1,114 @@
 #include "Image.h"
+#include <SDL_image.h>
+#include <cstdio>
+#include <utility>
 
-// 
+// create image from file
 Image::Image(const std::string &filename)
 {
-  image = IMG_Load(filename.c_str());
-  if (image == nullptr)
+  surface = IMG_Load(filename.c_str());
+  if (surface == nullptr)
   {
     fprintf(stderr, "Error: %s\n", IMG_GetError());
     exit(1);
   }
 }
 
-Image::Image(SDL_Surface *surface)
+// moving surface
+Image::Image(SDL_Surface *other)
 {
-  image = surface;
+  if (surface != nullptr)
+  {
+    SDL_FreeSurface(surface);
+  }
+
+  surface = other;
+  other = nullptr;
 }
 
+// copying constructor
 Image::Image(Image &other)
 {
-  if (image != nullptr)
-    SDL_FreeSurface(image);
+  if (surface != nullptr)
+  {
+    SDL_FreeSurface(surface);
+  }
 
-  image = SDL_ConvertSurface((SDL_Surface *) other.get_surface(),
+  surface = SDL_ConvertSurface((SDL_Surface *) other.get_surface(),
                              other.get_surface()->format,
                              other.get_surface()->flags);
 }
 
+// copying assignment operator
 const Image& Image::operator=(Image &other)
 {
-  if (image != nullptr)
+  if (surface != nullptr)
   {
-    SDL_FreeSurface(image);
+    SDL_FreeSurface(surface);
   }
 
-  image = SDL_ConvertSurface((SDL_Surface *) other.get_surface(),
+  surface = SDL_ConvertSurface((SDL_Surface *) other.get_surface(),
                              other.get_surface()->format,
                              other.get_surface()->flags);
 
   return *this;
 }
 
+// move constructor
+Image::Image(Image &&other)
+{
+  if (surface != nullptr)
+  {
+    SDL_FreeSurface(surface);
+  }
+
+  surface = other.surface;
+  other.surface = nullptr;
+}
+
+// move assignment operator
+const Image& Image::operator=(Image &&other)
+{
+  if (surface != nullptr)
+  {
+    SDL_FreeSurface(surface);
+  }
+
+  surface = other.surface;
+  other.surface = nullptr;
+
+  return *this;
+}
+
 Image::~Image()
 {
-  if (image != nullptr)
+  if (surface != nullptr)
   {
-    SDL_FreeSurface(image);
+    SDL_FreeSurface(surface);
   }
 }
 
 const SDL_Surface *Image::get_surface()
 {
-  return image;
+  return surface;
 }
 
 void Image::save(const std::string &filename)
 {
-  if (image != nullptr)
+  if (surface != nullptr)
   {
-    SDL_SaveBMP(image, filename.c_str());
+    SDL_SaveBMP(surface, filename.c_str());
   }
 }
 
 // function setting individual pixel value
-// depends on image format (bytes per pixel)
+// depends on surface format (bytes per pixel)
 void Image::set_pixel(int x, int y, uint32_t pixel)
 {
-  int bpp = image->format->BitsPerPixel / 8;
+  int bpp = surface->format->BitsPerPixel / 8;
   
   // finding address of the pixel
-  uint8_t *p = (uint8_t *) image->pixels + y * image->pitch + x * bpp;
+  uint8_t *p = (uint8_t *) surface->pixels + y * surface->pitch + x * bpp;
 
   switch (bpp)
   {
@@ -106,13 +146,13 @@ void Image::set_pixel(int x, int y, uint32_t pixel)
 }
 
 // function getting individual pixel value
-// depends on image format (bytes per pixel)
+// depends on surface format (bytes per pixel)
 uint32_t Image::get_pixel(int x, int y)
 {
-  int bpp = image->format->BitsPerPixel / 8;
+  int bpp = surface->format->BitsPerPixel / 8;
   
   // finding address of the pixel
-  uint8_t *p = (uint8_t *) image->pixels + y * image->pitch + x * bpp;
+  uint8_t *p = (uint8_t *) surface->pixels + y * surface->pitch + x * bpp;
 
   switch (bpp)
   {

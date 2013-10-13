@@ -1,5 +1,6 @@
 #include "Resize.h"
 #include <SDL.h>
+#include <utility>
 
 Resize::Resize(double scale)
   :
@@ -47,7 +48,6 @@ void Resize::transform(Image &image)
                                            image.get_surface()->format->Bmask,
                                            image.get_surface()->format->Amask);
 
-
   if (sptr == nullptr)
   {
     fprintf(stderr, "Error: %s\n", SDL_GetError());
@@ -57,7 +57,7 @@ void Resize::transform(Image &image)
   // when depth is 8 SDL_CreateRGBSurface allocates empty palette
   // which SDL_ConvertSurface considers an error causing 
   // segmentation fault
-  // 
+  
   // manually copying the palette
   if (image.get_surface()->format->BitsPerPixel <= 8)
   {
@@ -82,5 +82,5 @@ void Resize::transform(Image &image)
   }
 
   // replacing previous image with the resized one
-  image = resized;
+  image = std::move(resized);
 }
