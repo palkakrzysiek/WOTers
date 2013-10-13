@@ -3,10 +3,11 @@
 
 
 Parser::Parser(int &argc, char** argv)
+    : desc("Options")
 {
     // http://www.boost.org/doc/libs/1_54_0/doc/html/program_options/tutorial.html
     namespace po = boost::program_options;
-    po::options_description desc("Options"); 
+    // po::options_description desc("Options"); 
 
     desc.add_options()
         ("help,h", "produce help message")
@@ -35,9 +36,7 @@ Parser::Parser(int &argc, char** argv)
         ("pmse", "temp_msg")
         ("snr", "temp_msg")
         ("psnr", "temp_msg")
-        ("md", "temp_msg")
-
-        ("binarize", "temp_msg");
+        ("md", "temp_msg");
 
     bool verbose = false;
 

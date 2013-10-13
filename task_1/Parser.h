@@ -49,7 +49,6 @@ class Parser{
         bool setPsnr();
         bool setMd();
 
-        bool setBinarize();
 };
 
 #endif

@@ -22,10 +22,11 @@ int main(int argc, char** argv)
 
     if (p.setBrightness())
     {
-        t = new BrightnessTransformation(p.getBrightnessValue());
+        t = new BrightnessTransformation(p.getBrightnessValue()/100.0);
     }
 
     assert(t != nullptr);
+    img.apply_transformation(t);
 
     img.save(p.getOutFilename());
         
