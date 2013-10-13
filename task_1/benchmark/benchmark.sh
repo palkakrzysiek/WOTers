@@ -27,7 +27,7 @@ echo
 
 for i in `LANG="en_us" seq 1 290`
 do
-	echo -ne "$((i+900)/2900\r"
+	echo -ne "$((i+900))/2900\r"
   ./noomp h img_$i.jpg >> noomp_h_$i.log
 done
 

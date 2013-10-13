@@ -55,7 +55,7 @@ const SDL_Surface *Image::get_surface()
 
 void Image::save(const std::string &filename)
 {
-  if (image != nulltpr)
+  if (image != nullptr)
   {
     SDL_SaveBMP(image, filename.c_str());
   }
