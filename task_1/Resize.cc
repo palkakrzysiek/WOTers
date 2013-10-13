@@ -54,17 +54,19 @@ void Resize::transform(Image &image)
     exit(1);
   }
 
-  // when depth is 8 SDL_CreateRGBSurface allocates empty palete
+  // when depth is 8 SDL_CreateRGBSurface allocates empty palette
   // which SDL_ConvertSurface considers an error causing 
   // segmentation fault
   // 
-  // manually copying palette
+  // manually copying the palette
   if (image.get_surface()->format->BitsPerPixel <= 8)
+  {
     SDL_SetPalette(sptr, 
                    SDL_LOGPAL | SDL_PHYSPAL, 
                    &*image.get_surface()->format->palette->colors,
                    0,
                    image.get_surface()->format->palette->ncolors);
+  }
 
   Image resized(sptr);
 

@@ -15,7 +15,6 @@ void DiagonalFlip::transform(Image &image)
       uint32_t temp = image.get_pixel(i, j);
       image.set_pixel(i, j, image.get_pixel(image.get_surface()->w - 1 - i, image.get_surface()->h - 1 - j));
       image.set_pixel(image.get_surface()->w - 1 - i, image.get_surface()->h - 1 - j, temp);
-      // image.set_pixel(i, j, image.get_pixel(image.get_surface()->w - 1 - i, image.get_surface()->h - 1 - j));
     }
   }
 }

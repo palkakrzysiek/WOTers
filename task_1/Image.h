@@ -11,12 +11,15 @@
 
 class Transformation;
 
+// wrapper class for SDL_Surface
+// simplifies operations on images
 class Image
 {
 public:
+  // constructors
   Image(const std::string &filename);
-  Image(SDL_Surface *surface);
   Image(Image &other);
+  Image(SDL_Surface *surface);
   const Image& operator=(Image &other);
   const Image& operator=(SDL_Surface *surface);
 
@@ -24,9 +27,11 @@ public:
 
   const SDL_Surface *get_surface();
 
+  // pixel operations
   void set_pixel(int x, int y, uint32_t value);
   uint32_t get_pixel(int x, int y);
 
+  // applying transformations
   void apply_transformation(Transformation *t);
 
   void save(const std::string& filename);

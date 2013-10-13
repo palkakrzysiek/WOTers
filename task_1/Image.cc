@@ -1,5 +1,6 @@
 #include "Image.h"
 
+// 
 Image::Image(const std::string &filename)
 {
   image = IMG_Load(filename.c_str());
@@ -41,7 +42,10 @@ const Image& Image::operator=(Image &other)
 
 Image::~Image()
 {
-  SDL_FreeSurface(image);
+  if (image != nullptr)
+  {
+    SDL_FreeSurface(image);
+  }
 }
 
 const SDL_Surface *Image::get_surface()
@@ -51,7 +55,10 @@ const SDL_Surface *Image::get_surface()
 
 void Image::save(const std::string &filename)
 {
-  SDL_SaveBMP(image, filename.c_str());
+  if (image != nulltpr)
+  {
+    SDL_SaveBMP(image, filename.c_str());
+  }
 }
 
 // function setting individual pixel value
@@ -59,11 +66,13 @@ void Image::save(const std::string &filename)
 void Image::set_pixel(int x, int y, uint32_t pixel)
 {
   int bpp = image->format->BitsPerPixel / 8;
+  
+  // finding address of the pixel
   uint8_t *p = (uint8_t *) image->pixels + y * image->pitch + x * bpp;
 
   switch (bpp)
   {
-    // 8
+    // 8 bit
     case 1:
       *p = pixel;
       break;
@@ -101,6 +110,8 @@ void Image::set_pixel(int x, int y, uint32_t pixel)
 uint32_t Image::get_pixel(int x, int y)
 {
   int bpp = image->format->BitsPerPixel / 8;
+  
+  // finding address of the pixel
   uint8_t *p = (uint8_t *) image->pixels + y * image->pitch + x * bpp;
 
   switch (bpp)
