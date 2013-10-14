@@ -14,26 +14,9 @@ Image::Image(const std::string &filename)
   }
 }
 
-// moving surface
-Image::Image(SDL_Surface *other)
-{
-  if (surface != nullptr)
-  {
-    SDL_FreeSurface(surface);
-  }
-
-  surface = other;
-  other = nullptr;
-}
-
 // copying constructor
 Image::Image(Image &other)
 {
-  if (surface != nullptr)
-  {
-    SDL_FreeSurface(surface);
-  }
-
   surface = SDL_ConvertSurface((SDL_Surface *) other.get_surface(),
                              other.get_surface()->format,
                              other.get_surface()->flags);
@@ -57,13 +40,15 @@ const Image& Image::operator=(Image &other)
 // move constructor
 Image::Image(Image &&other)
 {
-  if (surface != nullptr)
-  {
-    SDL_FreeSurface(surface);
-  }
-
   surface = other.surface;
   other.surface = nullptr;
+}
+
+// moving surface
+Image::Image(SDL_Surface *other)
+{
+  surface = other;
+  other = nullptr;
 }
 
 // move assignment operator
@@ -105,7 +90,7 @@ void Image::save(const std::string &filename)
 // depends on surface format (bytes per pixel)
 void Image::set_pixel(int x, int y, uint32_t pixel)
 {
-  int bpp = surface->format->BitsPerPixel / 8;
+  int bpp = surface->format->BytesPerPixel;
   
   // finding address of the pixel
   uint8_t *p = (uint8_t *) surface->pixels + y * surface->pitch + x * bpp;
@@ -149,7 +134,7 @@ void Image::set_pixel(int x, int y, uint32_t pixel)
 // depends on surface format (bytes per pixel)
 uint32_t Image::get_pixel(int x, int y)
 {
-  int bpp = surface->format->BitsPerPixel / 8;
+  int bpp = surface->format->BytesPerPixel;
   
   // finding address of the pixel
   uint8_t *p = (uint8_t *) surface->pixels + y * surface->pitch + x * bpp;
