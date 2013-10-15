@@ -22,13 +22,11 @@ Parser::Parser(int &argc, char** argv)
          "modify contrast (in percents) [-100:100]")
         ("negative,n", "invert values of colors")
 
-        ("Hfilp", "temp_msg")
-        ("Vflip", "temp_msg")
-        ("Dflip", "temp_msg")
-        ("shrink,s", po::value<double>(),
-         "shrink by percent [-100:100]")
-        ("enlarge,e", po::value<double>(),
-         "enlarge by percent [-100:100]")
+        ("Hflip", "Horizontal Flip")
+        ("Vflip", "Vertical Flip")
+        ("Dflip", "Diagonal Flip")
+        ("resize,r", po::value<double>(),
+         "resize by percent of original image [greater then 0]")
 
         ("alpha", "temp_msg")
         ("cmean", "temp_msg")
@@ -37,8 +35,6 @@ Parser::Parser(int &argc, char** argv)
         ("snr", "temp_msg")
         ("psnr", "temp_msg")
         ("md", "temp_msg");
-
-    bool verbose = false;
 
     try 
     { 
@@ -51,9 +47,18 @@ Parser::Parser(int &argc, char** argv)
                 << desc << std::endl; 
             exit(0);
         } 
+
         if ( !vm.count("file")  ) 
         { 
             std::cout << "Name of the file must be given\n\
+Command Line Image processing tool" << std::endl 
+                << desc << std::endl; 
+            exit(0);
+        } 
+
+        if ( vm.count("resize") && vm["resize"].as<double>() <= 0) 
+        { 
+            std::cout << "Value of resize argument must by positive! \n\
 Command Line Image processing tool" << std::endl 
                 << desc << std::endl; 
             exit(0);
@@ -87,7 +92,11 @@ bool Parser::setBrightness()
 }
 double Parser::getBrightnessValue()
 {
-    return vm["brightness"].as<double>();
+    if (vm.count("verbose") && (vm["brightness"].as<double>() > 100 ||
+                                vm["brightness"].as<double>() < -100)) {
+        std::cout << "Brightness value is very close to or exceeds margin val.\n";
+    }
+    return (vm["brightness"].as<double>() / 100.0);
 }
 
 bool Parser::setContrast()
@@ -96,7 +105,11 @@ bool Parser::setContrast()
 }
 double Parser::getContrastValue()
 {
-    return vm["contrast"].as<double>();
+    if (vm.count("verbose") && (vm["contrast"].as<double>() > 100 ||
+                                vm["contrast"].as<double>() < -100)) {
+        std::cout << "Contrast value is very close to or exceeds margin val.\n";
+    }
+    return vm["contrast"].as<double>() / 100.0;;
 }
 
 bool Parser::setNegative()
@@ -106,7 +119,7 @@ bool Parser::setNegative()
 
 bool Parser::setHflip()
 {
-    return vm.count("Hfilp");
+    return vm.count("Hflip");
 }
 
 bool Parser::setVflip()
@@ -117,4 +130,13 @@ bool Parser::setVflip()
 bool Parser::setDflip()
 {
     return vm.count("Dflip");
+}
+
+bool Parser::setResize()
+{
+    return vm.count("resize");
+}
+double Parser::getResizeValue()
+{
+    return vm["resize"].as<double>() / 100.0;
 }

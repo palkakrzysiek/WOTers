@@ -35,10 +35,8 @@ class Parser{
         bool setHflip();
         bool setVflip();
         bool setDflip();
-        bool setShrink();
-        double getShrinkValue();
-        bool setEnlarge();
-        double getEnlargeValue();
+        bool setResize();
+        double getResizeValue();
 
         bool setAlpha();
         bool setCmean();
