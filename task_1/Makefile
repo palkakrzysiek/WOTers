@@ -56,6 +56,6 @@ Resize.o : Resize.cc Resize.h Image.h Transformation.h
 clean:
 	rm $(EXECUTABLE) $(OBJECTS)
 
-.PHONY : clean_compile_type
-clean_compile_type :
+.PHONY : clean_compilation_type
+clean_compilation_type :
 	rm main.o

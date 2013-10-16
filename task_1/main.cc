@@ -79,7 +79,9 @@ int main(int argc, char** argv)
     printf("%gs\n", (double)timer/1e6);
 #endif
   
+#ifndef _SPEED_TEST // saving the file during speed test is just the waste of time
     img.save(p.getOutFilename());
+#endif
         
     return 0;
 }

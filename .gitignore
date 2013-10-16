@@ -2,6 +2,8 @@
 *.gif
 *.png
 *.jpg
+*.gp
+*.log
 program*
 *.o
 *~
