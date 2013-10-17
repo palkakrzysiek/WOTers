@@ -68,7 +68,7 @@ int main(int argc, char** argv)
 
     if (p.setCmean())
     {
-        t = new ContramorphicMeanFilter(p.getCmeanValue());
+        t = new ContraharmonicMeanFilter(p.getCmeanValue());
     }
 
     if (p.setAlpha())

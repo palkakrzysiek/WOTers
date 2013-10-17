@@ -1,13 +1,13 @@
-#include "ContramorphicMeanFilter.h"
+#include "ContraharmonicMeanFilter.h"
 #include <algorithm> // std::sort
 #include <cmath> // std::pow
 
-ContramorphicMeanFilter::ContramorphicMeanFilter(double q)
+ContraharmonicMeanFilter::ContraharmonicMeanFilter(double q)
   : order(q)
 {
 }
 
-void ContramorphicMeanFilter::transform(Image &image)
+void ContraharmonicMeanFilter::transform(Image &image)
 {
   int w = image.get_surface()->w;
   int h = image.get_surface()->h;
