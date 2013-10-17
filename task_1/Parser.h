@@ -39,9 +39,12 @@ class Parser{
         double getResizeValue();
 
         bool setAlpha();
+        uint8_t getAlphaValue();
         bool setCmean();
+        double getCmeanValue();
 
         bool setMse();
+        std::string getMseFilename();
         bool setPmse();
         bool setSnr();
         bool setPsnr();

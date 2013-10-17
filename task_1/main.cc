@@ -66,6 +66,15 @@ int main(int argc, char** argv)
         t = new DiagonalFlip();
     }
 
+    if (p.setCmean())
+    {
+        t = new ContramorphicMeanFilter(p.getCmeanValue());
+    }
+
+    if (p.setAlpha())
+    {
+        t = new AlphaTrimmedMeanFilter(p.getAlphaValue());
+    }
     assert(t != nullptr);
 
 #ifdef _SPEED_TEST

@@ -1,4 +1,5 @@
 #include "AlphaTrimmedMeanFilter.h"
+#include <algorithm>
 
 AlphaTrimmedMeanFilter::AlphaTrimmedMeanFilter(uint8_t a)
   : alpha(a)
@@ -28,9 +29,9 @@ void AlphaTrimmedMeanFilter::transform(Image &image)
     {
       // 3x3 mask containing 4 color values
       uint8_t mask[4][9];
-      memset(sum, 0, 4 * sizeof(uint32_t));
 
       uint32_t avg[4];
+      memset(avg, 0, 4 * sizeof(uint32_t));
       int o = 0;
 
       // getting values of all the neighbors

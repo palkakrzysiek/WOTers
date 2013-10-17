@@ -7,6 +7,8 @@
 #include "HorizontalFlip.h"
 #include "VerticalFlip.h"
 #include "DiagonalFlip.h"
+#include "AlphaTrimmedMeanFilter.h"
+#include "ContramorphicMeanFilter.h"
 #include "Resize.h"
 
 #endif

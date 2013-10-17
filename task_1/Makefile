@@ -5,7 +5,7 @@ LDFLAGS=-fopenmp
 SDL_CFLAGS := $(shell sdl-config --cflags)
 SDL_LDFLAGS := $(shell sdl-config --libs) -lSDL_image
 BOOST_LDFLAGS=-lboost_program_options
-OBJECTS=main.o Parser.o Image.o Transformation.o BrightnessTransformation.o ContrastTransformation.o DiagonalFlip.o VerticalFlip.o HorizontalFlip.o NegativeTransformation.o Resize.o 
+OBJECTS=main.o Parser.o Image.o Transformation.o BrightnessTransformation.o ContrastTransformation.o DiagonalFlip.o VerticalFlip.o HorizontalFlip.o NegativeTransformation.o Resize.o AlphaTrimmedMeanFilter.o ContramorphicMeanFilter.o 
 EXECUTABLE=program1
 
 all: $(OBJECTS) $(EXECUTABLE)
@@ -51,6 +51,11 @@ DiagonalFlip.o: DiagonalFlip.cc DiagonalFlip.h HorizontalFlip.h VerticalFlip.h I
 Resize.o : Resize.cc Resize.h Image.h Transformation.h
 	$(CXX) $(CXXFLAGS) -c Resize.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
+ContramorphicMeanFilter.o : ContramorphicMeanFilter.cc ContramorphicMeanFilter.h Image.h Transformation.h
+	$(CXX) $(CXXFLAGS) -c ContramorphicMeanFilter.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
+
+AlphaTrimmedMeanFilter.o : AlphaTrimmedMeanFilter.cc AlphaTrimmedMeanFilter.h Image.h Transformation.h
+	$(CXX) $(CXXFLAGS) -c AlphaTrimmedMeanFilter.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
 .PHONY : clean
 clean:

@@ -78,13 +78,13 @@ if [ $operation = "vflip" ] || [ $operation = "all" ]; then
     do
         echo -ne "Element $i / $to\t$(( (($i - $from) * 100) / ($to-$from) ))%                 \r"
         echo -ne "$i\t" >> vflip.log
-        prog_out=`./$program_name -r 150 -f img_$i.jpg`
+        prog_out=`./$program_name --Vflip -f img_$i.jpg`
         prog_out=${prog_out//s/} # remove 's' form string
         echo -ne "$prog_out\n" >> vflip.log
     done
     echo -e "\nDone."
     echo -n "plot [$(( $from * $from )):$(( $to * $to ))] \
-'vflip.log' using (\$1 * \$1):2 with points pt 13 lc rgb '#771212' ps 1 title 'Vertical Flip \
+'vflip.log' using (\$1 * \$1):2 with points pt 1 lc rgb '#771212' ps 1 title 'Vertical Flip \
 (measured points) ', \
 'vflip.log' using (\$1 * \$1):2 smooth sbezier lc rgb '#771212' lw 5 title 'Vertical Flip \
 (approximation)'" >> $gnuplot_file

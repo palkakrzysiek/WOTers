@@ -6,11 +6,11 @@
 class AlphaTrimmedMeanFilter : public Transformation
 {
 public:
-  AlphaTrimmedMeanFilter(uint8_t a);
+  AlphaTrimmedMeanFilter(uint8_t alpha);
   void transform(Image &image);
 
 private:
-  uint8_t a;
+  uint8_t alpha;
 
 };
 
