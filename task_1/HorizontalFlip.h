@@ -1,12 +1,12 @@
 #ifndef __HORIZONTAL_FLIP_H__
 #define __HORIZONTAL_FLIP_H__
 
-#include "Transformation.h"
+#include "Operation.h"
 
-class HorizontalFlip : public Transformation
+class HorizontalFlip : public Operation
 {
 public:
-  void transform(Image &image);
+  void perform(Image &image);
 };
 
 #endif

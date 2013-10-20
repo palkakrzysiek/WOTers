@@ -1,12 +1,12 @@
-#include "ContrastTransformation.h"
+#include "ContrastAdjustment.h"
 
-ContrastTransformation::ContrastTransformation(double by)
+ContrastAdjustment::ContrastAdjustment(double by)
   :
   by_percent(by)
 {
 }
 
-void ContrastTransformation::transform(Image &image)
+void ContrastAdjustment::perform(Image &image)
 {
   // contrast change varies from -255 to 255
   // thus c must be in range [-1.0, 1.0]

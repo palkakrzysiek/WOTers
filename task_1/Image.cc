@@ -174,9 +174,9 @@ uint32_t Image::get_pixel(int x, int y)
   }
 }
 
-void Image::apply_transformation(Transformation *t)
+void Image::perform_operation(Operation *t)
 {
-  t->transform(*this);
+  t->perform(*this);
   delete t;
 }
 

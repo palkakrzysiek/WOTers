@@ -1,6 +1,6 @@
 #include "DiagonalFlip.h"
 
-void DiagonalFlip::transform(Image &image)
+void DiagonalFlip::perform(Image &image)
 {
   int i, j;
 

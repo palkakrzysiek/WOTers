@@ -1,6 +1,6 @@
 #include "VerticalFlip.h"
 
-void VerticalFlip::transform(Image &image)
+void VerticalFlip::perform(Image &image)
 {
   int i, j;
 

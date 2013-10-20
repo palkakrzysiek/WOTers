@@ -1,5 +1,6 @@
 #include "AlphaTrimmedMeanFilter.h"
-#include <algorithm>
+#include <algorithm> // std::sort
+#include <cstring> // memset
 
 AlphaTrimmedMeanFilter::AlphaTrimmedMeanFilter(uint8_t a)
   : alpha(a)
@@ -8,7 +9,7 @@ AlphaTrimmedMeanFilter::AlphaTrimmedMeanFilter(uint8_t a)
 
 // TODO
 // deal with the borders
-void AlphaTrimmedMeanFilter::transform(Image &image)
+void AlphaTrimmedMeanFilter::perform(Image &image)
 {
   int w = image.get_surface()->w;
   int h = image.get_surface()->h;
@@ -53,18 +54,39 @@ void AlphaTrimmedMeanFilter::transform(Image &image)
 
       // summing color values
       for (int k = 0; k < 4; ++k)
+      {
         for (int l = begin; l < end; ++l)
+        {
           avg[k] += mask[k][l];
+        }
+      }
 
       // calculating average color values
       for (int k = 0; k < 4; ++k)
+      {
         avg[k] /= (9 - alpha);
+      }
 
       // putting the new pixel value to the image
       filtered.set_pixel(i, j, SDL_MapRGBA(filtered.get_surface()->format,
                          avg[0], avg[1], avg[2], avg[3]));
     }
   }
+
+# pragma omp parallel for
+  for (i = 0; i < w; ++i)
+  {
+    filtered.set_pixel(i, 0, filtered.get_pixel(i, 1));
+    filtered.set_pixel(i, h - 1, filtered.get_pixel(i, h - 2));
+  }
+
+# pragma omp parallel for
+  for (j = 0; j < h; ++j)
+  {
+    filtered.set_pixel(0, j, filtered.get_pixel(1, j));
+    filtered.set_pixel(w - 1, j, filtered.get_pixel(w - 2, j));
+  }
+
 
   // replacing previous image with the filtered one
   image = std::move(filtered);

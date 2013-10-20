@@ -1,9 +1,9 @@
-#ifndef __TRANSFORMATIONS_H__
-#define __TRANSFORMATIONS_H__
+#ifndef __OPERATIONS_H__
+#define __OPERATIONS_H__
 
-#include "BrightnessTransformation.h"
-#include "ContrastTransformation.h"
-#include "NegativeTransformation.h"
+#include "BrightnessAdjustment.h"
+#include "ContrastAdjustment.h"
+#include "Negative.h"
 #include "HorizontalFlip.h"
 #include "VerticalFlip.h"
 #include "DiagonalFlip.h"

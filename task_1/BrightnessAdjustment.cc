@@ -1,12 +1,12 @@
-#include "BrightnessTransformation.h"
+#include "BrightnessAdjustment.h"
 
-BrightnessTransformation::BrightnessTransformation(double by)
+BrightnessAdjustment::BrightnessAdjustment(double by)
   :
   by_percent(by)
 {
 }
 
-void BrightnessTransformation::transform(Image &image)
+void BrightnessAdjustment::perform(Image &image)
 {
   // birghtness can be changed from -255 to 255
   int by = by_percent * 0xff;

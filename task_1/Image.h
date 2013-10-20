@@ -5,9 +5,9 @@
 #include <string>
 #include <cstdint>
 
-#include "Transformation.h"
+#include "Operation.h"
 
-class Transformation;
+class Operation;
 
 // wrapper class for SDL_Surface
 // simplifies operations on surfaces
@@ -35,7 +35,7 @@ public:
   uint32_t get_pixel(int x, int y);
 
   // applying transformations
-  void apply_transformation(Transformation *t);
+  void perform_operation(Operation *t);
 
   void save(const std::string& filename);
 

@@ -1,13 +1,13 @@
 #ifndef __ALPHA_TRIMMED_MEAN_FILTER_H__
 #define __ALPHA_TRIMMED_MEAN_FILTER_H__
 
-#include "Transformation.h"
+#include "Operation.h"
 
-class AlphaTrimmedMeanFilter : public Transformation
+class AlphaTrimmedMeanFilter : public Operation
 {
 public:
-  AlphaTrimmedMeanFilter(uint8_t alpha);
-  void transform(Image &image);
+  AlphaTrimmedMeanFilter(uint8_t a);
+  void perform(Image &image);
 
 private:
   uint8_t alpha;

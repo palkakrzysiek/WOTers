@@ -1,14 +1,14 @@
 #ifndef __CONTRAHARMONIC_MEAN_FILTER_H__
 #define __CONTRAHARMONIC_MEAN_FILTER_H__
 
-#include "Transformation.h"
+#include "Operation.h"
 
-class ContraharmonicMeanFilter : public Transformation
+class ContraharmonicMeanFilter : public Operation
 {
 public:
   ContraharmonicMeanFilter(double q);
 
-  void transform(Image &image);
+  void perform(Image &image);
 
 private:
   double order;

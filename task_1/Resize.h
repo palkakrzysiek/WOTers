@@ -1,15 +1,15 @@
 #ifndef __RESIZE_H__
 #define __RESIZE_H__
 
-#include "Transformation.h"
+#include "Operation.h"
 
-class Resize : public Transformation
+class Resize : public Operation
 {
 public:
   Resize(double scale);
   Resize(int w, int h, bool kr = true);
   
-  void transform(Image &image);
+  void perform(Image &image);
 
 private:
   double scale_x;

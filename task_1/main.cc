@@ -1,6 +1,6 @@
 #include "Image.h"
 #include "Parser.h"
-#include "Transformations.h"
+#include "Operations.h"
 #include <iostream>
 #include <string>
 #include <cassert>
@@ -29,59 +29,59 @@ int main(int argc, char** argv)
     Parser p(argc, argv);
 
     Image img(p.getFilename());
-    Transformation *t = nullptr;
+    Operation *o = nullptr;
 
     if (p.setBrightness())
     {
-        t = new BrightnessTransformation(p.getBrightnessValue());
+        o = new BrightnessAdjustment(p.getBrightnessValue());
     }
 
     if (p.setResize())
     {
-        t = new Resize(p.getResizeValue());
+        o = new Resize(p.getResizeValue());
     }
 
     if (p.setContrast())
     {
-        t = new ContrastTransformation(p.getContrastValue());
+        o = new ContrastAdjustment(p.getContrastValue());
     }
 
     if (p.setNegative())
     {
-        t = new NegativeTransformation();
+        o = new Negative();
     }
 
     if (p.setHflip())
     {
-        t = new HorizontalFlip();
+        o = new HorizontalFlip();
     }
 
     if (p.setVflip())
     {
-        t = new VerticalFlip();
+        o = new VerticalFlip();
     }
 
     if (p.setDflip())
     {
-        t = new DiagonalFlip();
+        o = new DiagonalFlip();
     }
 
     if (p.setCmean())
     {
-        t = new ContraharmonicMeanFilter(p.getCmeanValue());
+        o = new ContraharmonicMeanFilter(p.getCmeanValue());
     }
 
     if (p.setAlpha())
     {
-        t = new AlphaTrimmedMeanFilter(p.getAlphaValue());
+        o = new AlphaTrimmedMeanFilter(p.getAlphaValue());
     }
-    assert(t != nullptr);
+    assert(o != nullptr);
 
 #ifdef _SPEED_TEST
     uint64_t timer = now();
 #endif
 
-    img.apply_transformation(t);
+    img.perform_operation(o);
 
 #ifdef _SPEED_TEST
     timer = now() - timer;

@@ -1,6 +1,6 @@
-#include "Transformation.h"
+#include "Operation.h"
 
-uint8_t Transformation::trunc(int value)
+uint8_t Operation::trunc(int value)
 {
   if (value > 0xff)
     return 0xff;

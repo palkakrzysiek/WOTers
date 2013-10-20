@@ -1,5 +1,5 @@
 #include "Image.h"
-#include "Transformations.h"
+#include "Operations.h"
 #include <sys/time.h>
 #include <cstdint>
 #include <iostream>
@@ -22,16 +22,16 @@ int main(int argc, char const *argv[])
 {
   Image img(argv[2]);
 
-  Transformation *t = nullptr;
+  Operation *t = nullptr;
 
   string o = argv[1];
 
   if (o == "b")
-    t = new BrightnessTransformation(0.5);
+    t = new BrightnessAdjusment(0.5);
   else if (o == "c") 
-    t = new ContrastTransformation(0.5);
+    t = new ContrastAdjustment(0.5);
   else if (o == "n")
-    t = new NegativeTransformation();
+    t = new Negative();
   else if (o == "h")   
     t = new HorizontalFlip();
   else if (o == "v")
@@ -44,7 +44,7 @@ int main(int argc, char const *argv[])
   assert(t != nullptr);
   
   uint64_t timer = now();
-  img.apply_transformation(t);
+  img.perform_operation(t);
   timer = now() - timer;
 
   printf("%gs\n", (double)timer/1e6);

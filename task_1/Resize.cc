@@ -14,7 +14,7 @@ Resize::Resize(int w, int h, bool kr)
 {
 }
 
-void Resize::transform(Image &image)
+void Resize::perform(Image &image)
 {
   // calculating sizes and scales
   if (width > 0 && height > 0)

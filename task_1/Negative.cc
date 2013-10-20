@@ -1,7 +1,7 @@
-#include "NegativeTransformation.h"
+#include "Negative.h"
 #include <omp.h>
 
-void NegativeTransformation::transform(Image &image)
+void Negative::perform(Image &image)
 {
   int i, j;
 
