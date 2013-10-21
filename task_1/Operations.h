@@ -7,8 +7,13 @@
 #include "HorizontalFlip.h"
 #include "VerticalFlip.h"
 #include "DiagonalFlip.h"
+#include "Resize.h"
 #include "AlphaTrimmedMeanFilter.h"
 #include "ContraharmonicMeanFilter.h"
-#include "Resize.h"
+#include "MeanSquareError.h"
+#include "PeakMeanSquareError.h"
+#include "SignalToNoiseRatio.h"
+#include "PeakSignalToNoiseRatio.h"
+#include "MaxDifference.h"
 
 #endif

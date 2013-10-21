@@ -1,15 +1,12 @@
-#include "MeanSquareError.h"
-#include <cstdio> // fprintf
-#include <cstdlib> // exit
-#include <cmath> // std::pow
-#include <cstring> // memset
+#include "PeakSignalToNoiseRatio.h"
+#include <cmath>
 
-MeanSquareError::MeanSquareError(Image *f, double *r)
+PeakSignalToNoiseRatio::PeakSignalToNoiseRatio(Image *f, double *r)
   : filtered(f), result(r)
 {
 }
 
-void MeanSquareError::perform(Image &image)
+void PeakSignalToNoiseRatio::perform(Image &image)
 {
   int w = image.get_surface()->w;
   int h = image.get_surface()->h;
@@ -22,11 +19,37 @@ void MeanSquareError::perform(Image &image)
     exit(1);
   }
 
-  double r = 0.0, g = 0.0, b = 0.0, a = 0.0;
+  uint8_t max_r, max_g, max_b, max_a;
 
   int i, j;
 
-# pragma omp parallel for private(i) default(shared) reduction(+:r,g,b,a)
+# pragma omp parallel for private(i)
+  for (j = 0; j < h; ++j)
+  {
+    for (i = 0; i < w; ++i)
+    {
+      uint8_t r, g, b, a;
+
+      SDL_GetRGBA(image.get_pixel(i, j), image.get_surface()->format,
+                  &r, &g, &b, &a);
+
+      if (r > max_r)
+        max_r = r;
+
+      if (g > max_g)
+        max_g = g;
+
+      if (b > max_b)
+        max_b = b;
+
+      if (a > max_a)
+        max_a = a;
+    }
+  }
+
+  double r = 0.0, g = 0.0, b = 0.0, a = 0.0;
+
+  # pragma omp parallel for private(i) default(shared) reduction(+:r,g,b,a)
   for (j = 0; j < h; ++j)
   {
     for (i = 0; i < w; ++i)
@@ -46,10 +69,10 @@ void MeanSquareError::perform(Image &image)
     }
   }
 
-  r /= w * h;
-  g /= w * h;
-  b /= w * h;
-  a /= w * h;
+  r = 10 * log10(pow(max_r, 2) / r);
+  g = 10 * log10(pow(max_g, 2) / g);
+  b = 10 * log10(pow(max_b, 2) / b);
+  // a = ;
 
-  *result = (r + g + b + a) / bpp;
+  *result = (r + g + b) / bpp;
 }

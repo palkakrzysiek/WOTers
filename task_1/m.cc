@@ -20,32 +20,17 @@ static uint64_t now() {
 
 int main(int argc, char const *argv[])
 {
-  Image img(argv[2]);
+  Image img(argv[1]);
 
-  Operation *t = nullptr;
+  Image filtered(argv[2]);
+  uint64_t result = 0;
 
-  string o = argv[1];
-
-  if (o == "b")
-    t = new BrightnessAdjusment(0.5);
-  else if (o == "c") 
-    t = new ContrastAdjustment(0.5);
-  else if (o == "n")
-    t = new Negative();
-  else if (o == "h")   
-    t = new HorizontalFlip();
-  else if (o == "v")
-    t = new VerticalFlip();
-  else if (o == "d")
-    t = new DiagonalFlip();
-  else if(o == "r")
-    t = new Resize(120);
-  
-  assert(t != nullptr);
-  
   uint64_t timer = now();
-  img.perform_operation(t);
+  // img.perform_operation(new MeanSquareError(&filtered, &result));
+  img.perform_operation(new AlphaTrimmedMeanFilter(6));
   timer = now() - timer;
+
+  printf("%llu\n", result);
 
   printf("%gs\n", (double)timer/1e6);
 
