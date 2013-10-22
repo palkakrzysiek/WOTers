@@ -62,16 +62,16 @@ void PeakSignalToNoiseRatio::perform(Image &image)
       SDL_GetRGBA(filtered->get_pixel(i, j), filtered->get_surface()->format,
                   &rgba2[0], &rgba2[1], &rgba2[2], &rgba2[3]);
 
-      r += std::pow(rgba1[0] - rgba2[0], 2);
-      g += std::pow(rgba1[1] - rgba2[1], 2);
-      b += std::pow(rgba1[2] - rgba2[2], 2);
-      a += std::pow(rgba1[3] - rgba2[3], 2);
+      r += (rgba1[0] - rgba2[0]) * (rgba1[0] - rgba2[0]);
+      g += (rgba1[1] - rgba2[1]) * (rgba1[1] - rgba2[1]);
+      b += (rgba1[2] - rgba2[2]) * (rgba1[2] - rgba2[2]);
+      a += (rgba1[3] - rgba2[3]) * (rgba1[3] - rgba2[3]);
     }
   }
 
-  r = 10 * log10(pow(max_r, 2) / r);
-  g = 10 * log10(pow(max_g, 2) / g);
-  b = 10 * log10(pow(max_b, 2) / b);
+  r = 10 * log10(max_r * max_r / r);
+  g = 10 * log10(max_g * max_g / g);
+  b = 10 * log10(max_b * max_b / b);
   // a = ;
 
   *result = (r + g + b) / bpp;

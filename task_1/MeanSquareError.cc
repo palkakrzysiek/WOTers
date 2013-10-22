@@ -1,8 +1,6 @@
 #include "MeanSquareError.h"
 #include <cstdio> // fprintf
 #include <cstdlib> // exit
-#include <cmath> // std::pow
-#include <cstring> // memset
 
 MeanSquareError::MeanSquareError(Image *f, double *r)
   : filtered(f), result(r)
@@ -39,10 +37,10 @@ void MeanSquareError::perform(Image &image)
       SDL_GetRGBA(filtered->get_pixel(i, j), filtered->get_surface()->format,
                   &rgba2[0], &rgba2[1], &rgba2[2], &rgba2[3]);
 
-      r += std::pow(rgba1[0] - rgba2[0], 2);
-      g += std::pow(rgba1[1] - rgba2[1], 2);
-      b += std::pow(rgba1[2] - rgba2[2], 2);
-      a += std::pow(rgba1[3] - rgba2[3], 2);
+      r += (rgba1[0] - rgba2[0]) * (rgba1[0] - rgba2[0]);
+      g += (rgba1[1] - rgba2[1]) * (rgba1[1] - rgba2[1]);
+      b += (rgba1[2] - rgba2[2]) * (rgba1[2] - rgba2[2]);
+      a += (rgba1[3] - rgba2[3]) * (rgba1[3] - rgba2[3]);
     }
   }
 

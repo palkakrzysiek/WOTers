@@ -36,14 +36,14 @@ void MaxDifference::perform(Image &image)
       SDL_GetRGBA(filtered->get_pixel(i, j), filtered->get_surface()->format,
                   &r2, &g2, &b2, &a2);
 
-      if (std::abs(r1 - r2) > max_r)
-        max_r = std::abs(r1 - r2);
+      if (fabs(r1 - r2) > max_r)
+        max_r = fabs(r1 - r2);
 
-      if (std::abs(g1 - g2) > max_g)
-        max_g = std::abs(g1 - g2);
+      if (fabs(g1 - g2) > max_g)
+        max_g = fabs(g1 - g2);
 
-      if (std::abs(b1 - b2) > max_b)
-        max_b = std::abs(b1 - b2);
+      if (fabs(b1 - b2) > max_b)
+        max_b = fabs(b1 - b2);
 
       // if (a > max_a)
       //   max_a = a;
