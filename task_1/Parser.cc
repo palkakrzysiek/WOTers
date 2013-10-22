@@ -28,8 +28,8 @@ Parser::Parser(int &argc, char** argv)
         ("resize,r", po::value<double>(),
          "resize by percent of original image [greater then 0]")
 
-        ("alpha", "Alpha Trimmed Mean Filter [0, 2, 4, 6, 8]")
-        ("cmean", "temp_msg")
+        ("alpha", po::value<int>(), "Alpha Trimmed Mean Filter [0, 2, 4, 6, 8]")
+        ("cmean", po::value<double>(), "contraharmonic mean filter [integer value]")
         ("mse", po::value<std::string>()->default_value("out.bmp"),
          "temp_msg")
         ("pmse", "temp_msg")
@@ -145,8 +145,9 @@ double Parser::getResizeValue()
 
 bool Parser::setAlpha()
 {
-    return vm.count("aplha");
+    return vm.count("alpha");
 }
+
 uint8_t Parser::getAlphaValue()
 {
     int tempVal = vm["alpha"].as<int>();
@@ -176,3 +177,4 @@ std::string Parser::getMseFilename()
 {
     return vm["mse"].as<std::string>();
 }
+

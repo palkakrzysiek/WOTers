@@ -75,6 +75,12 @@ int main(int argc, char** argv)
     {
         o = new AlphaTrimmedMeanFilter(p.getAlphaValue());
     }
+
+    if (p.setCmean())
+    {
+        o = new ContraharmonicMeanFilter(p.getCmeanValue());
+    }
+
     assert(o != nullptr);
 
 #ifdef _SPEED_TEST
