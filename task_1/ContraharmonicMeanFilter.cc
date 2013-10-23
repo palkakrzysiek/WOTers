@@ -29,8 +29,8 @@ void ContraharmonicMeanFilter::perform(Image &image) {
                 for (int l = -sqareSize; l < sqareSize; l++){
                     // sum appropriate powers
                     // in case of pixels on borders -- don't copy them
-                    // to obtain 9x9 mask, just use only those pixels that already
-                    // exist
+                    // to obtain for example 9x9 mask, just use only those
+                    // pixels that already exist
                     if (i + k >= 0 && j + l >= 0 && i + k < w && j + l < h) {
                         SDL_GetRGBA(image.get_pixel(i + k, j + l), image.get_surface()->format, &rgba[0], &rgba[1], &rgba[2], &rgba[3]);
                         for (int o = 0; o < 4; o++){

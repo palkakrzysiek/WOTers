@@ -46,9 +46,13 @@ class Parser{
         bool setMse();
         std::string getMseFilename();
         bool setPmse();
+        std::string getPmseFilename();
         bool setSnr();
+        std::string getSnrFilename();
         bool setPsnr();
+        std::string getPsnrFilename();
         bool setMd();
+        std::string getMdFilename();
 
 };
 

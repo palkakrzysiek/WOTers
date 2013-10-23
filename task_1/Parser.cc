@@ -15,7 +15,7 @@ Parser::Parser(int &argc, char** argv)
         ("file,f", po::value<std::string>()->required(),
          "input file")
         ("output,o", po::value<std::string>()->default_value("out.bmp"),
-         "input file")
+         "output file")
         ("brightness,b", po::value<double>(),
          "modify brightness (in percents) [-100:100]")
         ("contrast,c", po::value<double>(),
@@ -29,13 +29,18 @@ Parser::Parser(int &argc, char** argv)
          "resize by percent of original image [greater then 0]")
 
         ("alpha", po::value<int>(), "Alpha Trimmed Mean Filter [0, 2, 4, 6, 8]")
-        ("cmean", po::value<double>(), "contraharmonic mean filter [integer value]")
-        ("mse", po::value<std::string>()->default_value("out.bmp"),
-         "temp_msg")
-        ("pmse", "temp_msg")
-        ("snr", "temp_msg")
-        ("psnr", "temp_msg")
-        ("md", "temp_msg");
+        ("cmean", po::value<double>(), "contraharmonic mean filter [floating point value]")
+
+        ("mse", po::value<std::string>(),
+         "Mean square error")
+        ("pmse", po::value<std::string>(),
+        "Preak mean sqare error")
+        ("snr", po::value<std::string>(),
+         "Signal to noise ratio")
+        ("psnr", po::value<std::string>(),
+         "Peak signal to noise ratio")
+        ("md", po::value<std::string>(),
+         "Maximum difference");
 
     try 
     { 
@@ -168,6 +173,10 @@ double Parser::getCmeanValue(){
     return vm["cmean"].as<double>();
 }
 
+
+
+
+
 bool Parser::setMse()
 {
     return vm.count("mse");
@@ -176,5 +185,45 @@ bool Parser::setMse()
 std::string Parser::getMseFilename()
 {
     return vm["mse"].as<std::string>();
+}
+
+bool Parser::setPmse()
+{
+    return vm.count("pmse");
+}
+
+std::string Parser::getPmseFilename()
+{
+    return vm["pmse"].as<std::string>();
+}
+
+bool Parser::setSnr()
+{
+    return vm.count("snr");
+}
+
+std::string Parser::getSnrFilename()
+{
+    return vm["snr"].as<std::string>();
+}
+
+bool Parser::setPsnr()
+{
+    return vm.count("psnr");
+}
+
+std::string Parser::getPsnrFilename()
+{
+    return vm["psnr"].as<std::string>();
+}
+
+bool Parser::setMd()
+{
+    return vm.count("md");
+}
+
+std::string Parser::getMdFilename()
+{
+    return vm["md"].as<std::string>();
 }
 
