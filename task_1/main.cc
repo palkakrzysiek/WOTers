@@ -90,35 +90,35 @@ int main(int argc, char** argv)
         imageChanged = false;
         Image filtered(p.getMseFilename());
         img.perform_operation(new MeanSquareError(&filtered, &result));
-        cout << "md:\t" << result << endl;
+        cout << result << endl;
     }
     if (p.setPmse())
     {
         imageChanged = false;
         Image filtered(p.getPmseFilename());
         img.perform_operation(new PeakMeanSquareError(&filtered, &result));
-        cout << "md:\t" << result << endl;
+        cout << result << endl;
     }
     if (p.setSnr())
     {
         imageChanged = false;
         Image filtered(p.getSnrFilename());
         img.perform_operation(new SignalToNoiseRatio(&filtered, &result));
-        cout << "md:\t" << result << endl;
+        cout << result << endl;
     }
     if (p.setPsnr())
     {
         imageChanged = false;
         Image filtered(p.getPsnrFilename());
         img.perform_operation(new PeakSignalToNoiseRatio(&filtered, &result));
-        cout << "md:\t" << result << endl;
+        cout << result << endl;
     }
     if (p.setMd())
     {
         imageChanged = false;
         Image filtered(p.getMdFilename());
         img.perform_operation(new MaxDifference(&filtered, &result));
-        cout << "md:\t" << result << endl;
+        cout << result << endl;
     }
 
 
@@ -129,8 +129,9 @@ int main(int argc, char** argv)
 #ifdef _SPEED_TEST
     uint64_t timer = now();
 #endif
-
-    img.perform_operation(o);
+    if (!imageChanged) {
+        img.perform_operation(o);
+    }
 
 #ifdef _SPEED_TEST
     timer = now() - timer;

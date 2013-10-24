@@ -7,8 +7,6 @@ AlphaTrimmedMeanFilter::AlphaTrimmedMeanFilter(uint8_t a)
 {
 }
 
-// TODO
-// deal with the borders
 void AlphaTrimmedMeanFilter::perform(Image &image)
 {
   int w = image.get_surface()->w;

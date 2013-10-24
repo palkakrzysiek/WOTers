@@ -44,7 +44,7 @@ void ContraharmonicMeanFilter::perform(Image &image) {
                 result[o] = sum1[o] / sum2[o];
             }
             filtered.set_pixel(i, j, SDL_MapRGBA(filtered.get_surface()->format,
-                        result[0], result[1], result[2], result[3]));
+                        trunc(result[0]), trunc(result[1]), trunc(result[2]), trunc(result[3])));
         }
     }
     image = std::move(filtered);
