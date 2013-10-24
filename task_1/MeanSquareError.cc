@@ -40,14 +40,14 @@ void MeanSquareError::perform(Image &image)
       r += (rgba1[0] - rgba2[0]) * (rgba1[0] - rgba2[0]);
       g += (rgba1[1] - rgba2[1]) * (rgba1[1] - rgba2[1]);
       b += (rgba1[2] - rgba2[2]) * (rgba1[2] - rgba2[2]);
-      a += (rgba1[3] - rgba2[3]) * (rgba1[3] - rgba2[3]);
+      // a += (rgba1[3] - rgba2[3]) * (rgba1[3] - rgba2[3]);
     }
   }
 
   r /= w * h;
   g /= w * h;
   b /= w * h;
-  a /= w * h;
+  // a /= w * h;
 
-  *result = (r + g + b + a) / bpp;
+  *result = (r + g + b) / 3.0;
 }

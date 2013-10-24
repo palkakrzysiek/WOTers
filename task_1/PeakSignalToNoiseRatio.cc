@@ -74,5 +74,5 @@ void PeakSignalToNoiseRatio::perform(Image &image)
   b = 10 * log10(max_b * max_b / b);
   // a = ;
 
-  *result = (r + g + b) / bpp;
+  *result = (r + g + b) / 3.0;
 }

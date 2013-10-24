@@ -50,5 +50,5 @@ void MaxDifference::perform(Image &image)
     }
   }
 
-  *result = (double) (max_r + max_b + max_g) / bpp;
+  *result = (double) (max_r + max_b + max_g) / 3.0;
 }

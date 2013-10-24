@@ -53,7 +53,7 @@ void SignalToNoiseRatio::perform(Image &image)
   r1 = 10 * log10(r1 / r2);
   g1 = 10 * log10(g1 / g2);
   b1 = 10 * log10(b1 / b2);
-  a1 = 10 * log10(a1 / a2);
+  // a1 = 10 * log10(a1 / a2);
 
-  *result = (r1 + g1 + b1/* + a1*/) / bpp;
+  *result = (r1 + g1 + b1) / 3.0;
 }

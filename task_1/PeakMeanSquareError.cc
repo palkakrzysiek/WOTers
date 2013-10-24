@@ -43,8 +43,8 @@ void PeakMeanSquareError::perform(Image &image)
       if (b > max_b)
         max_b = b;
 
-      if (a > max_a)
-        max_a = a;
+      // if (a > max_a)
+      //   max_a = a;
     }
   }
 
@@ -66,19 +66,19 @@ void PeakMeanSquareError::perform(Image &image)
       r += (rgba1[0] - rgba2[0]) * (rgba1[0] - rgba2[0]);
       g += (rgba1[1] - rgba2[1]) * (rgba1[1] - rgba2[1]);
       b += (rgba1[2] - rgba2[2]) * (rgba1[2] - rgba2[2]);
-      a += (rgba1[3] - rgba2[3]) * (rgba1[3] - rgba2[3]);
+      // a += (rgba1[3] - rgba2[3]) * (rgba1[3] - rgba2[3]);
     }
   }
 
   r /= max_r * max_r;
   g /= max_g * max_g;
   b /= max_b * max_b;
-  a /= max_a * max_a;
+  // a /= max_a * max_a;
 
   r /= w * h;
   g /= w * h;
   b /= w * h;
-  a /= w * h;
+  // a /= w * h;
 
-  *result = (r + g + b + a) / bpp;
+  *result = (r + g + b) / 3.0;
 }
