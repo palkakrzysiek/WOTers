@@ -129,7 +129,7 @@ int main(int argc, char** argv)
 #ifdef _SPEED_TEST
     uint64_t timer = now();
 #endif
-    if (!imageChanged) {
+    if (imageChanged) {
         img.perform_operation(o);
     }
 

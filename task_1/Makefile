@@ -69,7 +69,7 @@ SignalToNoiseRatio.o : SignalToNoiseRatio.cc SignalToNoiseRatio.h Image.h Operat
 PeakSignalToNoiseRatio.o : PeakSignalToNoiseRatio.cc PeakSignalToNoiseRatio.h Image.h Operation.h
 	$(CXX) $(CXXFLAGS) -c PeakSignalToNoiseRatio.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-MaxDifference.o : MaxDifference.cc MaxDifference.h Image.h Operation.h MaxDifference.o
+MaxDifference.o : MaxDifference.cc MaxDifference.h Image.h Operation.h
 	$(CXX) $(CXXFLAGS) -c MaxDifference.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)	
 
 .PHONY : clean
