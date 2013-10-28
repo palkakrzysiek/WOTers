@@ -23,13 +23,13 @@ main.o : main.cc
 # Parser.o : Parser.h Parser.cc
 # 	$(CXX) $(CXXFLAGS) -c Parser.cc $(BOOST_LDFLAGS)
 
-Histogram.o:
+Histogram.o: Histogram.cc Histogram.h
 	$(CXX) $(CXXFLAGS) -c Histogram.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-Image.o :
+Image.o : ../libimage/Image.cc ../libimage/Image.h
 	$(CXX) $(CXXFLAGS) -c ../libimage/Image.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-Operation.o :
+Operation.o : ../libimage/Operation.cc ../libimage/Operation.h
 	$(CXX) $(CXXFLAGS) -c ../libimage/Operation.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
 .PHONY : clean
