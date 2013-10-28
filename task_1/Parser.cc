@@ -34,7 +34,7 @@ Parser::Parser(int &argc, char** argv)
         ("mse", po::value<std::string>(),
          "Mean square error")
         ("pmse", po::value<std::string>(),
-        "Preak mean sqare error")
+        "Peak mean sqare error")
         ("snr", po::value<std::string>(),
          "Signal to noise ratio")
         ("psnr", po::value<std::string>(),

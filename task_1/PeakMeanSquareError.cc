@@ -20,7 +20,7 @@ void PeakMeanSquareError::perform(Image &image)
     exit(1);
   }
 
-  uint8_t max_r, max_g, max_b, max_a;
+  uint8_t max_r = 0, max_g = 0, max_b = 0, max_a = 0;
 
   int i, j;
 

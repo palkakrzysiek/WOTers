@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-g -O2 -std=c++11 -Wall -Wextra -pedantic -fopenmp
+CXXFLAGS=-g -O2 -std=c++11 -Wall -Wextra -pedantic -fopenmp -I../libimage/
 MAIN_CFLAGS=
 LDFLAGS=-fopenmp
 SDL_CFLAGS := $(shell sdl-config --cflags)
@@ -24,52 +24,52 @@ main.o : main.cc
 Parser.o : Parser.h Parser.cc
 	$(CXX) $(CXXFLAGS) -c Parser.cc $(BOOST_LDFLAGS)
 
-Image.o : Image.cc Image.h
-	$(CXX) $(CXXFLAGS) -c Image.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
+Image.o :
+	$(CXX) $(CXXFLAGS) -c ../libimage/Image.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-Operation.o : Operation.cc Operation.h Image.h
-	$(CXX) $(CXXFLAGS) -c Operation.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
+Operation.o :
+	$(CXX) $(CXXFLAGS) -c ../libimage/Operation.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-BrightnessAdjustment.o : BrightnessAdjustment.cc BrightnessAdjustment.h Image.h
+BrightnessAdjustment.o :
 	$(CXX) $(CXXFLAGS) -c BrightnessAdjustment.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-Negative.o : Negative.cc Negative.h Image.h Operation.h
+Negative.o :
 	$(CXX) $(CXXFLAGS) -c Negative.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-ContrastAdjustment.o : ContrastAdjustment.cc ContrastAdjustment.h Image.h Operation.h
+ContrastAdjustment.o :
 	$(CXX) $(CXXFLAGS) -c ContrastAdjustment.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-VerticalFlip.o : VerticalFlip.cc VerticalFlip.h Image.h Operation.h
+VerticalFlip.o :
 	$(CXX) $(CXXFLAGS) -c VerticalFlip.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-HorizontalFlip.o : HorizontalFlip.cc HorizontalFlip.h Image.h Operation.h
+HorizontalFlip.o :
 	$(CXX) $(CXXFLAGS) -c HorizontalFlip.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-DiagonalFlip.o: DiagonalFlip.cc DiagonalFlip.h HorizontalFlip.h VerticalFlip.h Image.h
+DiagonalFlip.o:
 	$(CXX) $(CXXFLAGS) -c DiagonalFlip.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-Resize.o : Resize.cc Resize.h Image.h Operation.h
+Resize.o :
 	$(CXX) $(CXXFLAGS) -c Resize.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-ContraharmonicMeanFilter.o : ContraharmonicMeanFilter.cc ContraharmonicMeanFilter.h Image.h Operation.h
+ContraharmonicMeanFilter.o :
 	$(CXX) $(CXXFLAGS) -c ContraharmonicMeanFilter.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-AlphaTrimmedMeanFilter.o : AlphaTrimmedMeanFilter.cc AlphaTrimmedMeanFilter.h Image.h Operation.h
+AlphaTrimmedMeanFilter.o :
 	$(CXX) $(CXXFLAGS) -c AlphaTrimmedMeanFilter.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-MeanSquareError.o : MeanSquareError.cc MeanSquareError.h Image.h Operation.h
+MeanSquareError.o :
 	$(CXX) $(CXXFLAGS) -c MeanSquareError.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)	
 
-PeakMeanSquareError.o : PeakMeanSquareError.cc PeakMeanSquareError.h Image.h Operation.h
+PeakMeanSquareError.o :
 	$(CXX) $(CXXFLAGS) -c PeakMeanSquareError.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)	
 
-SignalToNoiseRatio.o : SignalToNoiseRatio.cc SignalToNoiseRatio.h Image.h Operation.h
+SignalToNoiseRatio.o :
 	$(CXX) $(CXXFLAGS) -c SignalToNoiseRatio.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)	
 
-PeakSignalToNoiseRatio.o : PeakSignalToNoiseRatio.cc PeakSignalToNoiseRatio.h Image.h Operation.h
+PeakSignalToNoiseRatio.o :
 	$(CXX) $(CXXFLAGS) -c PeakSignalToNoiseRatio.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-MaxDifference.o : MaxDifference.cc MaxDifference.h Image.h Operation.h
+MaxDifference.o :
 	$(CXX) $(CXXFLAGS) -c MaxDifference.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)	
 
 .PHONY : clean
