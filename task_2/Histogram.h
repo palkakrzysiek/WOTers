@@ -22,7 +22,7 @@ public:
   double cvarcoii(Channel c);
   double centropy(Channel c);
 
-  void save_as_image(const std::string &filename, Channel c);
+  void save_as_image(Channel c, const std::string &filename);
 
 private:
   // std::map<uint8_t, uint64_t> pixels_r;

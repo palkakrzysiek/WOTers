@@ -23,7 +23,8 @@ Image::Image(int width, int height, int bpp)
     rmask = 0x000000ff;
   }
 
-  surface = SDL_CreateRGBSurface(0, width, height, bpp, rmask, gmask, bmask, amask);
+  // surface = SDL_CreateRGBSurface(0, width, height, bpp, rmask, gmask, bmask, amask);
+  surface = SDL_CreateRGBSurface(0, width, height, bpp, 0, 0, 0, 0);
 
   if (surface == nullptr)
   {

@@ -2,6 +2,7 @@
 #include <cstring>
 #include <cassert>
 #include <cmath>
+#include <algorithm>
 
 Histogram::Histogram(Image &image)
 {
@@ -158,7 +159,7 @@ double Histogram::casyco(Channel c)
   return mean;
 }
 
-void Histogram::save_as_image(const std::string &filename, Channel c)
+void Histogram::save_as_image(Channel c, const std::string &filename)
 {
   uint64_t *ptr = nullptr;
 
@@ -172,4 +173,39 @@ void Histogram::save_as_image(const std::string &filename, Channel c)
     ptr = pixels_a;
 
   assert(ptr != nullptr);
+
+  Image histogram(768, 510, 24);
+
+  int i, j;
+
+  int w = histogram.get_surface()->w;
+  int h = histogram.get_surface()->h;
+
+  uint64_t max = *std::max_element(ptr, ptr + 256);
+  double f = (double) max / (h - 5);
+  printf("%f\n", f);
+
+  # pragma omp parallel for private(i)
+  for (j = 0; j < h; ++j)
+  {
+    for (i = 0; i < w; ++i)
+    {
+      histogram.set_pixel(i, j, 0xffffff);
+    }
+  }
+  
+// # pragma omp parallel for
+  for (i = 0; i < w; ++i)
+  {
+    if (ptr[i / 3] > 0)
+    {
+      for (j = 0; j < (int) (ptr[i / 3] / f); ++j)
+      {
+        histogram.set_pixel(i, h - j - 1, SDL_MapRGB(histogram.get_surface()->format,
+                            0, 0, 0));
+      }
+    }
+  }
+
+  histogram.save(filename);
 }
