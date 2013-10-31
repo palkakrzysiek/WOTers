@@ -15,6 +15,9 @@ class Image
 {
 public:
   // constructors
+
+  Image(int width, int height, int bpp);
+
   Image(const std::string &filename);
   
   // copy constructors

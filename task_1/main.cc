@@ -83,7 +83,7 @@ int main(int argc, char** argv)
         o = new ContraharmonicMeanFilter(p.getCmeanValue());
     }
 
-    double result = 0;
+    double result = 0.0;
 
     if (p.setMse())
     {

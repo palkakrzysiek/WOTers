@@ -12,8 +12,8 @@ void MaxDifference::perform(Image &image)
   int h = image.get_surface()->h;
   int bpp = image.get_surface()->format->BytesPerPixel;
 
-  if (filtered->get_surface()->w != w && filtered->get_surface()->h != h 
-      && filtered->get_surface()->format->BytesPerPixel != bpp)
+  if (filtered->get_surface()->w != w || filtered->get_surface()->h != h 
+      || filtered->get_surface()->format->BytesPerPixel != bpp)
   {
     fprintf(stderr, "Images are not of the same size\n");
     exit(1);
