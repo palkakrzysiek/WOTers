@@ -13,7 +13,7 @@ Histogram::Histogram(Image &image)
 
   int i, j;
 
-# pragma omp parallel for default(shared) private(i)
+// # pragma omp parallel for default(shared) private(i)
   for (j = 0; j < h; ++j)
   {
     for (i = 0; i < w; ++i)
@@ -163,49 +163,66 @@ void Histogram::save_as_image(Channel c, const std::string &filename)
 {
   uint64_t *ptr = nullptr;
 
+  Image image(768, 510, 24);
+  int8_t dr = 0, dg = 0, db = 0; 
+
   if (c == R)
+  {
     ptr = pixels_r;
+    dr = 1;
+  }
   else if (c == G)
+  {
     ptr = pixels_g;
+    dg = 1;
+  }
   else if (c == B)
+  {
     ptr = pixels_b;
+    db = 1;
+  }
   else if (c == A)
+  {
     ptr = pixels_a;
+    dr = -1;
+    dg = -1;
+    db = -1;
+  }
 
   assert(ptr != nullptr);
 
-  Image histogram(768, 510, 24);
-
   int i, j;
 
-  int w = histogram.get_surface()->w;
-  int h = histogram.get_surface()->h;
+  int w = image.get_surface()->w;
+  int h = image.get_surface()->h;
 
   uint64_t max = *std::max_element(ptr, ptr + 256);
   double f = (double) max / (h - 5);
   printf("%f\n", f);
 
-  # pragma omp parallel for private(i)
+# pragma omp parallel for private(i)
   for (j = 0; j < h; ++j)
   {
     for (i = 0; i < w; ++i)
     {
-      histogram.set_pixel(i, j, 0xffffff);
+      image.set_pixel(i, j, 0xffffff);
     }
   }
   
-// # pragma omp parallel for
+# pragma omp parallel for private(j)
   for (i = 0; i < w; ++i)
   {
     if (ptr[i / 3] > 0)
     {
-      for (j = 0; j < (int) (ptr[i / 3] / f); ++j)
+      for (j = 0; j < (ptr[i / 3] / f); ++j)
       {
-        histogram.set_pixel(i, h - j - 1, SDL_MapRGB(histogram.get_surface()->format,
-                            0, 0, 0));
+        image.set_pixel(i, h - j - 1, SDL_MapRGB(image.get_surface()->format,
+                        Operation::trunc((i / 3) * dr),
+                        Operation::trunc((i / 3) * dg),
+                        Operation::trunc((i / 3) * db)));
       }
     }
   }
 
-  histogram.save(filename);
+  image.save(filename);
 }

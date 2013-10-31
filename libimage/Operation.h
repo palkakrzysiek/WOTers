@@ -10,7 +10,7 @@ class Operation
 public:
   virtual void perform(Image &image) = 0;
 
-  uint8_t trunc(int value);
+  static uint8_t trunc(int value);
 
 };
 
