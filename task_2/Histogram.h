@@ -25,10 +25,6 @@ public:
   void save_as_image(Channel c, const std::string &filename);
 
 private:
-  // std::map<uint8_t, uint64_t> pixels_r;
-  // std::map<uint8_t, uint64_t> pixels_g;
-  // std::map<uint8_t, uint64_t> pixels_b;
-  // std::map<uint8_t, uint64_t> pixels_a;
   uint64_t pixels_r[256] = {0};
   uint64_t pixels_g[256] = {0};
   uint64_t pixels_b[256] = {0};

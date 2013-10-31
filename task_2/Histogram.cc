@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
 Histogram::Histogram(Image &image)
 {
@@ -13,7 +14,7 @@ Histogram::Histogram(Image &image)
 
   int i, j;
 
-// # pragma omp parallel for default(shared) private(i)
+# pragma omp parallel for default(shared) private(i)
   for (j = 0; j < h; ++j)
   {
     for (i = 0; i < w; ++i)
@@ -23,47 +24,17 @@ Histogram::Histogram(Image &image)
       SDL_GetRGBA(image.get_pixel(i, j), image.get_surface()->format,
                   &r, &g, &b, &a);
 
-// #     pragma omp flush(pixels_r[r])
       ++pixels_r[r];
-
-// #     pragma omp flush(pixels_g[g])
       ++pixels_g[g];
-
-// #     pragma omp flush(pixels_b[b])
       ++pixels_b[b];
-
-// #     pragma omp flush(pixels_a[a])
       ++pixels_a[a];
-      // printf("%hu, %hu, %hu, %hu\n", r, g, b, a);
     }
   } 
 }
 
 void Histogram::print_channel(Channel c)
 {
-  // std::map<uint8_t, uint64_t> *ptr;
-
-  // if (c == R)
-  //   ptr = &pixels_r;
-  // else if (c == G)
-  //   ptr = &pixels_g;
-  // else if (c == B)
-  //   ptr = &pixels_b;
-  // else if (c == A)
-  //   ptr = &pixels_a;
-
-  // for (const auto &i : *ptr)
-  //   printf("[%hu] = %llu\n", i.first, i.second);
-  for (auto i : pixels_r)
-    printf("%llu\n", i);
-}
-
-double Histogram::cmean(Channel c)
-{
-  // int w = image.get_surface()->w;
-  // int h = image.get_surface()->h;
-
-  uint64_t *ptr = nullptr;
+  uint64_t *ptr = pixels_r;
 
   if (c == R)
     ptr = pixels_r;
@@ -74,7 +45,22 @@ double Histogram::cmean(Channel c)
   else if (c == A)
     ptr = pixels_a;
 
-  assert(ptr != nullptr);
+  for (int i = 0; i < 256; ++i)
+    printf("[%d] = %llu\n", i, ptr[i]);
+}
+
+double Histogram::cmean(Channel c)
+{
+  uint64_t *ptr = pixels_r;
+
+  if (c == R)
+    ptr = pixels_r;
+  else if (c == G)
+    ptr = pixels_g;
+  else if (c == B)
+    ptr = pixels_b;
+  else if (c == A)
+    ptr = pixels_a;
 
   double result = 0.0;
 
@@ -91,7 +77,7 @@ double Histogram::cmean(Channel c)
 
 double Histogram::cvariance(Channel c)
 {
-  uint64_t *ptr = nullptr;
+  uint64_t *ptr = pixels_r;
 
   if (c == R)
     ptr = pixels_r;
@@ -101,8 +87,6 @@ double Histogram::cvariance(Channel c)
     ptr = pixels_b;
   else if (c == A)
     ptr = pixels_a;
-
-  assert(ptr != nullptr);
 
   double result = 0.0;
   double m = cmean(c);
@@ -130,7 +114,7 @@ double Histogram::cvarcoi(Channel c)
 
 double Histogram::casyco(Channel c)
 {
-  uint64_t *ptr = nullptr;
+  uint64_t *ptr = pixels_r;
 
   if (c == R)
     ptr = pixels_r;
@@ -140,8 +124,6 @@ double Histogram::casyco(Channel c)
     ptr = pixels_b;
   else if (c == A)
     ptr = pixels_a;
-
-  assert(ptr != nullptr);
 
   double mean = cmean(c);
 
@@ -161,9 +143,9 @@ double Histogram::casyco(Channel c)
 
 void Histogram::save_as_image(Channel c, const std::string &filename)
 {
-  uint64_t *ptr = nullptr;
+  uint64_t *ptr = pixels_r;
 
-  Image image(768, 510, 24);
+  Image image(768, 520, 24);
   int8_t dr = 0, dg = 0, db = 0; 
 
   if (c == R)
@@ -189,16 +171,13 @@ void Histogram::save_as_image(Channel c, const std::string &filename)
     db = -1;
   }
 
-  assert(ptr != nullptr);
-
   int i, j;
 
   int w = image.get_surface()->w;
   int h = image.get_surface()->h;
 
   uint64_t max = *std::max_element(ptr, ptr + 256);
-  double f = (double) max / (h - 5);
-  printf("%f\n", f);
+  double f = (double) max / (h - 15);
 
 # pragma omp parallel for private(i)
   for (j = 0; j < h; ++j)
