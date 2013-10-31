@@ -19,19 +19,21 @@ void PeakSignalToNoiseRatio::perform(Image &image)
     exit(1);
   }
 
-  uint8_t max_r, max_g, max_b, max_a;
-
   int i, j;
 
-# pragma omp parallel for private(i)
-  for (j = 0; j < h; ++j)
+  uint8_t max_r = 0, max_g = 0, max_b = 0;
+
+
+  // finding maximum value for each channel
+// #pragma omp parallel for private(i)
+  for(j = 0; j < h; ++j)
   {
     for (i = 0; i < w; ++i)
     {
-      uint8_t r, g, b, a;
+      uint8_t r, g, b;
 
-      SDL_GetRGBA(image.get_pixel(i, j), image.get_surface()->format,
-                  &r, &g, &b, &a);
+      SDL_GetRGB(image.get_pixel(i, j), image.get_surface()->format,
+                  &r, &g, &b);
 
       if (r > max_r)
         max_r = r;
@@ -41,38 +43,34 @@ void PeakSignalToNoiseRatio::perform(Image &image)
 
       if (b > max_b)
         max_b = b;
-
-      if (a > max_a)
-        max_a = a;
     }
   }
 
-  double r = 0.0, g = 0.0, b = 0.0, a = 0.0;
+  double r, g, b;
 
-  # pragma omp parallel for private(i) default(shared) reduction(+:r,g,b,a)
+#pragma omp parallel for private(j) reduction(+:r, g, b)
   for (j = 0; j < h; ++j)
   {
     for (i = 0; i < w; ++i)
     {
-      uint8_t rgba1[4],
-              rgba2[4];
+      uint8_t rgb1[3], rgb2[3];
 
-      SDL_GetRGBA(image.get_pixel(i, j), image.get_surface()->format,
-                  &rgba1[0], &rgba1[1], &rgba1[2], &rgba1[3]);
-      SDL_GetRGBA(filtered->get_pixel(i, j), filtered->get_surface()->format,
-                  &rgba2[0], &rgba2[1], &rgba2[2], &rgba2[3]);
+      SDL_GetRGB(image.get_pixel(i, j), image.get_surface()->format,
+                 &rgb1[0], &rgb1[1], &rgb1[2]);
+      SDL_GetRGB(filtered->get_pixel(i, j), filtered->get_surface()->format,
+                 &rgb1[0], &rgb1[1], &rgb1[2]);
 
-      r += (rgba1[0] - rgba2[0]) * (rgba1[0] - rgba2[0]);
-      g += (rgba1[1] - rgba2[1]) * (rgba1[1] - rgba2[1]);
-      b += (rgba1[2] - rgba2[2]) * (rgba1[2] - rgba2[2]);
-      // a += (rgba1[3] - rgba2[3]) * (rgba1[3] - rgba2[3]);
+      r += pow(rgb1[0] - rgb2[0], 2);
+      g += pow(rgb1[1] - rgb2[1], 2);
+      b += pow(rgb1[2] - rgb2[2], 2);
     }
   }
 
-  r = 10 * log10(max_r * max_r / r);
-  g = 10 * log10(max_g * max_g / g);
-  b = 10 * log10(max_b * max_b / b);
-  // a = ;
+  double res_r, res_g, res_b;
 
-  *result = (r + g + b) / 3.0;
+  res_r = 10 * log10(pow(max_r, 2) * w * h / r);
+  res_g = 10 * log10(pow(max_g, 2) * w * h / g);
+  res_b = 10 * log10(pow(max_b, 2) * w * h / b);
+
+  *result = (res_r + res_g + res_b) / 3.0;
 }

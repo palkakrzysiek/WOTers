@@ -30,7 +30,7 @@ Image.o : ../libimage/Image.cc ../libimage/Image.h
 Operation.o : ../libimage/Operation.cc ../libimage/Operation.h
 	$(CXX) $(CXXFLAGS) -c ../libimage/Operation.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-BrightnessAdjustment.o : BrightnessAdjustment.c BrightnessAdjustment.h
+BrightnessAdjustment.o : BrightnessAdjustment.cc BrightnessAdjustment.h
 	$(CXX) $(CXXFLAGS) -c BrightnessAdjustment.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
 Negative.o : Negative.cc Negative.h
