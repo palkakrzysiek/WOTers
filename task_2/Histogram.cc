@@ -89,12 +89,12 @@ double Histogram::cvariance(Channel c)
     ptr = pixels_a;
 
   double result = 0.0;
-  double m = cmean(c);
+  double mean = cmean(c);
 
 # pragma omp parallel for reduction(+:result)
   for (int i = 0; i < 256; ++i)
   {
-    result += (i - m) * (i - m) * ptr[i];
+    result += (double) (i - mean) * (i - mean) * ptr[i];
   }
 
   result /= n_pixels;
@@ -126,6 +126,7 @@ double Histogram::casyco(Channel c)
     ptr = pixels_a;
 
   double mean = cmean(c);
+  double stddev = cstdev(c);
 
   double result = 0.0;
 
@@ -136,9 +137,64 @@ double Histogram::casyco(Channel c)
   }
 
   result /= n_pixels;
-  mean = (1.0 / pow(cstdev(c), 3)) * result;
+  result *= 1.0 / pow(stddev, 3);
 
-  return mean;
+  return result;
+}
+
+double Histogram::cflato(Channel c)
+{
+  uint64_t *ptr = pixels_r;
+
+  if (c == R)
+    ptr = pixels_r;
+  else if (c == G)
+    ptr = pixels_g;
+  else if (c == B)
+    ptr = pixels_b;
+  else if (c == A)
+    ptr = pixels_a;
+
+  double mean = cmean(c);
+  double stddev = cstdev(c);
+
+  double result = 0.0;
+
+# pragma omp parallel for reduction(+:result)
+  for (int i = 0; i < 256; ++i)
+  {
+    result += pow(i - mean, 4) * ptr[i];
+  }
+
+  result /= n_pixels;
+  result *= 1.0 / pow(stddev, 4);
+
+  return result;
+}
+
+double Histogram::centropy(Channel c)
+{
+  uint64_t *ptr = pixels_r;
+
+  if (c == R)
+    ptr = pixels_r;
+  else if (c == G)
+    ptr = pixels_g;
+  else if (c == B)
+    ptr = pixels_b;
+  else if (c == A)
+    ptr = pixels_a;
+
+  double result = 0.0;
+
+# pragma omp parallel for reduction(+:result)
+  for (int i = 0; i < 256; ++i)
+  {
+    result += ptr[i] * log2((double) ptr[i] / n_pixels);
+  }
+
+  result /= -n_pixels;
+  return result;
 }
 
 void Histogram::save_as_image(Channel c, const std::string &filename)
