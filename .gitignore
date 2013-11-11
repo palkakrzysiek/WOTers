@@ -3,5 +3,6 @@
 *.png
 *.jpg
 program*
+ip
 *.o
 *~

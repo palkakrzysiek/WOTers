@@ -75,7 +75,7 @@ int main(int argc, char** argv)
 
     if (p.setAlpha())
     {
-        o = new RosenfeldOperator(p.getAlphaValue());
+        o = new AlphaTrimmedMeanFilter(p.getAlphaValue());
     }
 
     if (p.setCmean())

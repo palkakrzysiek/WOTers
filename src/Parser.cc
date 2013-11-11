@@ -158,11 +158,11 @@ bool Parser::setAlpha()
 int Parser::getAlphaValue()
 {
     int tempVal = vm["alpha"].as<int>();
-//     if (tempVal < 0 || tempVal > 8 || tempVal % 2 != 0){
-//         std::cerr << "Value of Alpha Trimmed Mean Filter must be \
-// 0, 2, 4, 6 or 8. Exiting..." std::endl;
-//         exit(1);
-//     }
+    if (tempVal < 0 || tempVal > 8 || tempVal % 2 != 0){
+        std::cerr << "Value of Alpha Trimmed Mean Filter must be \
+0, 2, 4, 6 or 8. Exiting..." << std::endl;
+        exit(1);
+    }
     return tempVal;
 }
 
