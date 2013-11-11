@@ -1,0 +1,43 @@
+
+"impulse original"	 0.0274355
+"impulse aplha 0"	0.00382576
+"impulse aplha 2"	0.00143198
+"impulse aplha 4"	0.000595869
+"impulse aplha 6"	0.00041346
+"impulse aplha 8"	0.000392224
+"impulse cmean -3"	0.0496212
+"impulse cmean -1"	0.0501758
+"impulse cmean 0"	0.00799408
+"impulse cmean 0.5"	0.0100161
+"impulse cmean 1"	0.0171125
+"impulse cmean 3"	0.040919
+"impulse mcmean 2"	0.0168767
+"impulse mcmean 5"	0.0169294
+"normal original"	 0.0203389
+"normal aplha 0"	0.0027717
+"normal aplha 2"	0.00182461
+"normal aplha 4"	0.00101015
+"normal aplha 6"	0.000683596
+"normal aplha 8"	0.000637992
+"normal cmean -3"	0.0291588
+"normal cmean -1"	0.0165073
+"normal cmean 0"	0.00599918
+"normal cmean 0.5"	0.00656591
+"normal cmean 1"	0.00844978
+"normal cmean 3"	0.0193184
+"normal mcmean 2"	0.0114276
+"normal mcmean 5"	0.0141013
+"uniform original"	 0.0212362
+"uniform aplha 0"	0.00283964
+"uniform aplha 2"	0.0022534
+"uniform aplha 4"	0.00150975
+"uniform aplha 6"	0.00109124
+"uniform aplha 8"	0.00103495
+"uniform cmean -3"	0.0275474
+"uniform cmean -1"	0.015584
+"uniform cmean 0"	0.00623581
+"uniform cmean 0.5"	0.00686536
+"uniform cmean 1"	0.00864079
+"uniform cmean 3"	0.0186036
+"uniform mcmean 2"	0.0116021
+"uniform mcmean 5"	0.0148085

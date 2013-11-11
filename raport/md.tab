@@ -1,0 +1,43 @@
+
+"impulse original"	 235
+"impulse aplha 0"	107
+"impulse aplha 2"	105
+"impulse aplha 4"	111
+"impulse aplha 6"	122
+"impulse aplha 8"	171
+"impulse cmean -3"	234
+"impulse cmean -1"	234
+"impulse cmean 0"	219
+"impulse cmean 0.5"	219
+"impulse cmean 1"	219
+"impulse cmean 3"	232
+"impulse mcmean 2"	230
+"impulse mcmean 5"	230
+"normal original"	 102
+"normal aplha 0"	82
+"normal aplha 2"	87
+"normal aplha 4"	94
+"normal aplha 6"	97
+"normal aplha 8"	98
+"normal cmean -3"	195
+"normal cmean -1"	190
+"normal cmean 0"	119
+"normal cmean 0.5"	133
+"normal cmean 1"	144
+"normal cmean 3"	198
+"normal mcmean 2"	190
+"normal mcmean 5"	195
+"uniform original"	 102
+"uniform aplha 0"	87
+"uniform aplha 2"	90
+"uniform aplha 4"	86
+"uniform aplha 6"	86
+"uniform aplha 8"	94
+"uniform cmean -3"	201
+"uniform cmean -1"	186
+"uniform cmean 0"	121
+"uniform cmean 0.5"	145
+"uniform cmean 1"	167
+"uniform cmean 3"	200
+"uniform mcmean 2"	199
+"uniform mcmean 5"	201
