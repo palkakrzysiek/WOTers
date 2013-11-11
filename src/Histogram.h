@@ -9,18 +9,18 @@ class Histogram
 public:
   Histogram(Image &image);
 
-  enum Channel { R, G, B, A };
+  enum Channel { R = 0, G = 1, B = 2, A = 3, ALL = 4};
 
   void print_channel(Channel c);
 
-  double cmean(Channel c);
-  double cvariance(Channel c);
-  double cstdev(Channel c);
-  double cvarcoi(Channel c);
-  double casyco(Channel c);
-  double cflato(Channel c);
-  double cvarcoii(Channel c);
-  double centropy(Channel c);
+  double cmean(Channel c = ALL);
+  double cvariance(Channel c = ALL);
+  double cstdev(Channel c = ALL);
+  double cvarcoi(Channel c = ALL);
+  double casyco(Channel c = ALL);
+  double cflatco(Channel c = ALL);
+  double cvarcoii(Channel c = ALL);
+  double centropy(Channel c = ALL);
 
   void save_as_image(Channel c, const std::string &filename);
 
@@ -36,6 +36,7 @@ private:
   uint64_t pixels_a[256] = {0};
 
   uint64_t n_pixels;
+  bool grayscale;
 
 };
 

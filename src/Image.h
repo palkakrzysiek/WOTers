@@ -44,26 +44,7 @@ public:
 
 private:
   SDL_Surface *surface = nullptr;
-
-  // void brightness(double by_percent);
-  // void contrast(double by_percent);
-  // void negative();
-
-  // void hflip();
-  // void vflip();
-  // void dflip();
-  // void shrink(double by_percent);
-  // void enlarge(double by_percent);
-
-  // void alpha();
-  // void cmean();
-
-  // void mse();
-  // void pmse();
-  // void snr();
-  // void psnr();
-  // void md();
-
+  
 };
 
 #endif

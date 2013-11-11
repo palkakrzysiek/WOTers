@@ -1,7 +1,6 @@
 #include "Parser.h"
 #include "boost/program_options.hpp" 
 
-
 Parser::Parser(int &argc, char** argv)
     : desc("Options")
 {
@@ -32,6 +31,7 @@ Parser::Parser(int &argc, char** argv)
         ("cmean", po::value<double>(), "contraharmonic mean filter [floating point value]")
 
         ("slowpass", "Low-pass filter")
+        ("orosenfeld", po::value<int>(), "Rosenfeld operator [1, 2, 4, 8, 16, ..]")
 
         ("mse", po::value<std::string>(),
          "Mean square error")
@@ -42,7 +42,20 @@ Parser::Parser(int &argc, char** argv)
         ("psnr", po::value<std::string>(),
          "Peak signal to noise ratio")
         ("md", po::value<std::string>(),
-         "Maximum difference");
+         "Maximum difference")
+
+        ("channel", po::value<std::string>(), "Channel [R, G, B]")
+
+        ("cmeanh", "Mean")
+        ("cvariance", "Variance")
+        ("cstdev", "Standard deviation")
+        ("cvarcoi", "Variation coefficient I")
+        ("cvarcoii", "Variation coefficient II")
+        ("casyco", "Asymmetry coefficient")
+        ("cflatco", "Flattening coefficient")
+        ("centropy", "Information source entropy")
+
+        ("histogram", po::value<std::string>(), "Save histogram to file");
 
     try 
     { 
@@ -80,7 +93,6 @@ Command Line Image processing tool" << std::endl
         std::cerr << desc << std::endl; 
         exit(1);
     } 
-
 
 }
 
@@ -149,7 +161,6 @@ double Parser::getResizeValue()
     return vm["resize"].as<double>() / 100.0;
 }
 
-
 bool Parser::setAlpha()
 {
     return vm.count("alpha");
@@ -178,6 +189,16 @@ double Parser::getCmeanValue(){
 bool Parser::setLowPass()
 {
     return vm.count("slowpass");
+}
+
+bool Parser::setRosenfeld()
+{
+    return vm.count("orosenfeld");
+}
+
+int Parser::getRosenfeldP()
+{
+    return vm["orosenfeld"].as<int>();
 }
 
 bool Parser::setMse()
@@ -228,4 +249,78 @@ bool Parser::setMd()
 std::string Parser::getMdFilename()
 {
     return vm["md"].as<std::string>();
+}
+
+bool Parser::setChannel()
+{
+    return vm.count("channel");
+}
+
+int Parser::getChannel()
+{
+    std::string channel = vm["channel"].as<std::string>();
+
+    if (channel == "R")
+        return 0;
+    else if (channel == "G")
+        return 1;
+    else if (channel == "B")
+        return 2;
+    else
+    {
+        std::cerr << "Wron channel" << std::endl;
+        exit(1);
+    }
+
+    return 4;
+}
+
+bool Parser::setCmeanh()
+{
+    return vm.count("cmeanh");
+}
+
+bool Parser::setCvariance()
+{
+    return vm.count("cvariance");
+}
+
+bool Parser::setCstdev()
+{
+    return vm.count("cstdev");
+}
+
+bool Parser::setCvarcoi()
+{
+    return vm.count("cvarcoi");
+}
+
+bool Parser::setCvarcoii()
+{
+    return vm.count("cvarcoii");
+}
+
+bool Parser::setCasyco()
+{
+    return vm.count("casyco");
+}
+
+bool Parser::setCflatco()
+{
+    return vm.count("cflatco");
+}
+
+bool Parser::setCentropy()
+{
+    return vm.count("centropy");
+}
+
+bool Parser::setHistogram()
+{
+    return vm.count("histogram");
+}
+
+std::string Parser::getHistogramFilename()
+{
+    return vm["histogram"].as<std::string>();
 }

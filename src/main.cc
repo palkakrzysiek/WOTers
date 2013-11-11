@@ -1,6 +1,7 @@
 #include "Image.h"
 #include "Parser.h"
 #include "Operations.h"
+#include "Histogram.h"
 #include <iostream>
 #include <string>
 #include <cassert>
@@ -24,130 +25,213 @@ using namespace std;
 int main(int argc, char** argv)
 {
 
-    bool imageChanged = true;
- 
-    using namespace std;
+  bool imageChanged = true;
 
-    Parser p(argc, argv);
+  using namespace std;
 
-    Image img(p.getFilename());
-    Operation *o = nullptr;
+  Parser p(argc, argv);
 
-    if (p.setBrightness())
+  Image img(p.getFilename());
+  Histogram hist(img);
+  Histogram::Channel channel;
+
+  Operation *o = nullptr;
+
+  if (p.setBrightness())
+  {
+    o = new BrightnessAdjustment(p.getBrightnessValue());
+  }
+
+  if (p.setResize())
+  {
+    o = new Resize(p.getResizeValue());
+  }
+
+  if (p.setContrast())
+  {
+    o = new ContrastAdjustment(p.getContrastValue());
+  }
+
+  if (p.setNegative())
+  {
+    o = new Negative();
+  }
+
+  if (p.setHflip())
+  {
+    o = new HorizontalFlip();
+  }
+
+  if (p.setVflip())
+  {
+    o = new VerticalFlip();
+  }
+
+  if (p.setDflip())
+  {
+    o = new DiagonalFlip();
+  }
+
+  if (p.setCmean())
+  {
+    o = new ContraharmonicMeanFilter(p.getCmeanValue());
+  }
+
+  if (p.setAlpha())
+  {
+    o = new AlphaTrimmedMeanFilter(p.getAlphaValue());
+  }
+
+  if (p.setCmean())
+  {
+    o = new ContraharmonicMeanFilter(p.getCmeanValue());
+  }
+
+  if (p.setLowPass())
+  {
+    o = new LowPassFilter();
+  }
+
+  if (p.setRosenfeld())
+  {
+    o = new RosenfeldOperator(p.getRosenfeldP());
+  }
+
+  double result = 0.0;
+
+  if (p.setMse())
+  {
+    imageChanged = false;
+    Image filtered(p.getMseFilename());
+    img.perform_operation(new MeanSquareError(&filtered, &result));
+    cout << result << endl;
+  }
+
+  if (p.setPmse())
+  {
+    imageChanged = false;
+    Image filtered(p.getPmseFilename());
+    img.perform_operation(new PeakMeanSquareError(&filtered, &result));
+    cout << result << endl;
+  }
+
+  if (p.setSnr())
+  {
+    imageChanged = false;
+    Image filtered(p.getSnrFilename());
+    img.perform_operation(new SignalToNoiseRatio(&filtered, &result));
+    cout << result << endl;
+  }
+  if (p.setPsnr())
+  {
+    imageChanged = false;
+    Image filtered(p.getPsnrFilename());
+    img.perform_operation(new PeakSignalToNoiseRatio(&filtered, &result));
+    cout << result << endl;
+  }
+
+  if (p.setMd())
+  {
+    imageChanged = false;
+    Image filtered(p.getMdFilename());
+    img.perform_operation(new MaxDifference(&filtered, &result));
+    cout << result << endl;
+  }
+
+  if (p.setChannel())
+  {
+    channel = (Histogram::Channel) p.getChannel();
+  }
+  else
+  {
+    channel = Histogram::Channel::ALL;
+  }
+
+  if (p.setCmeanh())
+  {
+    imageChanged = false;
+    cout << hist.cmean(channel) << endl;
+  }
+
+  if (p.setCvariance())
+  {
+    imageChanged = false;
+    cout << hist.cvariance(channel) << endl;
+  }
+
+  if (p.setCstdev())
+  {
+    imageChanged = false;
+    cout << hist.cstdev(channel) << endl;
+  }
+
+  if (p.setCvarcoii())
+  {
+    imageChanged = false;
+    cout << hist.cvarcoii(channel) << endl;
+  }
+
+  if (p.setCvarcoi())
+  {
+    imageChanged = false;
+    cout << hist.cvarcoi(channel) << endl;
+  }
+
+  if (p.setCasyco())
+  {
+    imageChanged = false;
+    cout << hist.casyco(channel) << endl;
+  }
+
+  if (p.setCflatco())
+  {
+    imageChanged = false;
+    cout << hist.cflatco(channel) << endl;
+  }
+
+  if (p.setCentropy())
+  {
+    imageChanged = false;
+    cout << hist.centropy(channel) << endl;
+  }
+
+  if (p.setHistogram())
+  {
+    if (channel == Histogram::Channel::ALL && img.get_surface()->format->BitsPerPixel != 8)
     {
-        o = new BrightnessAdjustment(p.getBrightnessValue());
+      std::cerr << "You must specify channel (--channel)" << std::endl;
+      exit(1);
+    }
+    else if (img.get_surface()->format->BitsPerPixel == 8)
+    {
+      channel = Histogram::Channel::R;
     }
 
-    if (p.setResize())
-    {
-        o = new Resize(p.getResizeValue());
-    }
+    imageChanged = false;
+    hist.save_as_image(channel, p.getHistogramFilename());
+  }
 
-    if (p.setContrast())
-    {
-        o = new ContrastAdjustment(p.getContrastValue());
-    }
-
-    if (p.setNegative())
-    {
-        o = new Negative();
-    }
-
-    if (p.setHflip())
-    {
-        o = new HorizontalFlip();
-    }
-
-    if (p.setVflip())
-    {
-        o = new VerticalFlip();
-    }
-
-    if (p.setDflip())
-    {
-        o = new DiagonalFlip();
-    }
-
-    if (p.setCmean())
-    {
-        o = new ContraharmonicMeanFilter(p.getCmeanValue());
-    }
-
-    if (p.setAlpha())
-    {
-        o = new AlphaTrimmedMeanFilter(p.getAlphaValue());
-    }
-
-    if (p.setCmean())
-    {
-        o = new ContraharmonicMeanFilter(p.getCmeanValue());
-    }
-
-    if (p.setLowPass())
-    {
-        o = new LowPassFilter();
-    }
-
-    double result = 0.0;
-
-    if (p.setMse())
-    {
-        imageChanged = false;
-        Image filtered(p.getMseFilename());
-        img.perform_operation(new MeanSquareError(&filtered, &result));
-        cout << result << endl;
-    }
-    if (p.setPmse())
-    {
-        imageChanged = false;
-        Image filtered(p.getPmseFilename());
-        img.perform_operation(new PeakMeanSquareError(&filtered, &result));
-        cout << result << endl;
-    }
-    if (p.setSnr())
-    {
-        imageChanged = false;
-        Image filtered(p.getSnrFilename());
-        img.perform_operation(new SignalToNoiseRatio(&filtered, &result));
-        cout << result << endl;
-    }
-    if (p.setPsnr())
-    {
-        imageChanged = false;
-        Image filtered(p.getPsnrFilename());
-        img.perform_operation(new PeakSignalToNoiseRatio(&filtered, &result));
-        cout << result << endl;
-    }
-    if (p.setMd())
-    {
-        imageChanged = false;
-        Image filtered(p.getMdFilename());
-        img.perform_operation(new MaxDifference(&filtered, &result));
-        cout << result << endl;
-    }
-
-
-    if (imageChanged) {
-        assert(o != nullptr);
-    }
+  if (imageChanged) {
+    assert(o != nullptr);
+  }
 
 #ifdef _SPEED_TEST
-    uint64_t timer = now();
+  uint64_t timer = now();
 #endif
-    if (imageChanged) {
-        img.perform_operation(o);
-    }
+  if (imageChanged) {
+    img.perform_operation(o);
+  }
 
 #ifdef _SPEED_TEST
-    timer = now() - timer;
-    printf("%gs\n", (double)timer/1e6);
+  timer = now() - timer;
+  printf("%gs\n", (double)timer/1e6);
 #endif
-  
+
 #ifndef _SPEED_TEST // saving the file during speed test is just the waste of time
-    if (imageChanged) {
-        img.save(p.getOutFilename());
-    }
+  if (imageChanged) {
+    img.save(p.getOutFilename());
+  }
 #endif
-        
-    return 0;
+      
+  return 0;
 }

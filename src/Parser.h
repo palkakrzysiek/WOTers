@@ -2,6 +2,8 @@
 #define __PARSER_H
 
 #include "boost/program_options.hpp" 
+// #include "Histogram.h"
+// class Histogram;
 
 namespace 
 { 
@@ -42,7 +44,10 @@ class Parser{
         int getAlphaValue();
         bool setCmean();
         double getCmeanValue();
+        
         bool setLowPass();
+        bool setRosenfeld();
+        int getRosenfeldP();
 
         bool setMse();
         std::string getMseFilename();
@@ -54,6 +59,21 @@ class Parser{
         std::string getPsnrFilename();
         bool setMd();
         std::string getMdFilename();
+
+        bool setChannel();
+        int getChannel();
+
+        bool setCmeanh();
+        bool setCvariance();
+        bool setCstdev();
+        bool setCvarcoi();
+        bool setCvarcoii();
+        bool setCasyco();
+        bool setCflatco();
+        bool setCentropy();
+
+        bool setHistogram();
+        std::string getHistogramFilename();
 
 };
 

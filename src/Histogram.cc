@@ -11,6 +11,7 @@ Histogram::Histogram(Image &image)
   int h = image.get_surface()->h;
 
   n_pixels = w * h;
+  grayscale = (image.get_surface()->format->BitsPerPixel <= 8) ? true : false;
 
   int i, j;
 
@@ -51,6 +52,9 @@ void Histogram::print_channel(Channel c)
 
 double Histogram::cmean(Channel c)
 {
+  if (c == ALL)
+    return (cmean(R) + cmean(G) + cmean(B)) / 3.0;
+
   uint64_t *ptr = pixels_r;
 
   if (c == R)
@@ -77,6 +81,9 @@ double Histogram::cmean(Channel c)
 
 double Histogram::cvariance(Channel c)
 {
+  if (c == ALL)
+    return (cvariance(R) + cvariance(G) + cvariance(B)) / 3.0;
+
   uint64_t *ptr = pixels_r;
 
   if (c == R)
@@ -104,16 +111,33 @@ double Histogram::cvariance(Channel c)
 
 double Histogram::cstdev(Channel c)
 {
+  if (c == ALL)
+    return (cstdev(R) + cstdev(G) + cstdev(B)) / 3.0;
+
   return sqrt(cvariance(c));
 }
 
 double Histogram::cvarcoi(Channel c)
 {
+  if (c == ALL)
+    return (cvarcoi(R) + cvarcoi(G) + cvarcoi(B)) / 3.0;
+
   return cstdev(c) / cmean(c);
+}
+
+double Histogram::cvarcoii(Channel c)
+{
+  if (c == ALL)
+    return (cvarcoii(R) + cvarcoii(G) + cvarcoii(B)) / 3.0;
+
+  return 0.0;
 }
 
 double Histogram::casyco(Channel c)
 {
+  if (c == ALL)
+    return (casyco(R) + casyco(G) + casyco(B)) / 3.0;
+
   uint64_t *ptr = pixels_r;
 
   if (c == R)
@@ -142,8 +166,11 @@ double Histogram::casyco(Channel c)
   return result;
 }
 
-double Histogram::cflato(Channel c)
+double Histogram::cflatco(Channel c)
 {
+  if (c == ALL)
+    return (cflatco(R) + cflatco(G) + cflatco(B)) / 3.0;
+
   uint64_t *ptr = pixels_r;
 
   if (c == R)
@@ -174,6 +201,9 @@ double Histogram::cflato(Channel c)
 
 double Histogram::centropy(Channel c)
 {
+  if (c == ALL)
+    return (centropy(R) + centropy(G) + centropy(B)) / 3.0;
+
   uint64_t *ptr = pixels_r;
 
   if (c == R)
@@ -204,7 +234,14 @@ void Histogram::save_as_image(Channel c, const std::string &filename)
   Image image(768, 520, 24);
   int8_t dr = 0, dg = 0, db = 0; 
 
-  if (c == R)
+  if (grayscale)
+  {
+    ptr = pixels_r;
+    dr = -1;
+    dg = -1;
+    db = -1;
+  }
+  else if (c == R)
   {
     ptr = pixels_r;
     dr = 1;
