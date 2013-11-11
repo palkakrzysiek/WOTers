@@ -266,9 +266,11 @@ int Parser::getChannel()
         return 1;
     else if (channel == "B")
         return 2;
+    else if (channel == "A")
+        return 3;
     else
     {
-        std::cerr << "Wron channel" << std::endl;
+        std::cerr << "Invalid channel specified" << std::endl;
         exit(1);
     }
 
