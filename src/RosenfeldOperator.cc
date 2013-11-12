@@ -18,7 +18,7 @@ void RosenfeldOperator::perform(Image &image)
 # pragma omp parallel for private(i)  
   for (j = 0; j < h; ++j)
   {
-    for (i = P; i < w - P; ++i)
+    for (i = 0; i < w - P; ++i)
     {
       // uint8_t mask[3][9];
 
@@ -36,10 +36,17 @@ void RosenfeldOperator::perform(Image &image)
       // }
 
       double pixel_value[3] = {0.0};
+
+      int P2 = P;
       
       for (int m = -P; m < P; ++m)
       {
-        // printf("\t%d\n", m);
+        if (i + m < 0 || i + m > w)
+        {
+          continue;
+          --P2;
+        }
+
         uint8_t r, g, b;
         SDL_GetRGB(image.get_pixel(i + m, j), image.get_surface()->format,
                    &r, &g, &b);
@@ -49,10 +56,10 @@ void RosenfeldOperator::perform(Image &image)
         pixel_value[2] += b;
       }
 
-      for (int n = 0; n < 3; ++n)
-      {
-        pixel_value[n] /= (double) P;
-      }
+      pixel_value[0] /= P2;
+      pixel_value[1] /= P2;
+      pixel_value[2] /= P2;
+
 
       filtered.set_pixel(i, j, SDL_MapRGB(filtered.get_surface()->format,
                          trunc(pixel_value[0]),
@@ -61,19 +68,19 @@ void RosenfeldOperator::perform(Image &image)
     }
   }
 
-# pragma omp parallel for
-  for (i = 0; i < w; ++i)
-  {
-    filtered.set_pixel(i, 0, filtered.get_pixel(i, 1));
-    filtered.set_pixel(i, h - 1, filtered.get_pixel(i, h - 2));
-  }
+// # pragma omp parallel for
+//   for (i = 0; i < w; ++i)
+//   {
+//     filtered.set_pixel(i, 0, filtered.get_pixel(i, 1));
+//     filtered.set_pixel(i, h - 1, filtered.get_pixel(i, h - 2));
+//   }
 
-# pragma omp parallel for
-  for (j = 0; j < h; ++j)
-  {
-    filtered.set_pixel(0, j, filtered.get_pixel(1, j));
-    filtered.set_pixel(w - 1, j, filtered.get_pixel(w - 2, j));
-  }
+// # pragma omp parallel for
+//   for (j = 0; j < h; ++j)
+//   {
+//     filtered.set_pixel(0, j, filtered.get_pixel(1, j));
+//     filtered.set_pixel(w - 1, j, filtered.get_pixel(w - 2, j));
+//   }
 
   // replacing previous image with the filtered one
   image = std::move(filtered);

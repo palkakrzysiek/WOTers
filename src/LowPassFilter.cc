@@ -36,7 +36,7 @@ void LowPassFilter::perform(Image &image)
           // b += mask[2][o] / 9;
 
           // 2
-          // if (k == i && l == j)
+          // if (  k == i && l == j)
           // {
           //   r += mask[0][o] / 5;
           //   g += mask[1][o] / 5;
