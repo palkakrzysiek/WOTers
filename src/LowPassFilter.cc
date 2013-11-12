@@ -18,7 +18,7 @@ void LowPassFilter::perform(Image &image)
     {
       // 3x3 mask containing 4 color values
       uint8_t mask[3][9];
-      int r2 = 0, g2 = 0, b2 = 0;
+      int r = 0, g = 0, b = 0;
     
       int o = 0;
 
@@ -31,42 +31,42 @@ void LowPassFilter::perform(Image &image)
                      &mask[0][o], &mask[1][o], &mask[2][o]);
 
           // 1
-          // r2 += mask[0][o] / 9;
-          // g2 += mask[1][o] / 9;
-          // b2 += mask[2][o] / 9;
+          // r += mask[0][o] / 9;
+          // g += mask[1][o] / 9;
+          // b += mask[2][o] / 9;
 
           // 2
           // if (k == i && l == j)
           // {
-          //   r2 += mask[0][o] / 5;
-          //   g2 += mask[1][o] / 5;
-          //   b2 += mask[2][o] / 5;
+          //   r += mask[0][o] / 5;
+          //   g += mask[1][o] / 5;
+          //   b += mask[2][o] / 5;
           // }
           // else
           // {
-          //   r2 += mask[0][o] / 10;
-          //   g2 += mask[1][o] / 10;
-          //   b2 += mask[2][o] / 10;
+          //   r += mask[0][o] / 10;
+          //   g += mask[1][o] / 10;
+          //   b += mask[2][o] / 10;
           // }
 
           // 3
           if (k == i && l == j)
           {
-            r2 += mask[0][o] / 4;
-            g2 += mask[1][o] / 4;
-            b2 += mask[2][o] / 4;
+            r += mask[0][o] / 4;
+            g += mask[1][o] / 4;
+            b += mask[2][o] / 4;
           }
           else if (k == i || l == j)
           {
-            r2 += mask[0][o] / 8;
-            g2 += mask[1][o] / 8;
-            b2 += mask[2][o] / 8;
+            r += mask[0][o] / 8;
+            g += mask[1][o] / 8;
+            b += mask[2][o] / 8;
           }
           else
           {
-            r2 += mask[0][o] / 16;
-            g2 += mask[1][o] / 16;
-            b2 += mask[2][o] / 16;
+            r += mask[0][o] / 16;
+            g += mask[1][o] / 16;
+            b += mask[2][o] / 16;
           }
 
           ++o;
@@ -75,7 +75,7 @@ void LowPassFilter::perform(Image &image)
 
       // putting the new pixel value to the image
       filtered.set_pixel(i, j, SDL_MapRGB(filtered.get_surface()->format,
-                         trunc(r2), trunc(g2), trunc(b2)));
+                         trunc(r), trunc(g), trunc(b)));
     }
   }
 

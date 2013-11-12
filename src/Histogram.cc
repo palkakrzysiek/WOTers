@@ -15,7 +15,6 @@ Histogram::Histogram(Image &image)
 
   int i, j;
 
-# pragma omp parallel for default(shared) private(i)
   for (j = 0; j < h; ++j)
   {
     for (i = 0; i < w; ++i)

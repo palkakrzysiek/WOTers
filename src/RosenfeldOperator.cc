@@ -16,7 +16,7 @@ void RosenfeldOperator::perform(Image &image)
   int i, j;
 
 # pragma omp parallel for private(i)  
-  for (j = P; j < h - P; ++j)
+  for (j = 0; j < h; ++j)
   {
     for (i = P; i < w - P; ++i)
     {
@@ -51,7 +51,7 @@ void RosenfeldOperator::perform(Image &image)
 
       for (int n = 0; n < 3; ++n)
       {
-        pixel_value[n] *= (double) 1.0 / P;
+        pixel_value[n] /= (double) P;
       }
 
       filtered.set_pixel(i, j, SDL_MapRGB(filtered.get_surface()->format,
@@ -61,7 +61,7 @@ void RosenfeldOperator::perform(Image &image)
     }
   }
 
-  # pragma omp parallel for
+# pragma omp parallel for
   for (i = 0; i < w; ++i)
   {
     filtered.set_pixel(i, 0, filtered.get_pixel(i, 1));
