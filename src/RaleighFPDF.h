@@ -7,12 +7,13 @@
 class RaleighFPDF : public Operation
 {
 public:
-  RaleighFPDF(double a);
+  RaleighFPDF(Histogram::Channel c, double a);
 
   void perform(Image &image);
 
 private:
   double alpha;
+  Histogram::Channel channel;
 
 };
 

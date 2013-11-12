@@ -33,9 +33,18 @@ int main(int argc, char** argv)
 
   Image img(p.getFilename());
   Histogram hist(img);
-  Histogram::Channel channel;
+  Histogram::Channel channel = Histogram::Channel::ALL;
 
   Operation *o = nullptr;
+
+  if (p.setChannel())
+  {
+    channel = (Histogram::Channel) p.getChannel();
+  }
+  else
+  {
+    channel = Histogram::Channel::ALL;
+  }
 
   if (p.setBrightness())
   {
@@ -99,7 +108,17 @@ int main(int argc, char** argv)
 
   if (p.setRaleigh())
   {
-    o = new RaleighFPDF(p.getRaleighAlpha());
+    if (channel == Histogram::Channel::ALL && img.get_surface()->format->BitsPerPixel != 8)
+    {
+      std::cerr << "You must specify channel (--channel)" << std::endl;
+      exit(1);
+    }
+    else if (img.get_surface()->format->BitsPerPixel == 8)
+    {
+      channel = Histogram::Channel::R;
+    }
+
+    o = new RaleighFPDF(channel, p.getRaleighAlpha());
   }
 
   double result = 0.0;
@@ -141,15 +160,6 @@ int main(int argc, char** argv)
     Image filtered(p.getMdFilename());
     img.perform_operation(new MaxDifference(&filtered, &result));
     cout << result << endl;
-  }
-
-  if (p.setChannel())
-  {
-    channel = (Histogram::Channel) p.getChannel();
-  }
-  else
-  {
-    channel = Histogram::Channel::ALL;
   }
 
   if (p.setCmeanh())
