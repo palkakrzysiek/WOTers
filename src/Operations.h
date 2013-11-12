@@ -17,5 +17,6 @@
 #include "MaxDifference.h"
 #include "RosenfeldOperator.h"
 #include "LowPassFilter.h"
+#include "RaleighFPDF.h"
 
 #endif

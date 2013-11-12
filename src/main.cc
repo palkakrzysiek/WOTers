@@ -97,6 +97,11 @@ int main(int argc, char** argv)
     o = new RosenfeldOperator(p.getRosenfeldP());
   }
 
+  if (p.setRaleigh())
+  {
+    o = new RaleighFPDF(p.getRaleighAlpha());
+  }
+
   double result = 0.0;
 
   if (p.setMse())

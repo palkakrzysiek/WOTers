@@ -44,6 +44,8 @@ Parser::Parser(int &argc, char** argv)
         ("md", po::value<std::string>(),
          "Maximum difference")
 
+        ("hraleigh", po::value<double>(), "Raleigh final probability density function")
+
         ("channel", po::value<std::string>(), "Channel [R, G, B]")
 
         ("cmeanh", "Mean")
@@ -249,6 +251,16 @@ bool Parser::setMd()
 std::string Parser::getMdFilename()
 {
     return vm["md"].as<std::string>();
+}
+
+bool Parser::setRaleigh()
+{
+    return vm.count("hraleigh");
+}
+
+double Parser::getRaleighAlpha()
+{
+    return vm["hraleigh"].as<double>();
 }
 
 bool Parser::setChannel()

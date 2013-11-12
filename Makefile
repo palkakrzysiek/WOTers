@@ -5,7 +5,7 @@ LDFLAGS=-fopenmp
 SDL_CFLAGS := $(shell sdl-config --cflags)
 SDL_LDFLAGS := $(shell sdl-config --libs) -lSDL_image
 BOOST_LDFLAGS=-lboost_program_options
-OBJECTS=main.o Parser.o Histogram.o Image.o Operation.o BrightnessAdjustment.o ContrastAdjustment.o DiagonalFlip.o VerticalFlip.o HorizontalFlip.o Negative.o Resize.o AlphaTrimmedMeanFilter.o ContraharmonicMeanFilter.o MeanSquareError.o PeakMeanSquareError.o SignalToNoiseRatio.o PeakSignalToNoiseRatio.o MaxDifference.o RaleightFPDF.o RosenfeldOperator.o LowPassFilter.o
+OBJECTS=main.o Parser.o Histogram.o Image.o Operation.o BrightnessAdjustment.o ContrastAdjustment.o DiagonalFlip.o VerticalFlip.o HorizontalFlip.o Negative.o Resize.o AlphaTrimmedMeanFilter.o ContraharmonicMeanFilter.o MeanSquareError.o PeakMeanSquareError.o SignalToNoiseRatio.o PeakSignalToNoiseRatio.o MaxDifference.o RaleighFPDF.o RosenfeldOperator.o LowPassFilter.o
 EXECUTABLE=ip
 
 all: $(OBJECTS) $(EXECUTABLE)
@@ -74,8 +74,8 @@ PeakSignalToNoiseRatio.o : src/PeakSignalToNoiseRatio.cc src/PeakSignalToNoiseRa
 MaxDifference.o : src/MaxDifference.cc src/MaxDifference.h
 	$(CXX) $(CXXFLAGS) -c src/MaxDifference.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-RaleightFPDF.o : src/RaleightFPDF.cc src/RaleightFPDF.h
-	$(CXX) $(CXXFLAGS) -c src/RaleightFPDF.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
+RaleighFPDF.o : src/RaleighFPDF.cc src/RaleighFPDF.h
+	$(CXX) $(CXXFLAGS) -c src/RaleighFPDF.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
 RosenfeldOperator.o : src/RosenfeldOperator.cc src/RosenfeldOperator.h
 	$(CXX) $(CXXFLAGS) -c src/RosenfeldOperator.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)

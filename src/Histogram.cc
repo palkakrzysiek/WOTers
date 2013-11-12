@@ -318,3 +318,14 @@ const uint64_t* Histogram::get_a()
   return pixels_a;
 }
 
+// std::vector<std::vector<uint64_t>> Histogram::get_rgba()
+// {
+//   std::vector<std::vector<uint64_t>> temp(4);
+//   temp[0] = std::vector<uint64_t>(pixels_r, pixels_r + 256);
+//   temp[1] = std::vector<uint64_t>(pixels_g, pixels_g + 256);
+//   temp[2] = std::vector<uint64_t>(pixels_b, pixels_b + 256);
+//   temp[3] = std::vector<uint64_t>(pixels_a, pixels_a + 256);
+
+//   return temp;
+// }
+

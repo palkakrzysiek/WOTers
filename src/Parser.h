@@ -60,6 +60,9 @@ class Parser{
         bool setMd();
         std::string getMdFilename();
 
+        bool setRaleigh();
+        double getRaleighAlpha();
+
         bool setChannel();
         int getChannel();
 

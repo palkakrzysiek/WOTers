@@ -3,6 +3,7 @@
 
 #include "Image.h"
 #include <map>
+// #include <vector>
 
 class Histogram
 {
@@ -28,6 +29,8 @@ public:
   const uint64_t* get_g();
   const uint64_t* get_b();
   const uint64_t* get_a();
+
+  // std::vector<std::vector<uint64_t>> get_rgba();
 
 private:
   uint64_t pixels_r[256] = {0};
