@@ -9,7 +9,6 @@ void RosenfeldOperator::perform(Image &image)
 {
   int w = image.get_surface()->w;
   int h = image.get_surface()->h;
-  int bpp = image.get_surface()->format->BitsPerPixel;
 
   Image filtered(image);
 
@@ -18,7 +17,7 @@ void RosenfeldOperator::perform(Image &image)
 # pragma omp parallel for private(i)  
   for (j = 0; j < h; ++j)
   {
-    for (i = 0; i < w - P; ++i)
+    for (i = 0; i < w; ++i)
     {
       // uint8_t mask[3][9];
 
