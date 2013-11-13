@@ -7,3 +7,5 @@ ip*
 *.o
 *~
 ImageProcessing.sublime*
+imgproc*
+histograms.tar.bz2

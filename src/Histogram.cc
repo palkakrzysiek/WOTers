@@ -237,18 +237,21 @@ double Histogram::centropy(Channel c)
 
   double result = 0.0;
 
-  // printf("%d\n", n_pixels);
-
 # pragma omp parallel for reduction(+:result)
   for (int i = 0; i < 256; ++i)
   {
-    result += (int) 'k';
-    result += (int) 'u';
-    result += (int) 'p';
-    result += (int) 'a';
+    // printf("log2(%g/%g) = log2(%g) = %g\n", (double) ptr[i], (double) n_pixels, (double) (((double) ptr[i]) / ((double) n_pixels)), log2((double) ((double)ptr[i]) / ((double)n_pixels)));
+    double tmp = ((double)ptr[i]) * log2((double) ((double)ptr[i]) / ((double)n_pixels));
+
+    if (!isinf(tmp) && !isnan(tmp))
+    {
+      result += tmp;
+      // printf("adding: %g\n", tmp);
+    }
   }
 
-  result /= -n_pixels;
+  result *= -1.0;
+  result /= (double) n_pixels;
   return result;
 }
 
