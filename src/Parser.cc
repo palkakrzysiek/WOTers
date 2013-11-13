@@ -11,6 +11,7 @@ Parser::Parser(int &argc, char** argv)
     desc.add_options()
         ("help,h", "produce help message")
         ("verbose,v", "rant and rave")
+        //("histogram", po::value<std::string>(), "Save histogram to file");
         ("file,f", po::value<std::string>()->required(),
          "input file")
         ("output,o", po::value<std::string>()->default_value("out.bmp"),
@@ -57,7 +58,7 @@ Parser::Parser(int &argc, char** argv)
         ("cflatco", "Flattening coefficient")
         ("centropy", "Information source entropy")
 
-        ("histogram", po::value<std::string>()->default_value("histogram.bmp"), "Save histogram to file");
+        ("histogram", po::value<std::string>(), "save histogram to a file");
 
     try 
     { 
