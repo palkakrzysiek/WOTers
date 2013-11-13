@@ -148,7 +148,7 @@ double Histogram::cvarcoii(Channel c)
     result += pow(ptr[i], 2);
   }
 
-  result /= pow(n_pixels, 2);
+  result /= pow(n_pixels, 256);
 
   return result;
 }

@@ -19,9 +19,10 @@ void RaleighFPDF::perform(Image &image)
     int g_min = 0;
 
     // precompute new intensity values
-    double newVal[3][256] {};
+    double newVal[3][256] = {};
     double tempVal[3] = {0};
     int i, j, k;
+
     for (i = 0; i <= 255; i++) { // 255 operations
         tempVal[0] = hist.get_r()[i];
         tempVal[1] = hist.get_g()[i];
@@ -44,13 +45,14 @@ void RaleighFPDF::perform(Image &image)
 
         }
     }
-
-    uint8_t rgb[3] = {};
     
+#   pragma omp parallel for private(j)
     for (i = 0; i < w; i++) {
-        for (j = 0; j < h; j++){
+        for (j = 0; j < h; j++) {
+            uint8_t rgb[3] = {};
+            
             SDL_GetRGB(image.get_pixel(i, j), image.get_surface()->format,
-                    &rgb[0], &rgb[1], &rgb[2]);
+                       &rgb[0], &rgb[1], &rgb[2]);
 
             if (channel == Histogram::Channel::R || 
                 channel == Histogram::Channel::ALL) {
@@ -69,5 +71,6 @@ void RaleighFPDF::perform(Image &image)
                         rgb[0], rgb[1], rgb[2]));
         }
     }
+
     image = std::move(improved);
 }
