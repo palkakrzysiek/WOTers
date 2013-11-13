@@ -108,15 +108,15 @@ int main(int argc, char** argv)
 
   if (p.setRaleigh())
   {
-    if (channel == Histogram::Channel::ALL && img.get_surface()->format->BitsPerPixel != 8)
-    {
-      std::cerr << "You must specify channel (--channel)" << std::endl;
-      exit(1);
-    }
-    else if (img.get_surface()->format->BitsPerPixel == 8)
-    {
-      channel = Histogram::Channel::R;
-    }
+    // if (channel == Histogram::Channel::ALL && img.get_surface()->format->BitsPerPixel != 8)
+    // {
+    //   std::cerr << "You must specify channel (--channel)" << std::endl;
+    //   exit(1);
+    // }
+    // else if (img.get_surface()->format->BitsPerPixel == 8)
+    // {
+    //   channel = Histogram::Channel::R;
+    // }
 
     o = new RaleighFPDF(channel, p.getRaleighAlpha());
   }
@@ -212,12 +212,12 @@ int main(int argc, char** argv)
 
   if (p.setHistogram())
   {
-    if (channel == Histogram::Channel::ALL && img.get_surface()->format->BitsPerPixel != 8)
-    {
-      std::cerr << "You must specify channel (--channel)" << std::endl;
-      exit(1);
-    }
-    else if (img.get_surface()->format->BitsPerPixel == 8)
+    // if (channel == Histogram::Channel::ALL && img.get_surface()->format->BitsPerPixel != 8)
+    // {
+    //   std::cerr << "You must specify channel (--channel)" << std::endl;
+    //   exit(1);
+    // }
+    if (img.get_surface()->format->BitsPerPixel == 8)
     {
       channel = Histogram::Channel::R;
     }

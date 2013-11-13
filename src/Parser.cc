@@ -57,7 +57,7 @@ Parser::Parser(int &argc, char** argv)
         ("cflatco", "Flattening coefficient")
         ("centropy", "Information source entropy")
 
-        ("histogram", po::value<std::string>(), "Save histogram to file");
+        ("histogram", po::value<std::string>()->default_value("histogram.bmp"), "Save histogram to file");
 
     try 
     { 
