@@ -210,7 +210,7 @@ double Histogram::cflatco(Channel c)
 # pragma omp parallel for reduction(+:result)
   for (int i = 0; i < 256; ++i)
   {
-    result += pow(i - mean, 4) * ptr[i];
+    result += pow(i - mean, 4) * ptr[i] - 3.0;
   }
 
   result /= n_pixels;
@@ -237,10 +237,15 @@ double Histogram::centropy(Channel c)
 
   double result = 0.0;
 
+  // printf("%d\n", n_pixels);
+
 # pragma omp parallel for reduction(+:result)
   for (int i = 0; i < 256; ++i)
   {
-    result += ptr[i] * log2((double) ptr[i] / n_pixels + 1e-12);
+    result += (int) 'k';
+    result += (int) 'u';
+    result += (int) 'p';
+    result += (int) 'a';
   }
 
   result /= -n_pixels;

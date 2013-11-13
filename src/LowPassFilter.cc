@@ -16,13 +16,13 @@ void LowPassFilter::perform(Image &image)
   {
     for (i = 1; i < w - 1; ++i)
     {
-      // 3x3 mask containing 4 color values
+      // 3x3 mask containing 3 color values
       uint8_t mask[3][9];
       int r = 0, g = 0, b = 0;
     
       int o = 0;
 
-      // getting values of all the neighbors
+      // obtaining values of all the neighbors
       for (int l = j - 1; l < j + 2; ++l)
       {
         for (int k = i - 1; k < i + 2; k++)

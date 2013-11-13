@@ -46,6 +46,11 @@ int main(int argc, char** argv)
     channel = Histogram::Channel::ALL;
   }
 
+  if (img.get_surface()->format->BitsPerPixel == 8)
+  {
+    channel = Histogram::Channel::R;
+  }
+
   if (p.setBrightness())
   {
     o = new BrightnessAdjustment(p.getBrightnessValue());
