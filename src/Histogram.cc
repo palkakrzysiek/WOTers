@@ -219,7 +219,7 @@ double Histogram::centropy(Channel c)
 # pragma omp parallel for reduction(+:result)
   for (int i = 0; i < 256; ++i)
   {
-    result += ptr[i] * log2((double) ptr[i] / n_pixels);
+    result += ptr[i] * log2((double) ptr[i] / n_pixels + 1e-12);
   }
 
   result /= -n_pixels;

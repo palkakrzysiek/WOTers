@@ -2,7 +2,7 @@
 #include <cmath>
 #include <algorithm>
 
-    RaleighFPDF::RaleighFPDF(Histogram::Channel c, double a)
+RaleighFPDF::RaleighFPDF(Histogram::Channel c, double a)
 : channel(c),
     alpha(a)
 {
@@ -17,7 +17,6 @@ void RaleighFPDF::perform(Image &image)
     Histogram hist(image);
 
     int g_min = 0;
-
 
     // precompute new intensity values
     double newVal[3][256] {};
@@ -46,7 +45,7 @@ void RaleighFPDF::perform(Image &image)
         }
     }
 
-    uint8_t rgb[3] {};
+    uint8_t rgb[3] = {};
     
     for (i = 0; i < w; i++) {
         for (j = 0; j < h; j++){
