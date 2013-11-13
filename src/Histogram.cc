@@ -129,7 +129,28 @@ double Histogram::cvarcoii(Channel c)
   if (c == ALL)
     return (cvarcoii(R) + cvarcoii(G) + cvarcoii(B)) / 3.0;
 
-  return 0.0;
+  uint64_t *ptr = pixels_r;
+
+  if (c == R)
+    ptr = pixels_r;
+  else if (c == G)
+    ptr = pixels_g;
+  else if (c == B)
+    ptr = pixels_b;
+  else if (c == A)
+    ptr = pixels_a;
+
+  double result = 0.0;
+
+# pragma omp parallel for reduction(+:result)
+  for (int i = 0; i < 256; ++i)
+  {
+    result += pow(ptr[i], 2);
+  }
+
+  result /= pow(n_pixels, 2);
+
+  return result;
 }
 
 double Histogram::casyco(Channel c)
