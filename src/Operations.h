@@ -18,5 +18,9 @@
 #include "RosenfeldOperator.h"
 #include "LowPassFilter.h"
 #include "RaleighFPDF.h"
+#include "Erosion.h"
+#include "Dilation.h"
+#include "Opening.h"
+#include "Closing.h"
 
 #endif
