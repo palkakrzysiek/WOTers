@@ -22,5 +22,6 @@
 #include "Dilation.h"
 #include "Opening.h"
 #include "Closing.h"
+#include "ConvertToGrayscale.h"
 
 #endif
