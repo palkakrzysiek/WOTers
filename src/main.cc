@@ -239,7 +239,7 @@ int main(int argc, char** argv)
   uint64_t timer = now();
 #endif
   if (imageChanged) {
-    img.perform_operation(new ConvertToGrayscale());
+    img.perform_operation(new Binarize());
   }
 
 #ifdef _SPEED_TEST

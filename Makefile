@@ -5,7 +5,7 @@ LDFLAGS=-fopenmp
 SDL_CFLAGS := $(shell sdl-config --cflags)
 SDL_LDFLAGS := $(shell sdl-config --libs) -lSDL_image
 BOOST_LDFLAGS=-lboost_program_options
-OBJECTS=main.o Parser.o Histogram.o Image.o Operation.o BrightnessAdjustment.o ContrastAdjustment.o DiagonalFlip.o VerticalFlip.o HorizontalFlip.o Negative.o Resize.o AlphaTrimmedMeanFilter.o ContraharmonicMeanFilter.o MeanSquareError.o PeakMeanSquareError.o SignalToNoiseRatio.o PeakSignalToNoiseRatio.o MaxDifference.o RaleighFPDF.o RosenfeldOperator.o LowPassFilter.o ConvertToGrayscale.o
+OBJECTS=main.o Parser.o Histogram.o Image.o Operation.o BrightnessAdjustment.o ContrastAdjustment.o DiagonalFlip.o VerticalFlip.o HorizontalFlip.o Negative.o Resize.o AlphaTrimmedMeanFilter.o ContraharmonicMeanFilter.o MeanSquareError.o PeakMeanSquareError.o SignalToNoiseRatio.o PeakSignalToNoiseRatio.o MaxDifference.o RaleighFPDF.o RosenfeldOperator.o LowPassFilter.o ConvertToGrayscale.o Binarize.o
 EXECUTABLE=imgproc
 
 all: $(OBJECTS) $(EXECUTABLE)
@@ -85,6 +85,9 @@ LowPassFilter.o : src/LowPassFilter.cc src/LowPassFilter.h
 
 ConvertToGrayscale.o : src/ConvertToGrayscale.cc src/ConvertToGrayscale.h
 	$(CXX) $(CXXFLAGS) -c src/ConvertToGrayscale.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
+
+Binarize.o : src/Binarize.cc src/Binarize.h
+	$(CXX) $(CXXFLAGS) -c src/Binarize.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
 .PHONY : clean
 clean:

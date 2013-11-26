@@ -23,5 +23,6 @@
 #include "Opening.h"
 #include "Closing.h"
 #include "ConvertToGrayscale.h"
+#include "Binarize.h"
 
 #endif
