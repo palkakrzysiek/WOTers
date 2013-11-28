@@ -111,6 +111,11 @@ int main(int argc, char** argv)
     o = new RosenfeldOperator(p.getRosenfeldP());
   }
 
+  if (p.setErosion())
+  {
+    o = new Erosion();
+  }
+
   if (p.setRaleigh())
   {
     // if (channel == Histogram::Channel::ALL && img.get_surface()->format->BitsPerPixel != 8)
@@ -239,7 +244,7 @@ int main(int argc, char** argv)
   uint64_t timer = now();
 #endif
   if (imageChanged) {
-    img.perform_operation(new Binarize());
+    img.perform_operation(o);
   }
 
 #ifdef _SPEED_TEST

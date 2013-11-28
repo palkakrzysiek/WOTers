@@ -1,7 +1,7 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 #include <string>
 #include <cstdint>
 

@@ -2,340 +2,378 @@
 #include "boost/program_options.hpp" 
 
 Parser::Parser(int &argc, char** argv)
-    : desc("Options")
+  : desc("Options")
 {
-    // http://www.boost.org/doc/libs/1_54_0/doc/html/program_options/tutorial.html
-    namespace po = boost::program_options;
-    // po::options_description desc("Options"); 
+  // http://www.boost.org/doc/libs/1_54_0/doc/html/program_options/tutorial.html
+  namespace po = boost::program_options;
+  // po::options_description desc("Options"); 
 
-    desc.add_options()
-        ("help,h", "produce help message")
-        ("verbose,v", "rant and rave")
-        //("histogram", po::value<std::string>(), "Save histogram to file");
-        ("file,f", po::value<std::string>()->required(),
-         "input file")
-        ("output,o", po::value<std::string>()->default_value("out.bmp"),
-         "output file")
-        ("brightness,b", po::value<double>(),
-         "modify brightness (in percents) [-100:100]")
-        ("contrast,c", po::value<double>(),
-         "modify contrast (in percents) [-100:100]")
-        ("negative,n", "invert values of colors")
+  desc.add_options()
+    ("help,h", "produce help message")
+    ("verbose,v", "rant and rave")
+    //("histogram", po::value<std::string>(), "Save histogram to file");
+    ("file,f", po::value<std::string>()->required(),
+     "input file")
+    ("output,o", po::value<std::string>()->default_value("out.bmp"),
+     "output file")
+    ("brightness,b", po::value<double>(),
+     "modify brightness (in percents) [-100:100]")
+    ("contrast,c", po::value<double>(),
+     "modify contrast (in percents) [-100:100]")
+    ("negative,n", "invert values of colors")
 
-        ("Hflip", "Horizontal Flip")
-        ("Vflip", "Vertical Flip")
-        ("Dflip", "Diagonal Flip")
-        ("resize,r", po::value<double>(),
-         "resize by percent of original image [greater then 0]")
+    ("Hflip", "Horizontal Flip")
+    ("Vflip", "Vertical Flip")
+    ("Dflip", "Diagonal Flip")
+    ("resize,r", po::value<double>(),
+     "resize by percent of original image [greater then 0]")
 
-        ("alpha", po::value<int>(), "Alpha Trimmed Mean Filter [0, 2, 4, 6, 8]")
-        ("cmean", po::value<double>(), "contraharmonic mean filter [floating point value]")
+    ("alpha", po::value<int>(), "Alpha Trimmed Mean Filter [0, 2, 4, 6, 8]")
+    ("cmean", po::value<double>(), "contraharmonic mean filter [floating point value]")
 
-        ("slowpass", "Low-pass filter")
-        ("orosenfeld", po::value<int>(), "Rosenfeld operator [1, 2, 4, 8, 16, ..]")
+    ("slowpass", "Low-pass filter")
+    ("orosenfeld", po::value<int>(), "Rosenfeld operator [1, 2, 4, 8, 16, ..]")
 
-        ("mse", po::value<std::string>(),
-         "Mean square error")
-        ("pmse", po::value<std::string>(),
-        "Peak mean sqare error")
-        ("snr", po::value<std::string>(),
-         "Signal to noise ratio")
-        ("psnr", po::value<std::string>(),
-         "Peak signal to noise ratio")
-        ("md", po::value<std::string>(),
-         "Maximum difference")
+    ("mse", po::value<std::string>(),
+     "Mean square error")
+    ("pmse", po::value<std::string>(),
+     "Peak mean sqare error")
+    ("snr", po::value<std::string>(),
+     "Signal to noise ratio")
+    ("psnr", po::value<std::string>(),
+     "Peak signal to noise ratio")
+    ("md", po::value<std::string>(),
+     "Maximum difference")
 
-        ("hraleigh", po::value<double>(), "Raleigh final probability density function")
+    ("hraleigh", po::value<double>(), "Raleigh final probability density function")
 
-        ("channel", po::value<std::string>(), "Channel [R, G, B]")
+    ("channel", po::value<std::string>(), "Channel [R, G, B]")
 
-        ("cmeanh", "Mean")
-        ("cvariance", "Variance")
-        ("cstdev", "Standard deviation")
-        ("cvarcoi", "Variation coefficient I")
-        ("cvarcoii", "Variation coefficient II")
-        ("casyco", "Asymmetry coefficient")
-        ("cflatco", "Flattening coefficient")
-        ("centropy", "Information source entropy")
+    ("cmeanh", "Mean")
+    ("cvariance", "Variance")
+    ("cstdev", "Standard deviation")
+    ("cvarcoi", "Variation coefficient I")
+    ("cvarcoii", "Variation coefficient II")
+    ("casyco", "Asymmetry coefficient")
+    ("cflatco", "Flattening coefficient")
+    ("centropy", "Information source entropy")
 
-        ("histogram", po::value<std::string>(), "save histogram to a file");
+    ("histogram", po::value<std::string>(), "save histogram to a file")
 
-    try 
+
+    ("erosion", "Mean Transformation")
+    ("dilation", "Mean Transformation")
+    ("opening", "Mean Transformation")
+    ("closing", "Closing Transformation")
+    ("hmt", "Hit-or-Miss Transformation")
+    ("lab3", "lab3");
+
+  try 
+  { 
+    po::store(po::parse_command_line(argc, argv, desc),  vm); // can throw 
+
+    /** --help option */ 
+    if ( vm.count("help")  ) 
     { 
-        po::store(po::parse_command_line(argc, argv, desc),  vm); // can throw 
-
-        /** --help option */ 
-        if ( vm.count("help")  ) 
-        { 
-            std::cout << "Command Line Image processing tool" << std::endl 
-                << desc << std::endl; 
-            exit(0);
-        } 
-
-        if ( !vm.count("file")  ) 
-        { 
-            std::cout << "Name of the file must be given\n\
-Command Line Image processing tool" << std::endl 
-                << desc << std::endl; 
-            exit(0);
-        } 
-
-        if ( vm.count("resize") && vm["resize"].as<double>() <= 0) 
-        { 
-            std::cout << "Value of resize argument must by positive! \n\
-Command Line Image processing tool" << std::endl 
-                << desc << std::endl; 
-            exit(0);
-        } 
-        po::notify(vm); // throws on error, so do after help in case 
-        // there are any problems 
+      std::cout << "Command Line Image processing tool" << std::endl 
+        << desc << std::endl; 
+      exit(0);
     } 
-    catch(po::error& e) 
+
+    if ( !vm.count("file")  ) 
     { 
-        std::cerr << "ERROR: " << e.what() << std::endl << std::endl; 
-        std::cerr << desc << std::endl; 
-        exit(1);
+      std::cout << "Name of the file must be given\n\
+        Command Line Image processing tool" << std::endl 
+        << desc << std::endl; 
+      exit(0);
     } 
+
+    if ( vm.count("resize") && vm["resize"].as<double>() <= 0) 
+    { 
+      std::cout << "Value of resize argument must by positive! \n\
+        Command Line Image processing tool" << std::endl 
+        << desc << std::endl; 
+      exit(0);
+    } 
+    po::notify(vm); // throws on error, so do after help in case 
+    // there are any problems 
+  } 
+  catch(po::error& e) 
+  { 
+    std::cerr << "ERROR: " << e.what() << std::endl << std::endl; 
+    std::cerr << desc << std::endl; 
+    exit(1);
+  } 
 
 }
 
 std::string Parser::getFilename()
 {
-    return vm["file"].as<std::string>();
+  return vm["file"].as<std::string>();
 }
 
 std::string Parser::getOutFilename()
 {
-    return vm["output"].as<std::string>();
+  return vm["output"].as<std::string>();
 }
 
 bool Parser::setBrightness()
 {
-    return vm.count("brightness");
+  return vm.count("brightness");
 }
 double Parser::getBrightnessValue()
 {
-    if (vm.count("verbose") && (vm["brightness"].as<double>() > 100 ||
-                                vm["brightness"].as<double>() < -100)) {
-        std::cout << "Brightness value is very close to or exceeds margin val.\n";
-    }
-    return (vm["brightness"].as<double>() / 100.0);
+  if (vm.count("verbose") && (vm["brightness"].as<double>() > 100 ||
+        vm["brightness"].as<double>() < -100)) {
+    std::cout << "Brightness value is very close to or exceeds margin val.\n";
+  }
+  return (vm["brightness"].as<double>() / 100.0);
 }
 
 bool Parser::setContrast()
 {
-    return vm.count("contrast");
+  return vm.count("contrast");
 }
 double Parser::getContrastValue()
 {
-    if (vm.count("verbose") && (vm["contrast"].as<double>() > 100 ||
-                                vm["contrast"].as<double>() < -100)) {
-        std::cout << "Contrast value is very close to or exceeds margin val.\n";
-    }
-    return vm["contrast"].as<double>() / 100.0;;
+  if (vm.count("verbose") && (vm["contrast"].as<double>() > 100 ||
+        vm["contrast"].as<double>() < -100)) {
+    std::cout << "Contrast value is very close to or exceeds margin val.\n";
+  }
+  return vm["contrast"].as<double>() / 100.0;;
 }
 
 bool Parser::setNegative()
 {
-    return vm.count("negative");
+  return vm.count("negative");
 }
 
 bool Parser::setHflip()
 {
-    return vm.count("Hflip");
+  return vm.count("Hflip");
 }
 
 bool Parser::setVflip()
 {
-    return vm.count("Vflip");
+  return vm.count("Vflip");
 }
 
 bool Parser::setDflip()
 {
-    return vm.count("Dflip");
+  return vm.count("Dflip");
 }
 
 bool Parser::setResize()
 {
-    return vm.count("resize");
+  return vm.count("resize");
 }
 double Parser::getResizeValue()
 {
-    return vm["resize"].as<double>() / 100.0;
+  return vm["resize"].as<double>() / 100.0;
 }
 
 bool Parser::setAlpha()
 {
-    return vm.count("alpha");
+  return vm.count("alpha");
 }
 
 int Parser::getAlphaValue()
 {
-    int tempVal = vm["alpha"].as<int>();
-    if (tempVal < 0 || tempVal > 8 || tempVal % 2 != 0){
-        std::cerr << "Value of Alpha Trimmed Mean Filter must be \
-0, 2, 4, 6 or 8. Exiting..." << std::endl;
-        exit(1);
-    }
-    return tempVal;
+  int tempVal = vm["alpha"].as<int>();
+  if (tempVal < 0 || tempVal > 8 || tempVal % 2 != 0){
+    std::cerr << "Value of Alpha Trimmed Mean Filter must be \
+      0, 2, 4, 6 or 8. Exiting..." << std::endl;
+    exit(1);
+  }
+  return tempVal;
 }
 
 bool Parser::setCmean()
 {
-    return vm.count("cmean");
+  return vm.count("cmean");
 }
 
 double Parser::getCmeanValue(){
-    return vm["cmean"].as<double>();
+  return vm["cmean"].as<double>();
 }
 
 bool Parser::setLowPass()
 {
-    return vm.count("slowpass");
+  return vm.count("slowpass");
 }
 
 bool Parser::setRosenfeld()
 {
-    return vm.count("orosenfeld");
+  return vm.count("orosenfeld");
 }
 
 int Parser::getRosenfeldP()
 {
-    return vm["orosenfeld"].as<int>();
+  int temp = vm["orosenfeld"].as<int>();
+  if (temp != 0 && (temp & (temp - 1)) != 0) {
+    std::cerr << "Argument of ==orosenfeld must be 1, 2, 4, 8, 16...\n";
+    exit(1);
+  }
+  return vm["orosenfeld"].as<int>();
 }
 
 bool Parser::setMse()
 {
-    return vm.count("mse");
+  return vm.count("mse");
 }
 
 std::string Parser::getMseFilename()
 {
-    return vm["mse"].as<std::string>();
+  return vm["mse"].as<std::string>();
 }
 
 bool Parser::setPmse()
 {
-    return vm.count("pmse");
+  return vm.count("pmse");
 }
 
 std::string Parser::getPmseFilename()
 {
-    return vm["pmse"].as<std::string>();
+  return vm["pmse"].as<std::string>();
 }
 
 bool Parser::setSnr()
 {
-    return vm.count("snr");
+  return vm.count("snr");
 }
 
 std::string Parser::getSnrFilename()
 {
-    return vm["snr"].as<std::string>();
+  return vm["snr"].as<std::string>();
 }
 
 bool Parser::setPsnr()
 {
-    return vm.count("psnr");
+  return vm.count("psnr");
 }
 
 std::string Parser::getPsnrFilename()
 {
-    return vm["psnr"].as<std::string>();
+  return vm["psnr"].as<std::string>();
 }
 
 bool Parser::setMd()
 {
-    return vm.count("md");
+  return vm.count("md");
 }
 
 std::string Parser::getMdFilename()
 {
-    return vm["md"].as<std::string>();
+  return vm["md"].as<std::string>();
 }
 
 bool Parser::setRaleigh()
 {
-    return vm.count("hraleigh");
+  return vm.count("hraleigh");
 }
 
 double Parser::getRaleighAlpha()
 {
-    return vm["hraleigh"].as<double>();
+  return vm["hraleigh"].as<double>();
 }
 
 bool Parser::setChannel()
 {
-    return vm.count("channel");
+  return vm.count("channel");
 }
 
 int Parser::getChannel()
 {
-    std::string channel = vm["channel"].as<std::string>();
+  std::string channel = vm["channel"].as<std::string>();
 
-    if (channel == "R")
-        return 0;
-    else if (channel == "G")
-        return 1;
-    else if (channel == "B")
-        return 2;
-    else if (channel == "A")
-        return 3;
-    else
-    {
-        std::cerr << "Invalid channel specified" << std::endl;
-        exit(1);
-    }
+  if (channel == "R")
+    return 0;
+  else if (channel == "G")
+    return 1;
+  else if (channel == "B")
+    return 2;
+  else if (channel == "A")
+    return 3;
+  else
+  {
+    std::cerr << "Invalid channel specified" << std::endl;
+    exit(1);
+  }
 
-    return 4;
+  return 4;
 }
 
 bool Parser::setCmeanh()
 {
-    return vm.count("cmeanh");
+  return vm.count("cmeanh");
 }
 
 bool Parser::setCvariance()
 {
-    return vm.count("cvariance");
+  return vm.count("cvariance");
 }
 
 bool Parser::setCstdev()
 {
-    return vm.count("cstdev");
+  return vm.count("cstdev");
 }
 
 bool Parser::setCvarcoi()
 {
-    return vm.count("cvarcoi");
+  return vm.count("cvarcoi");
 }
 
 bool Parser::setCvarcoii()
 {
-    return vm.count("cvarcoii");
+  return vm.count("cvarcoii");
 }
 
 bool Parser::setCasyco()
 {
-    return vm.count("casyco");
+  return vm.count("casyco");
 }
 
 bool Parser::setCflatco()
 {
-    return vm.count("cflatco");
+  return vm.count("cflatco");
 }
 
 bool Parser::setCentropy()
 {
-    return vm.count("centropy");
+  return vm.count("centropy");
 }
 
 bool Parser::setHistogram()
 {
-    return vm.count("histogram");
+  return vm.count("histogram");
 }
 
 std::string Parser::getHistogramFilename()
 {
-    return vm["histogram"].as<std::string>();
+  return vm["histogram"].as<std::string>();
+}
+
+bool Parser::setErosion()
+{
+  return vm.count("erosion");
+}
+
+bool Parser::setDilation()
+{
+  return vm.count("dilation");
+}
+
+bool Parser::setOpening()
+{
+  return vm.count("opening");
+}
+
+bool Parser::setClosing()
+{
+  return vm.count("closing");
+}
+
+bool Parser::setHMT()
+{
+  return vm.count("hmt");
 }

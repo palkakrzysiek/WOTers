@@ -1,17 +1,17 @@
 #ifndef __PARSER_H
 #define __PARSER_H
 
-#include "boost/program_options.hpp" 
+#include "boost/program_options.hpp"
 // #include "Histogram.h"
 // class Histogram;
 
-namespace 
-{ 
-  const size_t ERROR_IN_COMMAND_LINE = 1; 
-  const size_t SUCCESS = 0; 
-  const size_t ERROR_UNHANDLED_EXCEPTION = 2; 
- 
-} // namespace 
+namespace
+{
+  const size_t ERROR_IN_COMMAND_LINE = 1;
+  const size_t SUCCESS = 0;
+  const size_t ERROR_UNHANDLED_EXCEPTION = 2;
+
+} // namespace
 
 namespace po = boost::program_options;
 
@@ -21,7 +21,7 @@ class Parser{
 
     private:
         po::options_description desc;
-        po::variables_map vm; 
+        po::variables_map vm;
         bool verbose;
 
     public:
@@ -44,7 +44,7 @@ class Parser{
         int getAlphaValue();
         bool setCmean();
         double getCmeanValue();
-        
+
         bool setLowPass();
         bool setRosenfeld();
         int getRosenfeldP();
@@ -74,6 +74,12 @@ class Parser{
         bool setCasyco();
         bool setCflatco();
         bool setCentropy();
+
+        bool setErosion();
+        bool setDilation();
+        bool setOpening();
+        bool setClosing();
+        bool setHMT();
 
         bool setHistogram();
         std::string getHistogramFilename();
