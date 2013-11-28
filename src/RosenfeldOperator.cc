@@ -14,7 +14,7 @@ void RosenfeldOperator::perform(Image &image)
 
   int i, j;
 
-# pragma omp parallel for private(i)  
+# pragma omp parallel for private(i)
   for (j = 0; j < h; ++j)
   {
     for (i = 0; i < w; ++i)
@@ -37,7 +37,7 @@ void RosenfeldOperator::perform(Image &image)
       double pixel_value[3] = {0.0};
 
       int P2 = P;
-      
+
       for (int m = -P; m < P; ++m)
       {
         if (i + m < 0 || i + m > w)
@@ -50,9 +50,18 @@ void RosenfeldOperator::perform(Image &image)
         SDL_GetRGB(image.get_pixel(i + m, j), image.get_surface()->format,
                    &r, &g, &b);
 
-        pixel_value[0] += r;
-        pixel_value[1] += g;
-        pixel_value[2] += b;
+        if (m >= 0)
+        {
+          pixel_value[0] += r;
+          pixel_value[1] += g;
+          pixel_value[2] += b;
+        }
+        else
+        {
+          pixel_value[0] -= r;
+          pixel_value[1] -= g;
+          pixel_value[2] -= b;
+        }
       }
 
       pixel_value[0] /= P2;

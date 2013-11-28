@@ -21,7 +21,7 @@ void AlphaTrimmedMeanFilter::perform(Image &image)
 
   int i, j;
 
-# pragma omp parallel for private(i)  
+# pragma omp parallel for private(i)
   for (j = 1; j < h - 1; ++j)
   {
     for (i = 1; i < w - 1; ++i)
