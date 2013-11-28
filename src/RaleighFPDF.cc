@@ -17,11 +17,11 @@ void RaleighFPDF::perform(Image &image)
     Image improved(image);
     Histogram hist(image);
 
-    uint8_t g_min, g_max;
+    int g_min, g_max;
     printf("gmin: ");
-    scanf("%u", &g_min);
+    scanf("%ir", &g_min);
     printf("gmax: ");
-    scanf("%u", &g_max);
+    scanf("%ir", &g_max);
 
     // precompute new intensity values
     double newVal[3][256] = {};
