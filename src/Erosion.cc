@@ -36,6 +36,7 @@ void Erosion::perform(Image &image)
             workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
                   255, 255, 255));
             goto nextPixel; // fuck Dijkstra!
+            // abc
           }
         }
       }
@@ -45,7 +46,5 @@ nextPixel:
   }
 
   image = std::move(workingCopy);
-
-  Image gray(image);
 }
 
