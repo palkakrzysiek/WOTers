@@ -29,7 +29,7 @@ Histogram::Histogram(Image &image)
       ++pixels_b[b];
       ++pixels_a[a];
     }
-  } 
+  }
 }
 
 void Histogram::print_channel(Channel c)
@@ -240,13 +240,11 @@ double Histogram::centropy(Channel c)
 # pragma omp parallel for reduction(+:result)
   for (int i = 0; i < 256; ++i)
   {
-    // printf("log2(%g/%g) = log2(%g) = %g\n", (double) ptr[i], (double) n_pixels, (double) (((double) ptr[i]) / ((double) n_pixels)), log2((double) ((double)ptr[i]) / ((double)n_pixels)));
     double tmp = ((double)ptr[i]) * log2((double) ((double)ptr[i]) / ((double)n_pixels));
 
     if (!isinf(tmp) && !isnan(tmp))
     {
       result += tmp;
-      // printf("adding: %g\n", tmp);
     }
   }
 
@@ -260,7 +258,7 @@ void Histogram::save_as_image(Channel c, const std::string &filename)
   uint64_t *ptr = pixels_r;
 
   Image image(768, 520, 24);
-  int8_t dr = 0, dg = 0, db = 0; 
+  int8_t dr = 0, dg = 0, db = 0;
 
   if (grayscale)
   {
@@ -315,7 +313,7 @@ void Histogram::save_as_image(Channel c, const std::string &filename)
       image.set_pixel(i, j, 0xffffff);
     }
   }
-  
+
 # pragma omp parallel for private(j)
   for (i = 0; i < w; ++i)
   {
