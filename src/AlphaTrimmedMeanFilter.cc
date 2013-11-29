@@ -26,11 +26,11 @@ void AlphaTrimmedMeanFilter::perform(Image &image)
   {
     for (i = 1; i < w - 1; ++i)
     {
-      // 3x3 mask containing 4 color values
-      uint8_t mask[4][9];
+      // 3x3 mask containing 3 color values
+      uint8_t mask[3][9];
 
-      uint32_t avg[4];
-      memset(avg, 0, 4 * sizeof(uint32_t));
+      uint32_t avg[3];
+      memset(avg, 0, 3 * sizeof(uint32_t));
       int o = 0;
 
       // getting values of all the neighbors
@@ -38,8 +38,8 @@ void AlphaTrimmedMeanFilter::perform(Image &image)
       {
         for (int k = i - 1; k < i + 2; k++)
         {
-          SDL_GetRGBA(image.get_pixel(k, l), image.get_surface()->format,
-                     &mask[0][o], &mask[1][o], &mask[2][o], &mask[3][o]);
+          SDL_GetRGB(image.get_pixel(k, l), image.get_surface()->format,
+                     &mask[0][o], &mask[1][o], &mask[2][o]);
           ++o;
         }
       }
@@ -48,7 +48,6 @@ void AlphaTrimmedMeanFilter::perform(Image &image)
       std::sort(mask[0], mask[0] + 9);
       std::sort(mask[1], mask[1] + 9);
       std::sort(mask[2], mask[2] + 9);
-      std::sort(mask[3], mask[3] + 9);
 
       // summing color values
       for (int k = 0; k < 4; ++k)
@@ -60,14 +59,14 @@ void AlphaTrimmedMeanFilter::perform(Image &image)
       }
 
       // calculating average color values
-      for (int k = 0; k < 4; ++k)
+      for (int k = 0; k < 3; ++k)
       {
         avg[k] /= (9 - alpha);
       }
 
       // putting the new pixel value to the image
-      filtered.set_pixel(i, j, SDL_MapRGBA(filtered.get_surface()->format,
-                         avg[0], avg[1], avg[2], avg[3]));
+      filtered.set_pixel(i, j, SDL_MapRGB(filtered.get_surface()->format,
+                         avg[0], avg[1], avg[2]));
     }
   }
 
