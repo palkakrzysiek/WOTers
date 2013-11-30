@@ -22,6 +22,7 @@
 #include "Dilation.h"
 #include "Opening.h"
 #include "Closing.h"
+#include "HMT.h"
 #include "ConvertToGrayscale.h"
 #include "Binarize.h"
 
