@@ -116,6 +116,11 @@ int main(int argc, char** argv)
     o = new Erosion();
   }
 
+  if (p.setDilation())
+  {
+    o = new Dilation();
+  }
+
   if (p.setRaleigh())
   {
     // if (channel == Histogram::Channel::ALL && img.get_surface()->format->BitsPerPixel != 8)
@@ -257,6 +262,6 @@ int main(int argc, char** argv)
     img.save(p.getOutFilename());
   }
 #endif
-      
+
   return 0;
 }

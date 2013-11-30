@@ -46,6 +46,5 @@ nextPixel:
 
   image = std::move(workingCopy);
 
-  Image gray(image);
 }
 
