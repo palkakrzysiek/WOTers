@@ -12,7 +12,7 @@ void MaxDifference::perform(Image &image)
   int h = image.get_surface()->h;
   int bpp = image.get_surface()->format->BytesPerPixel;
 
-  if (filtered->get_surface()->w != w || filtered->get_surface()->h != h 
+  if (filtered->get_surface()->w != w || filtered->get_surface()->h != h
       || filtered->get_surface()->format->BytesPerPixel != bpp)
   {
     fprintf(stderr, "Images are not of the same size\n");
@@ -28,13 +28,13 @@ void MaxDifference::perform(Image &image)
   {
     for (i = 0; i < w; ++i)
     {
-      uint8_t r1, g1, b1, a1,
-              r2, g2, b2, a2;
+      uint8_t r1, g1, b1,
+              r2, g2, b2;
 
-      SDL_GetRGBA(image.get_pixel(i, j), image.get_surface()->format,
-                  &r1, &g1, &b1, &a1);
-      SDL_GetRGBA(filtered->get_pixel(i, j), filtered->get_surface()->format,
-                  &r2, &g2, &b2, &a2);
+      SDL_GetRGB(image.get_pixel(i, j), image.get_surface()->format,
+                  &r1, &g1, &b1);
+      SDL_GetRGB(filtered->get_pixel(i, j), filtered->get_surface()->format,
+                  &r2, &g2, &b2);
 
       if (fabs(r1 - r2) > max_r)
         max_r = fabs(r1 - r2);
@@ -44,9 +44,6 @@ void MaxDifference::perform(Image &image)
 
       if (fabs(b1 - b2) > max_b)
         max_b = fabs(b1 - b2);
-
-      // if (a > max_a)
-      //   max_a = a;
     }
   }
 

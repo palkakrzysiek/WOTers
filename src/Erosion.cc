@@ -35,7 +35,7 @@ void Erosion::perform(Image &image)
           if (r == WHITE && STRUCTURAL_ELEMENT[8][k+1][l+1] == ACTIVE) {
             workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
                   255, 255, 255));
-            goto nextPixel; // fuck Dijkstra!
+            goto nextPixel;
           }
         }
       }
@@ -45,6 +45,5 @@ nextPixel:
   }
 
   image = std::move(workingCopy);
-
 }
 

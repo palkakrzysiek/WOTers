@@ -1,7 +1,7 @@
 #include "ContraharmonicMeanFilter.h"
 #include <cmath>
 
-const int sqareSize = 1; // size of "borders"
+const int squareSize = 1; // size of "borders"
 
 ContraharmonicMeanFilter::ContraharmonicMeanFilter(double q)
   : order(q) { }
@@ -16,17 +16,17 @@ void ContraharmonicMeanFilter::perform(Image &image) {
     int i, j;
     i = j = 0;
 
-# pragma omp parallel for private(j)  
+# pragma omp parallel for private(j)
     for (i = 0; i < w - 1; i++) {
         for (j = 0; j < h - 1; j++) {
             double sum1[4] {0};
             double sum2[4] {0};
             uint8_t rgba[4] {0};
             double result[4] {0};
-            
+
             // for every pixel
-            for (int k = -sqareSize; k < sqareSize; k++){
-                for (int l = -sqareSize; l < sqareSize; l++){
+            for (int k = -squareSize; k < squareSize; k++){
+                for (int l = -squareSize; l < squareSize; l++){
                     // sum appropriate powers
                     // in case of pixels on borders -- don't copy them
                     // to obtain for example 9x9 mask, just use only those
