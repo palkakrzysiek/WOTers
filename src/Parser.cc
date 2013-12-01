@@ -1,12 +1,13 @@
 #include "Parser.h"
-#include "boost/program_options.hpp" 
+#include "boost/program_options.hpp"
+#include <utility>
 
 Parser::Parser(int &argc, char** argv)
   : desc("Options")
 {
   // http://www.boost.org/doc/libs/1_54_0/doc/html/program_options/tutorial.html
   namespace po = boost::program_options;
-  // po::options_description desc("Options"); 
+  // po::options_description desc("Options");
 
   desc.add_options()
     ("help,h", "produce help message")
@@ -45,7 +46,7 @@ Parser::Parser(int &argc, char** argv)
     ("md", po::value<std::string>(),
      "Maximum difference")
 
-    ("hraleigh", po::value<double>(), "Raleigh final probability density function")
+    ("hraleigh", po::value<std::vector<int>>()->multitoken(), "Raleigh [min max]")
 
     ("channel", po::value<std::string>(), "Channel [R, G, B]")
 
@@ -68,42 +69,42 @@ Parser::Parser(int &argc, char** argv)
     ("hmt", "Hit-or-Miss Transformation")
     ("lab3", "lab3");
 
-  try 
-  { 
-    po::store(po::parse_command_line(argc, argv, desc),  vm); // can throw 
+  try
+  {
+    po::store(po::parse_command_line(argc, argv, desc),  vm); // can throw
 
-    /** --help option */ 
-    if ( vm.count("help")  ) 
-    { 
-      std::cout << "Command Line Image processing tool" << std::endl 
-        << desc << std::endl; 
+    /** --help option */
+    if ( vm.count("help")  )
+    {
+      std::cout << "Command Line Image processing tool" << std::endl
+        << desc << std::endl;
       exit(0);
-    } 
+    }
 
-    if ( !vm.count("file")  ) 
-    { 
+    if ( !vm.count("file")  )
+    {
       std::cout << "Name of the file must be given\n\
-        Command Line Image processing tool" << std::endl 
-        << desc << std::endl; 
+        Command Line Image processing tool" << std::endl
+        << desc << std::endl;
       exit(0);
-    } 
+    }
 
-    if ( vm.count("resize") && vm["resize"].as<double>() <= 0) 
-    { 
+    if ( vm.count("resize") && vm["resize"].as<double>() <= 0)
+    {
       std::cout << "Value of resize argument must by positive! \n\
-        Command Line Image processing tool" << std::endl 
-        << desc << std::endl; 
+        Command Line Image processing tool" << std::endl
+        << desc << std::endl;
       exit(0);
-    } 
-    po::notify(vm); // throws on error, so do after help in case 
-    // there are any problems 
-  } 
-  catch(po::error& e) 
-  { 
-    std::cerr << "ERROR: " << e.what() << std::endl << std::endl; 
-    std::cerr << desc << std::endl; 
+    }
+    po::notify(vm); // throws on error, so do after help in case
+    // there are any problems
+  }
+  catch(po::error& e)
+  {
+    std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
+    std::cerr << desc << std::endl;
     exit(1);
-  } 
+  }
 
 }
 
@@ -272,9 +273,17 @@ bool Parser::setRaleigh()
   return vm.count("hraleigh");
 }
 
-double Parser::getRaleighAlpha()
+std::pair<int, int> Parser::getRaleighMinMax()
 {
-  return vm["hraleigh"].as<double>();
+  auto vect = vm["hraleigh"].as<std::vector<int>>();
+
+  if (vect.size() != 2 /* && 0 <= value <= 255 */)
+  {
+    std::cerr << "You must specify min and max" << std::endl;
+    exit(1);
+  }
+
+  return std::make_pair(vect[0], vect[1]);
 }
 
 bool Parser::setChannel()

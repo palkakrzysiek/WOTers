@@ -7,12 +7,12 @@
 class RaleighFPDF : public Operation
 {
 public:
-  RaleighFPDF(Histogram::Channel c, double a);
+  RaleighFPDF(Histogram::Channel c, const std::pair<int, int> &minmax);
 
   void perform(Image &image);
 
 private:
-  double alpha;
+  int g_min, g_max;
   Histogram::Channel channel;
 
 };
