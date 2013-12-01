@@ -80,10 +80,16 @@ class Parser{
         bool setOpening();
         bool setClosing();
         bool setHMT();
+        int getHMTMask();
+        bool setM5();
 
         bool setHistogram();
         std::string getHistogramFilename();
 
+        bool setRegionGrowing();
+        int getRegionValue();
+        bool setThreshold();
+        int getTrescholdValue();
 };
 
 #endif

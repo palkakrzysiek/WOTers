@@ -37,8 +37,7 @@ int main(int argc, char** argv)
 
   Operation *o = nullptr;
 
-  if (p.setChannel())
-  {
+  if (p.setChannel()) {
     channel = (Histogram::Channel) p.getChannel();
   }
   else
@@ -46,83 +45,92 @@ int main(int argc, char** argv)
     channel = Histogram::Channel::ALL;
   }
 
-  if (img.get_surface()->format->BitsPerPixel == 8)
-  {
+  if (img.get_surface()->format->BitsPerPixel == 8) {
     channel = Histogram::Channel::R;
   }
 
-  if (p.setBrightness())
-  {
+  if (p.setBrightness()) {
     o = new BrightnessAdjustment(p.getBrightnessValue());
   }
 
-  if (p.setResize())
-  {
+  if (p.setResize()) {
     o = new Resize(p.getResizeValue());
   }
 
-  if (p.setContrast())
-  {
+  if (p.setContrast()) {
     o = new ContrastAdjustment(p.getContrastValue());
   }
 
-  if (p.setNegative())
-  {
+  if (p.setNegative()) {
     o = new Negative();
   }
 
-  if (p.setHflip())
-  {
+  if (p.setHflip()) {
     o = new HorizontalFlip();
   }
 
-  if (p.setVflip())
-  {
+  if (p.setVflip()) {
     o = new VerticalFlip();
   }
 
-  if (p.setDflip())
-  {
+  if (p.setDflip()) {
     o = new DiagonalFlip();
   }
 
-  if (p.setCmean())
-  {
+  if (p.setCmean()) {
     o = new ContraharmonicMeanFilter(p.getCmeanValue());
   }
 
-  if (p.setAlpha())
-  {
+  if (p.setAlpha()) {
     o = new AlphaTrimmedMeanFilter(p.getAlphaValue());
   }
 
-  if (p.setCmean())
-  {
+  if (p.setCmean()) {
     o = new ContraharmonicMeanFilter(p.getCmeanValue());
   }
 
-  if (p.setLowPass())
-  {
+  if (p.setLowPass()) {
     o = new LowPassFilter();
   }
 
-  if (p.setRosenfeld())
-  {
+  if (p.setRosenfeld()) {
     o = new RosenfeldOperator(p.getRosenfeldP());
   }
 
-  if (p.setErosion())
-  {
+  if (p.setErosion()) {
     o = new Erosion();
   }
 
-  if (p.setDilation())
-  {
+  if (p.setDilation()) {
     o = new Dilation();
   }
 
-  if (p.setRaleigh())
-  {
+  if (p.setOpening()) {
+    o = new Opening();
+  }
+
+  if (p.setClosing()) {
+    o = new Closing();
+  }
+
+  if (p.setHMT()) {
+    o = new HMT(p.getHMTMask());
+  }
+
+  if (p.setM5()) {
+    o = new M5();
+  }
+
+  if (p.setRegionGrowing()) {
+    int th = -1; // search for mean to calulate threshold value
+    if (p.setThreshold()) {
+      th = p.getTrescholdValue();
+    }
+    o = new RegionGrowing(p.getRegionValue(), th);
+
+  }
+
+  if (p.setRaleigh()) {
     // if (channel == Histogram::Channel::ALL && img.get_surface()->format->BitsPerPixel != 8)
     // {
     //   std::cerr << "You must specify channel (--channel)" << std::endl;
@@ -138,102 +146,87 @@ int main(int argc, char** argv)
 
   double result = 0.0;
 
-  if (p.setMse())
-  {
+  if (p.setMse()) {
     imageChanged = false;
     Image filtered(p.getMseFilename());
     img.perform_operation(new MeanSquareError(&filtered, &result));
     cout << result << endl;
   }
 
-  if (p.setPmse())
-  {
+  if (p.setPmse()) {
     imageChanged = false;
     Image filtered(p.getPmseFilename());
     img.perform_operation(new PeakMeanSquareError(&filtered, &result));
     cout << result << endl;
   }
 
-  if (p.setSnr())
-  {
+  if (p.setSnr()) {
     imageChanged = false;
     Image filtered(p.getSnrFilename());
     img.perform_operation(new SignalToNoiseRatio(&filtered, &result));
     cout << result << endl;
   }
-  if (p.setPsnr())
-  {
+  if (p.setPsnr()) {
     imageChanged = false;
     Image filtered(p.getPsnrFilename());
     img.perform_operation(new PeakSignalToNoiseRatio(&filtered, &result));
     cout << result << endl;
   }
 
-  if (p.setMd())
-  {
+  if (p.setMd()) {
     imageChanged = false;
     Image filtered(p.getMdFilename());
     img.perform_operation(new MaxDifference(&filtered, &result));
     cout << result << endl;
   }
 
-  if (p.setCmeanh())
-  {
+  if (p.setCmeanh()) {
     imageChanged = false;
     cout << hist.cmean(channel) << endl;
   }
 
-  if (p.setCvariance())
-  {
+  if (p.setCvariance()) {
     imageChanged = false;
     cout << hist.cvariance(channel) << endl;
   }
 
-  if (p.setCstdev())
-  {
+  if (p.setCstdev()) {
     imageChanged = false;
     cout << hist.cstdev(channel) << endl;
   }
 
-  if (p.setCvarcoii())
-  {
+  if (p.setCvarcoii()) {
     imageChanged = false;
     cout << hist.cvarcoii(channel) << endl;
   }
 
-  if (p.setCvarcoi())
-  {
+  if (p.setCvarcoi()) {
     imageChanged = false;
     cout << hist.cvarcoi(channel) << endl;
   }
 
-  if (p.setCasyco())
-  {
+  if (p.setCasyco()) {
     imageChanged = false;
     cout << hist.casyco(channel) << endl;
   }
 
-  if (p.setCflatco())
-  {
+  if (p.setCflatco()) {
     imageChanged = false;
     cout << hist.cflatco(channel) << endl;
   }
 
-  if (p.setCentropy())
-  {
+  if (p.setCentropy()) {
     imageChanged = false;
     cout << hist.centropy(channel) << endl;
   }
 
-  if (p.setHistogram())
-  {
+  if (p.setHistogram()) {
     // if (channel == Histogram::Channel::ALL && img.get_surface()->format->BitsPerPixel != 8)
     // {
     //   std::cerr << "You must specify channel (--channel)" << std::endl;
     //   exit(1);
     // }
-    if (img.get_surface()->format->BitsPerPixel == 8)
-    {
+    if (img.get_surface()->format->BitsPerPixel == 8) {
       channel = Histogram::Channel::R;
     }
 

@@ -1,12 +1,12 @@
 #include "Parser.h"
-#include "boost/program_options.hpp" 
+#include "boost/program_options.hpp"
 
 Parser::Parser(int &argc, char** argv)
   : desc("Options")
 {
   // http://www.boost.org/doc/libs/1_54_0/doc/html/program_options/tutorial.html
   namespace po = boost::program_options;
-  // po::options_description desc("Options"); 
+  // po::options_description desc("Options");
 
   desc.add_options()
     ("help,h", "produce help message")
@@ -65,45 +65,48 @@ Parser::Parser(int &argc, char** argv)
     ("dilation", "Mean Transformation")
     ("opening", "Mean Transformation")
     ("closing", "Closing Transformation")
-    ("hmt", "Hit-or-Miss Transformation")
-    ("lab3", "lab3");
+    ("hmt", po::value<int>(), "Hit-or-Miss Transformation")
+    ("m5", "assigned variant of morphological operation")
+    ("rgrow", po::value<int>(), "Region growing, seed as parameter")
+    ("threshold", po::value<int>(), "Border of threshold");
 
-  try 
-  { 
-    po::store(po::parse_command_line(argc, argv, desc),  vm); // can throw 
 
-    /** --help option */ 
-    if ( vm.count("help")  ) 
-    { 
-      std::cout << "Command Line Image processing tool" << std::endl 
-        << desc << std::endl; 
+  try
+  {
+    po::store(po::parse_command_line(argc, argv, desc),  vm); // can throw
+
+    /** --help option */
+    if ( vm.count("help")  )
+    {
+      std::cout << "Command Line Image processing tool" << std::endl
+        << desc << std::endl;
       exit(0);
-    } 
+    }
 
-    if ( !vm.count("file")  ) 
-    { 
+    if ( !vm.count("file")  )
+    {
       std::cout << "Name of the file must be given\n\
-        Command Line Image processing tool" << std::endl 
-        << desc << std::endl; 
+        Command Line Image processing tool" << std::endl
+        << desc << std::endl;
       exit(0);
-    } 
+    }
 
-    if ( vm.count("resize") && vm["resize"].as<double>() <= 0) 
-    { 
+    if ( vm.count("resize") && vm["resize"].as<double>() <= 0)
+    {
       std::cout << "Value of resize argument must by positive! \n\
-        Command Line Image processing tool" << std::endl 
-        << desc << std::endl; 
+        Command Line Image processing tool" << std::endl
+        << desc << std::endl;
       exit(0);
-    } 
-    po::notify(vm); // throws on error, so do after help in case 
-    // there are any problems 
-  } 
-  catch(po::error& e) 
-  { 
-    std::cerr << "ERROR: " << e.what() << std::endl << std::endl; 
-    std::cerr << desc << std::endl; 
+    }
+    po::notify(vm); // throws on error, so do after help in case
+    // there are any problems
+  }
+  catch(po::error& e)
+  {
+    std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
+    std::cerr << desc << std::endl;
     exit(1);
-  } 
+  }
 
 }
 
@@ -376,4 +379,42 @@ bool Parser::setClosing()
 bool Parser::setHMT()
 {
   return vm.count("hmt");
+}
+
+bool Parser::setM5()
+{
+  return vm.count("m5");
+}
+
+bool Parser::setRegionGrowing() {
+  return vm.count("rgrow");
+}
+int Parser::getRegionValue(){
+  int val = vm["rgrow"].as<int>();
+  if (val > 255 || val < 0) {
+    std::cerr << "Value of seeds must be in range [0:255]";
+    exit(1);
+  }
+  return val;
+}
+bool Parser::setThreshold() {
+   return vm.count("threshold");
+}
+int Parser::getTrescholdValue() {
+  int val = vm["threshold"].as<int>();
+  if (val > 255 || val < 0) {
+    std::cerr << "Value of threshold must be in range [0:255]";
+    exit(1);
+  }
+  return val;
+}
+
+int Parser::getHMTMask()
+{
+  int val = vm["hmt"].as<int>() - 1;
+  if (val < 0 || val > 8) {
+    std::cerr << "Possible masks are numbered from 1 to 9";
+    exit(1);
+  }
+  return val;
 }
