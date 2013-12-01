@@ -23,6 +23,7 @@
 #include "Opening.h"
 #include "Closing.h"
 #include "HMT.h"
+#include "RegionGrowing.h"
 #include "ConvertToGrayscale.h"
 #include "Binarize.h"
 #include "M5.h"

@@ -15,8 +15,12 @@ Region growing
 * If given image is colored, the it will be converted to gray scale by taking
   average mean of all channels.
 * Implementation will consists of iteration of all pixels to find seeds, those
-  pixels will be added to the queue. Then their neighbors will be checked if
+  pixels will be added to the queue (other will get value 255 -- on separate
+  image). Then their (those with value 0) neighbors will be checked if
   their not belongs to the same region, if they are, they'll be added to queue.
-* Only pixels with values different than 0 can be added to queue (except of
-  the first iteration) to prevent infinite execution
-* When queue will be empty value of remaining pixels will be set to 255.
+  And value of output image will be set to 0
+* Only pixels with values different than 0 (on output image) can be added to
+  queue (except of the first iteration) to prevent infinite execution (if they
+  have value 0 on output image, that means they have already been checked)
+* When queue will be empty loop that checks values forom queue terminates and
+* temporary, monochromatic image replaces the old one.

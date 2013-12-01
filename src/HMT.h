@@ -6,7 +6,12 @@
 class HMT : public Operation
 {
 public:
+  HMT(int mask);
+
   void perform(Image &image);
+
+private:
+  int mask;
 
 };
 

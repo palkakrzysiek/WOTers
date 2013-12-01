@@ -11,7 +11,6 @@ void Dilation::perform(Image &image)
   int i, j, k, l;
 
 # pragma omp parallel for private(i)
-// it does not work with parallel processing
   for (j = 1; j < h - 1; ++j) {
     for (i = 1; i < w - 1; ++i) {
     uint8_t r, g, b;

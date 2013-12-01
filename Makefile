@@ -5,7 +5,7 @@ LDFLAGS=-fopenmp
 SDL_CFLAGS := $(shell sdl-config --cflags)
 SDL_LDFLAGS := $(shell sdl-config --libs) -lSDL_image
 BOOST_LDFLAGS=-lboost_program_options
-OBJECTS=main.o Parser.o Histogram.o Image.o Operation.o BrightnessAdjustment.o ContrastAdjustment.o DiagonalFlip.o VerticalFlip.o HorizontalFlip.o Negative.o Resize.o AlphaTrimmedMeanFilter.o ContraharmonicMeanFilter.o MeanSquareError.o PeakMeanSquareError.o SignalToNoiseRatio.o PeakSignalToNoiseRatio.o MaxDifference.o RaleighFPDF.o RosenfeldOperator.o LowPassFilter.o ConvertToGrayscale.o Binarize.o Erosion.o Dilation.o
+OBJECTS=main.o Parser.o Histogram.o Image.o Operation.o BrightnessAdjustment.o ContrastAdjustment.o DiagonalFlip.o VerticalFlip.o HorizontalFlip.o Negative.o Resize.o AlphaTrimmedMeanFilter.o ContraharmonicMeanFilter.o MeanSquareError.o PeakMeanSquareError.o SignalToNoiseRatio.o PeakSignalToNoiseRatio.o MaxDifference.o RaleighFPDF.o RosenfeldOperator.o LowPassFilter.o ConvertToGrayscale.o Binarize.o Erosion.o Dilation.o Opening.o Closing.o HMT.o M5.o RegionGrowing.o
 EXECUTABLE=imgproc
 
 all: $(OBJECTS) $(EXECUTABLE)
@@ -95,6 +95,22 @@ Erosion.o : src/Erosion.cc src/Erosion.h
 Dilation.o : src/Dilation.cc src/Dilation.h
 	$(CXX) $(CXXFLAGS) -c src/Dilation.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
+Opening.o : src/Opening.cc src/Opening.h
+	$(CXX) $(CXXFLAGS) -c src/Opening.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
+
+Closing.o : src/Closing.cc src/Closing.h
+	$(CXX) $(CXXFLAGS) -c src/Closing.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
+
+HMT.o : src/HMT.cc src/HMT.h
+	$(CXX) $(CXXFLAGS) -c src/HMT.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
+
+M5.o : src/M5.cc src/M5.h
+	$(CXX) $(CXXFLAGS) -c src/M5.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
+
+RegionGrowing.o : src/RegionGrowing.cc src/RegionGrowing.h
+	$(CXX) $(CXXFLAGS) -c src/RegionGrowing.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
+
+Opening.o : src/Opening.cc src/Opening.h
 
 .PHONY : clean
 clean:
