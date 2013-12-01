@@ -25,5 +25,6 @@
 #include "HMT.h"
 #include "ConvertToGrayscale.h"
 #include "Binarize.h"
+#include "M5.h"
 
 #endif
