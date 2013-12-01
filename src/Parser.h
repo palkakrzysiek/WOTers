@@ -2,8 +2,8 @@
 #define __PARSER_H
 
 #include "boost/program_options.hpp"
-// #include "Histogram.h"
-// class Histogram;
+#include <utility>
+#include <vector>
 
 namespace
 {
@@ -61,7 +61,7 @@ class Parser{
         std::string getMdFilename();
 
         bool setRaleigh();
-        double getRaleighAlpha();
+        std::pair<int, int> getRaleighMinMax();
 
         bool setChannel();
         int getChannel();

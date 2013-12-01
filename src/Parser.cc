@@ -4,6 +4,7 @@
 Parser::Parser(int &argc, char** argv)
   : desc("Options")
 {
+
   // http://www.boost.org/doc/libs/1_54_0/doc/html/program_options/tutorial.html
   namespace po = boost::program_options;
   // po::options_description desc("Options");
@@ -45,7 +46,7 @@ Parser::Parser(int &argc, char** argv)
     ("md", po::value<std::string>(),
      "Maximum difference")
 
-    ("hraleigh", po::value<double>(), "Raleigh final probability density function")
+    ("hraleigh", po::value<std::vector<int>>()->multitoken(), "Raleigh [min max]")
 
     ("channel", po::value<std::string>(), "Channel [R, G, B]")
 
@@ -143,7 +144,7 @@ double Parser::getContrastValue()
         vm["contrast"].as<double>() < -100)) {
     std::cout << "Contrast value is very close to or exceeds margin val.\n";
   }
-  return vm["contrast"].as<double>() / 100.0;;
+  return vm["contrast"].as<double>() / 100.0;
 }
 
 bool Parser::setNegative()
@@ -275,9 +276,17 @@ bool Parser::setRaleigh()
   return vm.count("hraleigh");
 }
 
-double Parser::getRaleighAlpha()
+std::pair<int, int> Parser::getRaleighMinMax()
 {
-  return vm["hraleigh"].as<double>();
+  auto vect = vm["hraleigh"].as<std::vector<int>>();
+
+  if (vect.size() != 2 /* && 0 <= value <= 255 */)
+  {
+    std::cerr << "You must specify min and max" << std::endl;
+    exit(1);
+  }
+
+  return std::make_pair(vect[0], vect[1]);
 }
 
 bool Parser::setChannel()

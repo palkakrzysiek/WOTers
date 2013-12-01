@@ -141,7 +141,7 @@ int main(int argc, char** argv)
     //   channel = Histogram::Channel::R;
     // }
 
-    o = new RaleighFPDF(channel, p.getRaleighAlpha());
+    o = new RaleighFPDF(channel, p.getRaleighMinMax());
   }
 
   double result = 0.0;

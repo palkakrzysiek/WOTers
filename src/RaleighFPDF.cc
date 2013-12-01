@@ -2,119 +2,179 @@
 #include <cmath>
 #include <algorithm>
 #include <cstdio>
+#include <array>
 
-RaleighFPDF::RaleighFPDF(Histogram::Channel c, double a)
-: channel(c),
-    alpha(a)
+RaleighFPDF::RaleighFPDF(Histogram::Channel c, const std::pair<int, int> &minmax)
+  : channel(c),
+    g_min(minmax.first),
+    g_max(minmax.second)
 {
 }
 
 void RaleighFPDF::perform(Image &image)
-{
-    int w = image.get_surface()->w;
-    int h = image.get_surface()->h;
+{int w = image.get_surface()->w;
+  int h = image.get_surface()->h;
 
-    Image improved(image);
-    Histogram hist(image);
+  Image improved(image);
+  Histogram hist(image);
 
-    int g_min, g_max;
-    printf("gmin: ");
-    scanf("%ir", &g_min);
-    printf("gmax: ");
-    scanf("%ir", &g_max);
+  int i, j;
 
-    // precompute new intensity values
-    double newVal[3][256] = {};
-    double tempVal[3] = {0};
-    int i, j, k;
+  std::array<double, 256> rs, gs, bs;
 
-    for (i = 0; i <= 255; i++) { // 255 operations
-        tempVal[0] = hist.get_r()[i];
-        tempVal[1] = hist.get_g()[i];
-        tempVal[2] = hist.get_b()[i];
-
-
-        for (j = i; j <= 255 ; j++) {
-            for (k = 0; k < 3; k++) { // 3 * (255 - 0) / 2 * 255 operations
-                newVal[k][j] += tempVal[k];
-            }
-        }
-
-        for (k = 0; k < 3; k++) { // 3 operations
-                alpha = 0.0;
-                uint64_t H_0;
-
-                if (tempVal[k] == 0)
-                    H_0 = 1;
-                else
-                    H_0 = tempVal[k];
-
-                alpha = 0.0;
-                alpha = g_max - g_min;
-                alpha *= alpha;
-                alpha /= 2.0 * log((double) w * h / H_0);
-
-                newVal[k][i] = g_min + sqrt(-2.0 * alpha * alpha * log(newVal[k][i]));
-
-        }
+  for (i = 0; i <= 255; ++i)
+  {
+    for (j = 0; j <= i; ++j)
+    {
+#     pragma omp parallel sections
+      {
+#       pragma omp section
+        {rs[i] += hist.get_r()[i];}
+#       pragma omp section
+        {gs[i] += hist.get_g()[i];}
+#       pragma omp section
+        {bs[i] += hist.get_b()[i];}
+      }
     }
 
-#   pragma omp parallel for private(j)
-    for (i = 0; i < w; i++) {
-        for (j = 0; j < h; j++) {
-            uint8_t rgb[3] = {};
+#   pragma omp parallel sections
+    {
+#     pragma omp section
+      {
+        double alpha = 0;
+        uint64_t H_0;
 
-            SDL_GetRGB(image.get_pixel(i, j), image.get_surface()->format,
-                       &rgb[0], &rgb[1], &rgb[2]);
+        if (hist.get_r()[0] == 0)
+          H_0 = 1;
+        else
+          H_0 = hist.get_r()[0];
 
-            if (channel == Histogram::Channel::R ||
-                channel == Histogram::Channel::ALL) {
-                rgb[0] = trunc(newVal[0][rgb[0]]);
-            }
-            if (channel == Histogram::Channel::G ||
-                channel == Histogram::Channel::ALL) {
-                rgb[1] = trunc(newVal[1][rgb[1]]);
-            }
-            if (channel == Histogram::Channel::B ||
-                channel == Histogram::Channel::ALL) {
-                rgb[2] = trunc(newVal[2][rgb[2]]);
-            }
+        alpha = (double) g_max - g_min;
+        alpha = std::pow(alpha, 2);
+        alpha /= 2.0 * std::log((double) w * h / H_0);
 
-            improved.set_pixel(i, j, SDL_MapRGB(improved.get_surface()->format,
-                        rgb[0], rgb[1], rgb[2]));
-        }
+        rs[i] = g_min + sqrt(-2.0 * alpha * alpha * log(rs[i]));
+      }
+
+#     pragma omp section
+      {
+        double alpha = 0;
+        uint64_t H_0;
+
+        if (hist.get_g()[0] == 0)
+          H_0 = 1;
+        else
+          H_0 = hist.get_g()[0];
+
+        alpha = (double) g_max - g_min;
+        alpha = pow(alpha, 2);
+        alpha /= 2.0 * log((double) w * h / H_0);
+
+        gs[i] = g_min + sqrt(-2.0 * alpha * alpha * log(gs[i]));
+      }
+
+#     pragma omp section
+      {
+        double alpha = 0;
+        uint64_t H_0;
+
+        if (hist.get_b()[0] == 0)
+          H_0 = 1;
+        else
+          H_0 = hist.get_b()[0];
+
+        alpha = (double) g_max - g_min;
+        alpha = pow(alpha, 2);
+        alpha /= 2.0 * log((double) w * h / H_0);
+
+        bs[i] = g_min + sqrt(-2.0 * alpha * alpha * log(bs[i]));
+      }
     }
+  }
 
-    // uint64_t H_0;
+# pragma omp parallel for private(i)
+  for (j = 0; j < h; ++j)
+  {
+    for (i = 0; i < w; ++i)
+    {
+      uint8_t rgb[3] = {0};
 
-//     if (tempVal[0] == 0)
-//         H_0 = 1;
-//     else
-//         H_0 = tempVal[0];
+      SDL_GetRGB(image.get_pixel(i, j), image.get_surface()->format,
+                 &rgb[0], &rgb[1], &rgb[2]);
 
-//     alpha = 0.0;
-//     alpha = g_max - g_min;
-//     alpha *= alpha;
-//     alpha /= 2.0 * log((double) w * h / H_0);
+      if (channel == Histogram::Channel::R || channel == Histogram::Channel::ALL)
+      {
+        // alpha = 0.0;
+        // uint64_t H_0;
 
-// #   pragma omp parallel for private(j)
-//     for (i = 0; i < w; i++) {
-//         for (j = 0; j < h; j++) {
-//             for (k = 0; k < 3; ++k)
-//             {
+        // if (hist.get_r()[0] == 0)
+        //   H_0 = 1;
+        // else
+        //   H_0 = hist.get_r()[0];
 
+        // alpha = (double) g_max - g_min;
+        // alpha = pow(alpha, 2);
+        // alpha /= 2.0 * log((double) w * h / H_0);
 
-//                 newVal[]
-//             }
-//         }
-//     }
+        // for (int l = 0; l <= rgb[0]; ++l)
+        // {
+        //   sum_r += hist.get_r()[l];
+        // }
+        // sum_r /= w * h;
+        // rgb[0] = trunc(g_min + sqrt(-2.0 * alpha * alpha * log(sum_r)));
+        rgb[0] = trunc(rs[rgb[0]]);
+      }
 
-    // for (i = 0; i < w; i++) {
-    //     for (j = 0; j < h; j++) {
-    //         improved.set(i, j,)
-    //     }
-    // }
+      if (channel == Histogram::Channel::G || channel == Histogram::Channel::ALL)
+      {
+        // alpha = 0.0;
+        // uint64_t H_0;
 
+        // if (hist.get_g()[0] == 0)
+        //   H_0 = 1;
+        // else
+        //   H_0 = hist.get_g()[0];
 
-    image = std::move(improved);
+        // alpha = (double) g_max - g_min;
+        // alpha = pow(alpha, 2);
+        // alpha /= 2.0 * log((double) w * h / H_0);
+
+        // for (int l = 0; l <= rgb[1]; ++l)
+        // {
+        //   sum_g += hist.get_g()[l];
+        // }
+        // sum_g /= w * h;
+        // rgb[1] = trunc(g_min + sqrt(-2.0 * alpha * alpha * log(sum_g)));
+        rgb[1] = trunc(gs[rgb[1]]);
+      }
+
+      if (channel == Histogram::Channel::B || channel == Histogram::Channel::ALL)
+      {
+        // alpha = 0.0;
+        // uint64_t H_0;
+
+        // if (hist.get_b()[0] == 0)
+        //   H_0 = 1;
+        // else
+        //   H_0 = hist.get_b()[0];
+
+        // alpha = (double) g_max - g_min;
+        // alpha = pow(alpha, 2);
+        // alpha /= 2.0 * log((double) w * h / H_0);
+
+        // for (int l = 0; l <= rgb[2]; ++l)
+        // {
+        //   sum_b += hist.get_b()[l];
+        // }
+        // sum_b /= w * h;
+        // rgb[2] = trunc(g_min + sqrt(-2.0 * alpha * alpha * log(sum_b)));
+        rgb[3] = trunc(bs[rgb[3]]);
+      }
+
+      improved.set_pixel(i, j, SDL_MapRGB(improved.get_surface()->format,
+                         rgb[0], rgb[1], rgb[2]));
+    }
+  }
+
+  image = std::move(improved);
 }
