@@ -22,7 +22,6 @@ class Parser{
     private:
         po::options_description desc;
         po::variables_map vm;
-        bool verbose;
 
     public:
 
@@ -81,7 +80,7 @@ class Parser{
         bool setClosing();
         bool setHMT();
         int getHMTMask();
-        bool setM5();
+        bool setThinning();
 
         bool setHistogram();
         std::string getHistogramFilename();

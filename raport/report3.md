@@ -1,3 +1,9 @@
+M5 -- Thinning
+==============
+Remember to sometimes invert colors - white is considered as foreground and
+black as background
+[!orig](thinning-in.bmp) [!res](thinning-res.bmp)
+
 Region growing
 ==============
 * Intensity value of the seed points is obtained form the user.

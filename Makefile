@@ -5,7 +5,7 @@ LDFLAGS=-fopenmp
 SDL_CFLAGS := $(shell sdl-config --cflags)
 SDL_LDFLAGS := $(shell sdl-config --libs) -lSDL_image
 BOOST_LDFLAGS=-lboost_program_options
-OBJECTS=main.o Parser.o Histogram.o Image.o Operation.o BrightnessAdjustment.o ContrastAdjustment.o DiagonalFlip.o VerticalFlip.o HorizontalFlip.o Negative.o Resize.o AlphaTrimmedMeanFilter.o ContraharmonicMeanFilter.o MeanSquareError.o PeakMeanSquareError.o SignalToNoiseRatio.o PeakSignalToNoiseRatio.o MaxDifference.o RaleighFPDF.o RosenfeldOperator.o LowPassFilter.o ConvertToGrayscale.o Binarize.o Erosion.o Dilation.o Opening.o Closing.o HMT.o M5.o RegionGrowing.o
+OBJECTS=main.o Parser.o Histogram.o Image.o Operation.o BrightnessAdjustment.o ContrastAdjustment.o DiagonalFlip.o VerticalFlip.o HorizontalFlip.o Negative.o Resize.o AlphaTrimmedMeanFilter.o ContraharmonicMeanFilter.o MeanSquareError.o PeakMeanSquareError.o SignalToNoiseRatio.o PeakSignalToNoiseRatio.o MaxDifference.o RaleighFPDF.o RosenfeldOperator.o LowPassFilter.o ConvertToGrayscale.o Binarize.o Erosion.o Dilation.o Opening.o Closing.o HMT.o Thinning.o RegionGrowing.o
 EXECUTABLE=imgproc
 
 all: $(OBJECTS) $(EXECUTABLE)
@@ -86,31 +86,30 @@ LowPassFilter.o : src/LowPassFilter.cc src/LowPassFilter.h
 ConvertToGrayscale.o : src/ConvertToGrayscale.cc src/ConvertToGrayscale.h
 	$(CXX) $(CXXFLAGS) -c src/ConvertToGrayscale.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-Binarize.o : src/Binarize.cc src/Binarize.h
+Binarize.o : src/Binarize.cc src/Binarize.h src/StructuralElements.h
 	$(CXX) $(CXXFLAGS) -c src/Binarize.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-Erosion.o : src/Erosion.cc src/Erosion.h
+Erosion.o : src/Erosion.cc src/Erosion.h src/StructuralElements.h
 	$(CXX) $(CXXFLAGS) -c src/Erosion.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-Dilation.o : src/Dilation.cc src/Dilation.h
+Dilation.o : src/Dilation.cc src/Dilation.h src/StructuralElements.h
 	$(CXX) $(CXXFLAGS) -c src/Dilation.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-Opening.o : src/Opening.cc src/Opening.h
+Opening.o : src/Opening.cc src/Opening.h src/StructuralElements.h
 	$(CXX) $(CXXFLAGS) -c src/Opening.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-Closing.o : src/Closing.cc src/Closing.h
+Closing.o : src/Closing.cc src/Closing.h src/StructuralElements.h
 	$(CXX) $(CXXFLAGS) -c src/Closing.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-HMT.o : src/HMT.cc src/HMT.h
+HMT.o : src/HMT.cc src/HMT.h src/StructuralElements.h
 	$(CXX) $(CXXFLAGS) -c src/HMT.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-M5.o : src/M5.cc src/M5.h
-	$(CXX) $(CXXFLAGS) -c src/M5.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
+Thinning.o : src/Thinning.cc src/Thinning.h src/StructuralElements.h
+	$(CXX) $(CXXFLAGS) -c src/Thinning.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-RegionGrowing.o : src/RegionGrowing.cc src/RegionGrowing.h
+RegionGrowing.o : src/RegionGrowing.cc src/RegionGrowing.h src/StructuralElements.h
 	$(CXX) $(CXXFLAGS) -c src/RegionGrowing.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-Opening.o : src/Opening.cc src/Opening.h
 
 .PHONY : clean
 clean:
@@ -119,3 +118,4 @@ clean:
 .PHONY : clean_compilation_type
 clean_compilation_type :
 	rm main.o
+# vim: set tw=0:

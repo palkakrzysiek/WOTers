@@ -26,6 +26,6 @@
 #include "RegionGrowing.h"
 #include "ConvertToGrayscale.h"
 #include "Binarize.h"
-#include "M5.h"
+#include "Thinning.h"
 
 #endif

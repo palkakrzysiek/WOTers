@@ -1,10 +1,11 @@
-#ifndef __M5__
-#define __M5__
+#ifndef __THINNING_H__
+#define __THINNING_H__
 
 #include "Operation.h"
 #include "HMT.h"
+#include "Binarize.h"
 
-class M5 : public Operation {
+class Thinning : public Operation {
   public:
     void perform(Image &image);
 };

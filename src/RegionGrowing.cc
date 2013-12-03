@@ -36,12 +36,12 @@ void RegionGrowing::perform(Image &image)
         p.x = i, p.y = j;
         points.push(p);
         outimg.set_pixel(i, j, SDL_MapRGB(outimg.get_surface()->format,
-              0, 0, 0));
+              FG, FG, FG));
       }
 
       else {
         outimg.set_pixel(i, j, SDL_MapRGB(outimg.get_surface()->format,
-              255, 255, 255));
+              BG, BG, BG));
       }
     }
   }
@@ -66,7 +66,7 @@ void RegionGrowing::perform(Image &image)
             p2.x = i, p2.y = j;
             points.push(p2);
             outimg.set_pixel(i, j, SDL_MapRGB(outimg.get_surface()->format,
-                0, 0, 0));
+                FG, FG, FG));
           }
         }
       }

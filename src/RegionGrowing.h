@@ -4,12 +4,14 @@
 #include "Operation.h"
 #include "Histogram.h"
 #include "ConvertToGrayscale.h"
+#include "StructuralElements.h"
 #include <queue>
 
 struct Point {
     int x;
     int y;
 };
+
 
 class RegionGrowing : public Operation {
     public:

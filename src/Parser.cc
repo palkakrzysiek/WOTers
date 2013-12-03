@@ -67,7 +67,7 @@ Parser::Parser(int &argc, char** argv)
     ("opening", "Mean Transformation")
     ("closing", "Closing Transformation")
     ("hmt", po::value<int>(), "Hit-or-Miss Transformation")
-    ("m5", "assigned variant of morphological operation")
+    ("thinning", "Thinning operation - get the sceleton")
     ("rgrow", po::value<int>(), "Region growing, seed as parameter")
     ("threshold", po::value<int>(), "Border of threshold");
 
@@ -390,9 +390,9 @@ bool Parser::setHMT()
   return vm.count("hmt");
 }
 
-bool Parser::setM5()
+bool Parser::setThinning()
 {
-  return vm.count("m5");
+  return vm.count("thinning");
 }
 
 bool Parser::setRegionGrowing() {

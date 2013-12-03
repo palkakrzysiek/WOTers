@@ -22,16 +22,16 @@ void HMT::perform(Image &image)
           &r, &g, &b);
 
     workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
-                BLACK, BLACK, BLACK)); // just assume, check in next loops
+                FG, FG, FG)); // just assume, check in next loops
 
       for (k = -1; k <= 1; ++k) {
         for (l = -1; l <= 1; ++l) {
           SDL_GetRGB(image.get_pixel(i+k, j+l), image.get_surface()->format,
               &r, &g, &b);
-          if ((STRUCTURAL_ELEMENT[mask][k+1][l+1] == ACTIVE && r != BLACK) ||
-              (STRUCTURAL_ELEMENT[mask][k+1][l+1] == INACTIVE && r != WHITE)) {
+          if ((STRUCTURAL_ELEMENT[mask][k+1][l+1] == ACTIVE && r != FG) ||
+              (STRUCTURAL_ELEMENT[mask][k+1][l+1] == EMPTY && r != BG)) {
             workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
-                  WHITE, WHITE, WHITE));
+                  BG, BG, BG));
           }
         }
       }

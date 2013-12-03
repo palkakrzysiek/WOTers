@@ -117,8 +117,8 @@ int main(int argc, char** argv)
     o = new HMT(p.getHMTMask());
   }
 
-  if (p.setM5()) {
-    o = new M5();
+  if (p.setThinning()) {
+    o = new Thinning();
   }
 
   if (p.setRegionGrowing()) {
