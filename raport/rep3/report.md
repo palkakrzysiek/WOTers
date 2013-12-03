@@ -2,7 +2,7 @@ M5 -- Thinning
 ==============
 Remember to sometimes invert colors - white is considered as foreground and
 black as background
-[!orig](thinning-in.bmp) [!res](thinning-res.bmp)
+![orig](thinning-in.bmp) ![res](thinning-res.bmp)
 
 Region growing
 ==============
