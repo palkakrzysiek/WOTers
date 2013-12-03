@@ -2,6 +2,8 @@
 #include "StructuralElements.h"
 
 
+Erosion::Erosion(int m) : mask(m) {}
+
 void Erosion::perform(Image &image)
 {
   int w = image.get_surface()->w;
@@ -18,21 +20,21 @@ void Erosion::perform(Image &image)
     for (i = 1; i < w - 1; ++i) {
       SDL_GetRGB(image.get_pixel(i, j), image.get_surface()->format,
           &r, &g, &b);
-      if (r == WHITE){ // don't check empty pixels
+      if (r == BG){ // don't check empty pixels
         workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
-              WHITE, WHITE, WHITE)); // just assume, check in next nested loops
+              BG, BG, BG)); // just assume, check in next nested loops
         continue;
       }
       else {
         workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
-              BLACK, BLACK, BLACK)); // just assume, check in next nested loops
+              FG, FG, FG)); // just assume, check in next nested loops
       }
 
       for (k = -1; k <= 1; ++k) {
         for (l = -1; l <= 1; ++l) {
           SDL_GetRGB(image.get_pixel(i+k, j+l), image.get_surface()->format,
               &r, &g, &b);
-          if (r == WHITE && STRUCTURAL_ELEMENT[8][k+1][l+1] == ACTIVE) {
+          if (r == BG && STRUCTURAL_ELEMENT[mask][k+1][l+1] == ACTIVE) {
             workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
                   255, 255, 255));
             goto nextPixel;

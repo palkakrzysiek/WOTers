@@ -79,8 +79,10 @@ class Parser{
         bool setOpening();
         bool setClosing();
         bool setHMT();
-        int getHMTMask();
+        int getMask();
         bool setThinning();
+        bool setPruning();
+        int getPruningValue();
 
         bool setHistogram();
         std::string getHistogramFilename();

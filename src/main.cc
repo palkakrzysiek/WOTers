@@ -98,27 +98,31 @@ int main(int argc, char** argv)
   }
 
   if (p.setErosion()) {
-    o = new Erosion();
+    o = new Erosion(p.getMask());
   }
 
   if (p.setDilation()) {
-    o = new Dilation();
+    o = new Dilation(p.getMask());
   }
 
   if (p.setOpening()) {
-    o = new Opening();
+    o = new Opening(p.getMask());
   }
 
   if (p.setClosing()) {
-    o = new Closing();
+    o = new Closing(p.getMask());
   }
 
   if (p.setHMT()) {
-    o = new HMT(p.getHMTMask());
+    o = new HMT(p.getMask());
   }
 
   if (p.setThinning()) {
     o = new Thinning();
+  }
+
+  if (p.setPruning()) {
+    o = new Pruning(p.getPruningValue());
   }
 
   if (p.setRegionGrowing()) {

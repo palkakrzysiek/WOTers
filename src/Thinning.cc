@@ -1,5 +1,4 @@
 #include "Thinning.h"
-#include "StructuralElements.h"
 
 void Thinning::perform(Image &image)
 {

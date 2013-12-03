@@ -66,8 +66,10 @@ Parser::Parser(int &argc, char** argv)
     ("dilation", "Mean Transformation")
     ("opening", "Mean Transformation")
     ("closing", "Closing Transformation")
-    ("hmt", po::value<int>(), "Hit-or-Miss Transformation")
+    ("hmt", "Hit-or-Miss Transformation")
+    ("mask", po::value<int>(), "Hit-or-Miss Transformation")
     ("thinning", "Thinning operation - get the sceleton")
+    ("pruning", po::value<int>(), "Remove parasitic component from sceleton")
     ("rgrow", po::value<int>(), "Region growing, seed as parameter")
     ("threshold", po::value<int>(), "Border of threshold");
 
@@ -395,6 +397,21 @@ bool Parser::setThinning()
   return vm.count("thinning");
 }
 
+bool Parser::setPruning()
+{
+  return vm.count("pruning");
+}
+
+int Parser::getPruningValue()
+{
+  int val = vm["pruning"].as<int>();
+  if (val < 1) {
+    std::cerr << "Minimum length to prune is 1";
+    exit(1);
+  }
+  return val;
+}
+
 bool Parser::setRegionGrowing() {
   return vm.count("rgrow");
 }
@@ -418,12 +435,19 @@ int Parser::getTrescholdValue() {
   return val;
 }
 
-int Parser::getHMTMask()
+int Parser::getMask()
 {
-  int val = vm["hmt"].as<int>() - 1;
-  if (val < 0 || val > 8) {
-    std::cerr << "Possible masks are numbered from 1 to 9";
-    exit(1);
+  int val;
+  if (!vm.count("mask")){
+    std::cerr << "Possible masks are numbered from 1 to 18, setting 9";
+    val = 9 - 1; // masks are counted form 0, not from 1
+  }
+  else {
+    val = vm["mask"].as<int>() - 1;
+    if (val < 0 || val > 17) {
+      std::cerr << "Possible masks are numbered from 1 to 18";
+      exit(1);
+    }
   }
   return val;
 }

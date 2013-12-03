@@ -4,6 +4,7 @@
 #include "Operation.h"
 #include "HMT.h"
 #include "Binarize.h"
+#include "StructuralElements.h"
 
 class Thinning : public Operation {
   public:

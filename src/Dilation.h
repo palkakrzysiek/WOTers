@@ -6,8 +6,10 @@
 class Dilation : public Operation
 {
 public:
+  Dilation(int m);
   void perform(Image &image);
-  
+private:
+  int mask;
 };
 
 #endif

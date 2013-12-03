@@ -8,7 +8,10 @@
 class Closing : public Operation
 {
 public:
+  Closing(int m);
   void perform(Image &image);
+private:
+  int mask;
 
 };
 

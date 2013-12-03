@@ -19,7 +19,6 @@ void RegionGrowing::perform(Image &image)
     Histogram hist(image);
     thresholdMargin = std::abs(static_cast<long long>(seedVal - hist.cmean(Histogram::Channel::ALL)));
   }
-  printf("marg:%d\n", thresholdMargin);
 
   int w = image.get_surface()->w;
   int h = image.get_surface()->h;
@@ -45,8 +44,6 @@ void RegionGrowing::perform(Image &image)
       }
     }
   }
-
-  printf("queue: %d\n", points.size());
 
   while (!points.empty()) {
     Point p = points.front();

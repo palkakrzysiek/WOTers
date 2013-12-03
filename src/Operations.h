@@ -27,5 +27,6 @@
 #include "ConvertToGrayscale.h"
 #include "Binarize.h"
 #include "Thinning.h"
+#include "Pruning.h"
 
 #endif
