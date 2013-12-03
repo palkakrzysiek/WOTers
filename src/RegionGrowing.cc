@@ -61,7 +61,7 @@ void RegionGrowing::perform(Image &image)
               &r2, &g2, &b2);
           // if this pixel hasn't been already checked
           // and have value within accepted range
-          if ((r != 0) && (std::abs(r2 - seedVal) <= thresholdMargin)) {
+          if ((r != FG) && (std::abs(r2 - seedVal) <= thresholdMargin)) {
             Point p2;
             p2.x = i, p2.y = j;
             points.push(p2);
