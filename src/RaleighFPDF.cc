@@ -127,7 +127,7 @@ void RaleighFPDF::perform(Image &image)
       }
 
       image.set_pixel(i, j, SDL_MapRGB(image.get_surface()->format,
-                         rgb[0], rgb[0], rgb[0]));
+                         rgb[0], rgb[1], rgb[2]));
     }
   }
 
