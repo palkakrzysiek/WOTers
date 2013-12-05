@@ -42,6 +42,8 @@ public:
 
   void save(const std::string& filename);
 
+  bool grayscale() const;
+
 private:
   SDL_Surface *surface = nullptr;
 

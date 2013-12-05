@@ -210,3 +210,8 @@ void Image::perform_operation(Operation *t)
   delete t;
 }
 
+bool Image::grayscale() const
+{
+  return surface->format->BitsPerPixel <= 8;
+}
+

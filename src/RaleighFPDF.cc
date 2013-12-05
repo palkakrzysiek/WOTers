@@ -14,6 +14,8 @@ RaleighFPDF::RaleighFPDF(Histogram::Channel c, const std::pair<int, int> &minmax
 
 void RaleighFPDF::perform(Image &image)
 {
+  printf("%i\n", image.grayscale());
+
   assert(g_min < g_max);
 
   int w = image.get_surface()->w;
@@ -104,26 +106,23 @@ void RaleighFPDF::perform(Image &image)
       SDL_GetRGB(image.get_pixel(i, j), image.get_surface()->format,
                  &rgb[0], &rgb[1], &rgb[2]);
 
-      if (channel == Histogram::Channel::R)
+
+      if (channel == Histogram::Channel::R || channel == Histogram::Channel::ALL)
       {
-        rgb[0] = rs[rgb[0]];
+        rgb[0] = rs[255-rgb[0]];
+      }
+      if (channel == Histogram::Channel::G || channel == Histogram::Channel::ALL)
+      {
+        rgb[1] = gs[255-rgb[1]];
+      }
+      if (channel == Histogram::Channel::B || channel == Histogram::Channel::ALL)
+      {
+        rgb[2] = bs[255-rgb[2]];
+      }
+
+      if (image.grayscale())
+      {
         rgb[1] = rgb[2] = rgb[0];
-      }
-      else if (channel == Histogram::Channel::G)
-      {
-        rgb[1] = gs[rgb[1]];
-        rgb[0] = rgb[2] = rgb[1];
-      }
-      else if (channel == Histogram::Channel::B)
-      {
-        rgb[2] = bs[rgb[2]];
-        rgb[0] = rgb[1] = rgb[2];
-      }
-      else if (channel == Histogram::Channel::ALL)
-      {
-        rgb[0] = rs[rgb[0]];
-        rgb[1] = gs[rgb[1]];
-        rgb[2] = bs[rgb[2]];
       }
 
       image.set_pixel(i, j, SDL_MapRGB(image.get_surface()->format,
