@@ -8,6 +8,8 @@ class Image;
 class Operation
 {
 public:
+  virtual ~Operation() {}
+
   virtual void perform(Image &image) = 0;
 
   static uint8_t trunc(int value);

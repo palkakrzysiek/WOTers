@@ -1,7 +1,7 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include <string>
 #include <cstdint>
 
@@ -19,7 +19,7 @@ public:
   Image(int width, int height, int bpp);
 
   Image(const std::string &filename);
-  
+
   // copy constructors
   Image(Image &other);
   const Image& operator=(Image &other);
@@ -44,7 +44,7 @@ public:
 
 private:
   SDL_Surface *surface = nullptr;
-  
+
 };
 
 #endif

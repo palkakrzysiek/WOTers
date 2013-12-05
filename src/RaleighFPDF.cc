@@ -12,7 +12,8 @@ RaleighFPDF::RaleighFPDF(Histogram::Channel c, const std::pair<int, int> &minmax
 }
 
 void RaleighFPDF::perform(Image &image)
-{int w = image.get_surface()->w;
+{
+  int w = image.get_surface()->w;
   int h = image.get_surface()->h;
 
   Image improved(image);
@@ -104,71 +105,17 @@ void RaleighFPDF::perform(Image &image)
 
       if (channel == Histogram::Channel::R || channel == Histogram::Channel::ALL)
       {
-        // alpha = 0.0;
-        // uint64_t H_0;
-
-        // if (hist.get_r()[0] == 0)
-        //   H_0 = 1;
-        // else
-        //   H_0 = hist.get_r()[0];
-
-        // alpha = (double) g_max - g_min;
-        // alpha = pow(alpha, 2);
-        // alpha /= 2.0 * log((double) w * h / H_0);
-
-        // for (int l = 0; l <= rgb[0]; ++l)
-        // {
-        //   sum_r += hist.get_r()[l];
-        // }
-        // sum_r /= w * h;
-        // rgb[0] = trunc(g_min + sqrt(-2.0 * alpha * alpha * log(sum_r)));
         rgb[0] = trunc(rs[rgb[0]]);
       }
 
       if (channel == Histogram::Channel::G || channel == Histogram::Channel::ALL)
       {
-        // alpha = 0.0;
-        // uint64_t H_0;
-
-        // if (hist.get_g()[0] == 0)
-        //   H_0 = 1;
-        // else
-        //   H_0 = hist.get_g()[0];
-
-        // alpha = (double) g_max - g_min;
-        // alpha = pow(alpha, 2);
-        // alpha /= 2.0 * log((double) w * h / H_0);
-
-        // for (int l = 0; l <= rgb[1]; ++l)
-        // {
-        //   sum_g += hist.get_g()[l];
-        // }
-        // sum_g /= w * h;
-        // rgb[1] = trunc(g_min + sqrt(-2.0 * alpha * alpha * log(sum_g)));
         rgb[1] = trunc(gs[rgb[1]]);
       }
 
       if (channel == Histogram::Channel::B || channel == Histogram::Channel::ALL)
       {
-        // alpha = 0.0;
-        // uint64_t H_0;
-
-        // if (hist.get_b()[0] == 0)
-        //   H_0 = 1;
-        // else
-        //   H_0 = hist.get_b()[0];
-
-        // alpha = (double) g_max - g_min;
-        // alpha = pow(alpha, 2);
-        // alpha /= 2.0 * log((double) w * h / H_0);
-
-        // for (int l = 0; l <= rgb[2]; ++l)
-        // {
-        //   sum_b += hist.get_b()[l];
-        // }
-        // sum_b /= w * h;
-        // rgb[2] = trunc(g_min + sqrt(-2.0 * alpha * alpha * log(sum_b)));
-        rgb[3] = trunc(bs[rgb[3]]);
+        rgb[2] = trunc(bs[rgb[2]]);
       }
 
       improved.set_pixel(i, j, SDL_MapRGB(improved.get_surface()->format,

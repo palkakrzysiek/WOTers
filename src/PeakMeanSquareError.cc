@@ -20,7 +20,7 @@ void PeakMeanSquareError::perform(Image &image)
     exit(1);
   }
 
-  uint8_t max_r = 0, max_g = 0, max_b = 0, max_a = 0;
+  uint8_t max_r = 0, max_g = 0, max_b = 0;
 
   int i, j;
 
@@ -29,10 +29,10 @@ void PeakMeanSquareError::perform(Image &image)
   {
     for (i = 0; i < w; ++i)
     {
-      uint8_t r, g, b, a;
+      uint8_t r, g, b;
 
-      SDL_GetRGBA(image.get_pixel(i, j), image.get_surface()->format,
-                  &r, &g, &b, &a);
+      SDL_GetRGB(image.get_pixel(i, j), image.get_surface()->format,
+                  &r, &g, &b);
 
       if (r > max_r)
         max_r = r;
@@ -45,9 +45,9 @@ void PeakMeanSquareError::perform(Image &image)
     }
   }
 
-  double r = 0.0, g = 0.0, b = 0.0, a = 0.0;
+  double r = 0.0, g = 0.0, b = 0.0;
 
-# pragma omp parallel for private(i) default(shared) reduction(+:r,g,b,a)
+# pragma omp parallel for private(i) default(shared) reduction(+:r,g,b)
   for (j = 0; j < h; ++j)
   {
     for (i = 0; i < w; ++i)

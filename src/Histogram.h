@@ -24,18 +24,18 @@ public:
 
   void save_as_image(Channel c, const std::string &filename);
 
-  const uint64_t* get_r();
-  const uint64_t* get_g();
-  const uint64_t* get_b();
-  const uint64_t* get_a();
+  const uint32_t* get_r();
+  const uint32_t* get_g();
+  const uint32_t* get_b();
+  const uint32_t* get_a();
 
 private:
-  uint64_t pixels_r[256] = {0};
-  uint64_t pixels_g[256] = {0};
-  uint64_t pixels_b[256] = {0};
-  uint64_t pixels_a[256] = {0};
+  uint32_t pixels_r[256] = {0};
+  uint32_t pixels_g[256] = {0};
+  uint32_t pixels_b[256] = {0};
+  uint32_t pixels_a[256] = {0};
 
-  uint64_t n_pixels;
+  uint32_t n_pixels;
   bool grayscale;
 
 };

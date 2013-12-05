@@ -1,27 +1,27 @@
 #include "Image.h"
-#include <SDL/SDL_image.h>
+#include <SDL_image.h>
 #include <cstdio>
 #include <utility>
 
 // create empty image
 Image::Image(int width, int height, int bpp)
 {
-  uint32_t rmask, gmask, bmask, amask;
+  // uint32_t rmask, gmask, bmask, amask;
 
-  if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-  {
-    rmask = 0xff000000;
-    gmask = 0x00ff0000;
-    bmask = 0x0000ff00;
-    amask = 0x000000ff;
-  } 
-  else 
-  {
-    amask = 0xff000000;
-    bmask = 0x00ff0000;
-    gmask = 0x0000ff00;
-    rmask = 0x000000ff;
-  }
+  // if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+  // {
+  //   rmask = 0xff000000;
+  //   gmask = 0x00ff0000;
+  //   bmask = 0x0000ff00;
+  //   amask = 0x000000ff;
+  // }
+  // else
+  // {
+  //   amask = 0xff000000;
+  //   bmask = 0x00ff0000;
+  //   gmask = 0x0000ff00;
+  //   rmask = 0x000000ff;
+  // }
 
   // surface = SDL_CreateRGBSurface(0, width, height, bpp, rmask, gmask, bmask, amask);
   surface = SDL_CreateRGBSurface(0, width, height, bpp, 0, 0, 0, 0);
@@ -121,7 +121,7 @@ void Image::save(const std::string &filename)
 void Image::set_pixel(int x, int y, uint32_t pixel)
 {
   int bpp = surface->format->BytesPerPixel;
-  
+
   // finding address of the pixel
   uint8_t *p = (uint8_t *) surface->pixels + y * surface->pitch + x * bpp;
 
@@ -144,8 +144,8 @@ void Image::set_pixel(int x, int y, uint32_t pixel)
           p[0] = (pixel >> 16) & 0xff;
           p[1] = (pixel >> 8) & 0xff;
           p[2] = pixel & 0xff;
-      } 
-      else 
+      }
+      else
       {
           p[0] = pixel & 0xff;
           p[1] = (pixel >> 8) & 0xff;
@@ -165,7 +165,7 @@ void Image::set_pixel(int x, int y, uint32_t pixel)
 uint32_t Image::get_pixel(int x, int y)
 {
   int bpp = surface->format->BytesPerPixel;
-  
+
   // finding address of the pixel
   uint8_t *p = (uint8_t *) surface->pixels + y * surface->pitch + x * bpp;
 
@@ -191,7 +191,7 @@ uint32_t Image::get_pixel(int x, int y)
       {
           return p[0] | p[1] << 8 | p[2] << 16;
       }
-        
+
       break;
 
     // 32 bit
