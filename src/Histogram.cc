@@ -34,6 +34,14 @@ Histogram::Histogram(Image &image)
 
 void Histogram::print_channel(Channel c)
 {
+  if (c == ALL)
+  {
+    print_channel(R);
+    print_channel(G);
+    print_channel(B);
+    return;
+  }
+
   uint32_t *ptr = pixels_r;
 
   if (c == R)
@@ -44,6 +52,8 @@ void Histogram::print_channel(Channel c)
     ptr = pixels_b;
   else if (c == A)
     ptr = pixels_a;
+
+  // printf("%f\n", (double) ptr[0] / n_pixels);
 
   for (int i = 0; i < 256; ++i)
     printf("[%d] = %u\n", i, ptr[i]);
