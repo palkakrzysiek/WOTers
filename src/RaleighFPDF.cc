@@ -84,7 +84,7 @@ void RaleighFPDF::perform(Image &image)
   for (i = 0; i <= 255; ++i)
   {
     rs[i] = g_min + sqrt(-2.0 * alpha[0] * alpha[0] * log((double) rs[i] / (w * h)));
-    gs[i] = g_min + sqrt(-2.0 * alpha[1] * alpha[2] * log((double) gs[i] / (w * h)));
+    gs[i] = g_min + sqrt(-2.0 * alpha[1] * alpha[1] * log((double) gs[i] / (w * h)));
     bs[i] = g_min + sqrt(-2.0 * alpha[2] * alpha[2] * log((double) bs[i] / (w * h)));
   }
 
