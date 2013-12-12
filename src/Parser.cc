@@ -62,14 +62,14 @@ Parser::Parser(int &argc, char** argv)
     ("histogram", po::value<std::string>(), "save histogram to a file")
 
 
-    ("erosion", "Mean Transformation")
-    ("dilation", "Mean Transformation")
-    ("opening", "Mean Transformation")
+    ("erosion", "Erosion Transformation")
+    ("dilation", "Dilation Transformation")
+    ("opening", "Opening Transformation")
     ("closing", "Closing Transformation")
     ("hmt", "Hit-or-Miss Transformation")
-    ("mask", po::value<int>(), "Hit-or-Miss Transformation")
-    ("thinning", "Thinning operation - get the sceleton")
-    ("pruning", po::value<int>(), "Remove parasitic component from sceleton")
+    ("mask", po::value<int>(), "Mask for morphological transformation")
+    ("thinning", "Thinning operation - get the skeleton")
+    ("pruning", po::value<int>(), "Remove parasitic component from skeleton")
     ("rgrow", po::value<int>(), "Region growing, seed as parameter")
     ("threshold", po::value<int>(), "Border of threshold");
 
