@@ -34,7 +34,15 @@ Histogram::Histogram(Image &image)
 
 void Histogram::print_channel(Channel c)
 {
-  uint64_t *ptr = pixels_r;
+  if (c == ALL)
+  {
+    print_channel(R);
+    print_channel(G);
+    print_channel(B);
+    return;
+  }
+
+  uint32_t *ptr = pixels_r;
 
   if (c == R)
     ptr = pixels_r;
@@ -45,8 +53,10 @@ void Histogram::print_channel(Channel c)
   else if (c == A)
     ptr = pixels_a;
 
+  // printf("%f\n", (double) ptr[0] / n_pixels);
+
   for (int i = 0; i < 256; ++i)
-    printf("[%d] = %llu\n", i, ptr[i]);
+    printf("[%d] = %u\n", i, ptr[i]);
 }
 
 double Histogram::cmean(Channel c)
@@ -54,7 +64,7 @@ double Histogram::cmean(Channel c)
   if (c == ALL)
     return (cmean(R) + cmean(G) + cmean(B)) / 3.0;
 
-  uint64_t *ptr = pixels_r;
+  uint32_t *ptr = pixels_r;
 
   if (c == R)
     ptr = pixels_r;
@@ -83,7 +93,7 @@ double Histogram::cvariance(Channel c)
   if (c == ALL)
     return (cvariance(R) + cvariance(G) + cvariance(B)) / 3.0;
 
-  uint64_t *ptr = pixels_r;
+  uint32_t *ptr = pixels_r;
 
   if (c == R)
     ptr = pixels_r;
@@ -129,7 +139,7 @@ double Histogram::cvarcoii(Channel c)
   if (c == ALL)
     return (cvarcoii(R) + cvarcoii(G) + cvarcoii(B)) / 3.0;
 
-  uint64_t *ptr = pixels_r;
+  uint32_t *ptr = pixels_r;
 
   if (c == R)
     ptr = pixels_r;
@@ -158,7 +168,7 @@ double Histogram::casyco(Channel c)
   if (c == ALL)
     return (casyco(R) + casyco(G) + casyco(B)) / 3.0;
 
-  uint64_t *ptr = pixels_r;
+  uint32_t *ptr = pixels_r;
 
   if (c == R)
     ptr = pixels_r;
@@ -191,7 +201,7 @@ double Histogram::cflatco(Channel c)
   if (c == ALL)
     return (cflatco(R) + cflatco(G) + cflatco(B)) / 3.0;
 
-  uint64_t *ptr = pixels_r;
+  uint32_t *ptr = pixels_r;
 
   if (c == R)
     ptr = pixels_r;
@@ -224,7 +234,7 @@ double Histogram::centropy(Channel c)
   if (c == ALL)
     return (centropy(R) + centropy(G) + centropy(B)) / 3.0;
 
-  uint64_t *ptr = pixels_r;
+  uint32_t *ptr = pixels_r;
 
   if (c == R)
     ptr = pixels_r;
@@ -255,7 +265,7 @@ double Histogram::centropy(Channel c)
 
 void Histogram::save_as_image(Channel c, const std::string &filename)
 {
-  uint64_t *ptr = pixels_r;
+  uint32_t *ptr = pixels_r;
 
   Image image(768, 520, 24);
   int8_t dr = 0, dg = 0, db = 0;
@@ -302,7 +312,7 @@ void Histogram::save_as_image(Channel c, const std::string &filename)
   int w = image.get_surface()->w;
   int h = image.get_surface()->h;
 
-  uint64_t max = *std::max_element(ptr, ptr + 256);
+  uint32_t max = *std::max_element(ptr, ptr + 256);
   double f = (double) max / (h - 15);
 
 # pragma omp parallel for private(i)
@@ -332,22 +342,22 @@ void Histogram::save_as_image(Channel c, const std::string &filename)
   image.save(filename);
 }
 
-const uint64_t* Histogram::get_r()
+const uint32_t* Histogram::get_r()
 {
   return pixels_r;
 }
 
-const uint64_t* Histogram::get_g()
+const uint32_t* Histogram::get_g()
 {
   return pixels_g;
 }
 
-const uint64_t* Histogram::get_b()
+const uint32_t* Histogram::get_b()
 {
   return pixels_b;
 }
 
-const uint64_t* Histogram::get_a()
+const uint32_t* Histogram::get_a()
 {
   return pixels_a;
 }

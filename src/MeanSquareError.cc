@@ -20,17 +20,17 @@ void MeanSquareError::perform(Image &image)
     exit(1);
   }
 
-  double r = 0.0, g = 0.0, b = 0.0, a = 0.0;
+  double r = 0.0, g = 0.0, b = 0.0;
 
   int i, j;
 
-# pragma omp parallel for private(i) default(shared) reduction(+:r,g,b,a)
+# pragma omp parallel for private(i) default(shared) reduction(+:r,g,b)
   for (j = 0; j < h; ++j)
   {
     for (i = 0; i < w; ++i)
     {
-      uint8_t rgba1[4],
-              rgba2[4];
+      uint8_t rgba1[3],
+              rgba2[3];
 
       SDL_GetRGB(image.get_pixel(i, j), image.get_surface()->format,
                   &rgba1[0], &rgba1[1], &rgba1[2]);

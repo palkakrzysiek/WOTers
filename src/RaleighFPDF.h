@@ -12,8 +12,8 @@ public:
   void perform(Image &image);
 
 private:
-  int g_min, g_max;
   Histogram::Channel channel;
+  int g_min, g_max;
 
 };
 

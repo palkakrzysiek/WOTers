@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-g -O2 -std=c++11 -Wall -Wextra -Weffc++ -pedantic -fopenmp
+CXXFLAGS=-g -O2 -std=c++11 -Wall -Wextra -pedantic -fopenmp
 MAIN_CFLAGS=
 LDFLAGS=-fopenmp
 SDL_CFLAGS := $(shell sdl-config --cflags)
