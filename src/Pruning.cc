@@ -37,7 +37,7 @@ void Pruning::perform(Image &image)
               BG, BG, BG));
       }
     }
-    for (i = 18; i < 25; i++) {
+    for (i = 9; i < 17; i++) {
       Image workingCopy(image);
       workingCopy.perform_operation(new HMT(i));
       for (j = 1; j < w - 1; j++) {

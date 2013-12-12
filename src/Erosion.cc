@@ -20,29 +20,28 @@ void Erosion::perform(Image &image)
     for (i = 1; i < w - 1; ++i) {
       SDL_GetRGB(image.get_pixel(i, j), image.get_surface()->format,
           &r, &g, &b);
-      if (r == BG){ // don't check empty pixels
-        workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
-              BG, BG, BG)); // just assume, check in next nested loops
-        continue;
-      }
-      else {
-        workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
-              FG, FG, FG)); // just assume, check in next nested loops
-      }
-
-      for (k = -1; k <= 1; ++k) {
-        for (l = -1; l <= 1; ++l) {
-          SDL_GetRGB(image.get_pixel(i+k, j+l), image.get_surface()->format,
-              &r, &g, &b);
-          if (r == BG && STRUCTURAL_ELEMENT[mask][k+1][l+1] == ACTIVE) {
-            workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
-                  255, 255, 255));
-            goto nextPixel;
+      //if (r == BG){
+        //workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
+              //BG, BG, BG)); // just assume, check in next nested loops
+      //}
+      //else {
+        //workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
+              //FG, FG, FG)); // just assume, check in next nested loops
+      //}
+      //printf("%d\n", r);
+      if (r == BG) {
+        for (k = -1; k <= 1; ++k) {
+          for (l = -1; l <= 1; ++l) {
+            //SDL_GetRGB(image.get_pixel(i+k, j+l), image.get_surface()->format,
+            //&r, &g, &b);
+            if (STRUCTURAL_ELEMENT[mask][k+1][l+1] == ACTIVE) {
+              workingCopy.set_pixel(i+k, j+l, SDL_MapRGB(workingCopy.get_surface()->format,
+                    BG, BG, BG));
+            }
           }
         }
       }
-nextPixel:
-      continue;
+
     }
   }
 

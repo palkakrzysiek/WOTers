@@ -4,12 +4,13 @@
 enum Element {EMPTY = 0, ACTIVE = 1, INACTIVE = 2};
 enum {BLACK = 0, WHITE = 255};
 enum {FG = WHITE, BG = BLACK};
-const int NUM_OF_STRUCTURAL_ELEMENTS = 26;
+const int NUM_OF_STRUCTURAL_ELEMENTS = 28;
 const uint8_t STRUCTURAL_ELEMENT[NUM_OF_STRUCTURAL_ELEMENTS][3][3] = {
   // 0 - 7: thinning
   // 8 - erosion, dilation, opening, closing
   // 9 - 16 pruning (ends of the lines)
   // 17 pruning - dilation
+  // 18 - 25 pruning - restoring
   { // 0
     {0, 0, 0},
     {2, 1, 2},
@@ -103,42 +104,52 @@ const uint8_t STRUCTURAL_ELEMENT[NUM_OF_STRUCTURAL_ELEMENTS][3][3] = {
   { // 18
     {0, 0, 0},
     {0, 1, 0},
-    {0, 1, 0}
+    {2, 2, 0}
   },
   { // 19
     {0, 0, 0},
     {0, 1, 0},
-    {1, 0, 0}
+    {0, 2, 2}
   },
   { // 20
-    {0, 0, 0},
-    {1, 1, 0},
+    {2, 0, 0},
+    {2, 1, 0},
     {0, 0, 0}
   },
   { // 21
-    {1, 0, 0},
-    {0, 1, 0},
-    {0, 0, 0}
+    {0, 0, 0},
+    {2, 1, 0},
+    {2, 0, 0}
   },
   { // 22
-    {0, 1, 0},
+    {0, 2, 2},
     {0, 1, 0},
     {0, 0, 0}
   },
   { // 23
-    {0, 0, 1},
+    {2, 2, 0},
     {0, 1, 0},
     {0, 0, 0}
   },
   { // 24
     {0, 0, 0},
-    {0, 1, 1},
-    {0, 0, 0}
+    {0, 1, 2},
+    {0, 0, 2}
   },
   { // 25
     {0, 0, 0},
+    {0, 1, 2},
+    {0, 0, 2}
+  },
+  { // 26
+    {1, 1, 1},
+    {1, 1, 1},
+    {1, 1, 1}
+  },
+  { // 27
     {0, 1, 0},
-    {0, 0, 1}
+    {1, 1, 1},
+    {0, 1, 0}
   },
 };
 

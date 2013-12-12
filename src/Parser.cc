@@ -438,14 +438,13 @@ int Parser::getTrescholdValue() {
 int Parser::getMask()
 {
   int val;
-  if (!vm.count("mask")){
-    std::cerr << "Possible masks are numbered from 1 to 18, setting 9";
+  if (!vm.count("mask")) {
+    std::cerr << "Possible masks are numbered from 1 to 28, setting 9\n";
     val = 9 - 1; // masks are counted form 0, not from 1
-  }
-  else {
+  } else {
     val = vm["mask"].as<int>() - 1;
-    if (val < 0 || val > 17) {
-      std::cerr << "Possible masks are numbered from 1 to 18";
+    if (val < 0 || val > 27) {
+      std::cerr << "Possible masks are numbered from 1 to 28\n";
       exit(1);
     }
   }
