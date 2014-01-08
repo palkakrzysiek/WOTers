@@ -1,1 +1,7 @@
-M5
+T2
+implement DFT using rows and columns
+1st check - implement inverse FT
+2nd check - return to original image
+even for small image computation time could be very large
+implement Fast Furier Transform
+apply FFT and check if result is the same as in DFT 
