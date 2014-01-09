@@ -22,7 +22,7 @@ void Thinning::perform(Image &image)
     for (i = 0; i < 8; i++) {
       Image workingCopy(image);
       workingCopy.perform_operation(new HMT(i));
-      // substrat values of original images from result of HMT
+      // subtrat values of original images from result of HMT
       for (j = 1; j < w - 1; j++) {
         for (k = 1; k < h - 1; k++) {
           uint8_t r2, g2, b2;

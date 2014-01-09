@@ -148,6 +148,10 @@ int main(int argc, char** argv)
     o = new RaleighFPDF(channel, p.getRaleighMinMax());
   }
 
+  if (p.setDFT()) {
+    o = new DFT();
+  }
+
   double result = 0.0;
 
   if (p.setMse()) {

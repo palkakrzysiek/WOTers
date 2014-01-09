@@ -91,6 +91,8 @@ class Parser{
         int getRegionValue();
         bool setThreshold();
         int getTrescholdValue();
+
+        bool setDFT();
 };
 
 #endif

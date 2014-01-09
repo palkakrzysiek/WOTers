@@ -5,7 +5,7 @@ LDFLAGS=-fopenmp
 SDL_CFLAGS := $(shell sdl-config --cflags)
 SDL_LDFLAGS := $(shell sdl-config --libs) -lSDL_image
 BOOST_LDFLAGS=-lboost_program_options
-OBJECTS=main.o Parser.o Histogram.o Image.o Operation.o BrightnessAdjustment.o ContrastAdjustment.o DiagonalFlip.o VerticalFlip.o HorizontalFlip.o Negative.o Resize.o AlphaTrimmedMeanFilter.o ContraharmonicMeanFilter.o MeanSquareError.o PeakMeanSquareError.o SignalToNoiseRatio.o PeakSignalToNoiseRatio.o MaxDifference.o RaleighFPDF.o RosenfeldOperator.o LowPassFilter.o ConvertToGrayscale.o Binarize.o Erosion.o Dilation.o Opening.o Closing.o HMT.o Thinning.o RegionGrowing.o Pruning.o
+OBJECTS=main.o Parser.o Histogram.o Image.o Operation.o BrightnessAdjustment.o ContrastAdjustment.o DiagonalFlip.o VerticalFlip.o HorizontalFlip.o Negative.o Resize.o AlphaTrimmedMeanFilter.o ContraharmonicMeanFilter.o MeanSquareError.o PeakMeanSquareError.o SignalToNoiseRatio.o PeakSignalToNoiseRatio.o MaxDifference.o RaleighFPDF.o RosenfeldOperator.o LowPassFilter.o ConvertToGrayscale.o Binarize.o Erosion.o Dilation.o Opening.o Closing.o HMT.o Thinning.o RegionGrowing.o Pruning.o DFT.o
 EXECUTABLE=imgproc
 
 all: $(OBJECTS) $(EXECUTABLE)
@@ -113,7 +113,8 @@ Pruning.o : src/Pruning.cc src/Pruning.h src/StructuralElements.h
 RegionGrowing.o : src/RegionGrowing.cc src/RegionGrowing.h src/StructuralElements.h
 	$(CXX) $(CXXFLAGS) -c src/RegionGrowing.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
-
+DFT.o : src/DFT.cc src/DFT.h
+	$(CXX) $(CXXFLAGS) -c src/DFT.cc $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
 .PHONY : clean
 clean:

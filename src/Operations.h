@@ -28,5 +28,6 @@
 #include "Binarize.h"
 #include "Thinning.h"
 #include "Pruning.h"
+#include "DFT.h"
 
 #endif

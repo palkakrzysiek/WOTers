@@ -8,10 +8,10 @@ RegionGrowing::RegionGrowing(int s, int h)
 void RegionGrowing::perform(Image &image)
 {
 
-  bool grayscale = (image.get_surface()->format->BitsPerPixel <= 8) ? true : false;
+  // bool grayscale = (image.get_surface()->format->BitsPerPixel <= 8) ? true : false;
   std::queue<Point> points;
 
-  if (!grayscale) {
+  if (!image.grayscale()) {
     image.perform_operation(new ConvertToGrayscale());
   }
 
@@ -37,7 +37,6 @@ void RegionGrowing::perform(Image &image)
         outimg.set_pixel(i, j, SDL_MapRGB(outimg.get_surface()->format,
               FG, FG, FG));
       }
-
       else {
         outimg.set_pixel(i, j, SDL_MapRGB(outimg.get_surface()->format,
               BG, BG, BG));

@@ -1,7 +1,6 @@
 #include "Erosion.h"
 #include "StructuralElements.h"
 
-
 Erosion::Erosion(int m) : mask(m) {}
 
 void Erosion::perform(Image &image)

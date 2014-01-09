@@ -17,11 +17,11 @@ void HMT::perform(Image &image)
 
   for (j = 1; j < h - 1; ++j) {
     for (i = 1; i < w - 1; ++i) {
-    uint8_t r, g, b;
+      uint8_t r, g, b;
       SDL_GetRGB(image.get_pixel(i, j), image.get_surface()->format,
           &r, &g, &b);
 
-    workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
+      workingCopy.set_pixel(i, j, SDL_MapRGB(workingCopy.get_surface()->format,
                 FG, FG, FG)); // just assume, check in next loops
 
       for (k = -1; k <= 1; ++k) {

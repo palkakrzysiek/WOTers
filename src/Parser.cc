@@ -71,7 +71,9 @@ Parser::Parser(int &argc, char** argv)
     ("thinning", "Thinning operation - get the skeleton")
     ("pruning", po::value<int>(), "Remove parasitic component from skeleton")
     ("rgrow", po::value<int>(), "Region growing, seed as parameter")
-    ("threshold", po::value<int>(), "Border of threshold");
+    ("threshold", po::value<int>(), "Border of threshold")
+
+    ("dft", "DFT");
 
 
   try
@@ -415,6 +417,7 @@ int Parser::getPruningValue()
 bool Parser::setRegionGrowing() {
   return vm.count("rgrow");
 }
+
 int Parser::getRegionValue(){
   int val = vm["rgrow"].as<int>();
   if (val > 255 || val < 0) {
@@ -449,4 +452,9 @@ int Parser::getMask()
     }
   }
   return val;
+}
+
+bool Parser::setDFT()
+{
+  return vm.count("dft");
 }
