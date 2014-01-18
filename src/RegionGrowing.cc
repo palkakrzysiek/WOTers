@@ -69,6 +69,5 @@ void RegionGrowing::perform(Image &image)
     }
   }
 
-
   image = std::move(outimg);
 }

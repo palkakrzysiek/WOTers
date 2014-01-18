@@ -62,5 +62,4 @@ void Thinning::perform(Image &image)
     previousImage = image;
   }
 
-
 }
