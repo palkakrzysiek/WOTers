@@ -32,15 +32,17 @@ void FreqDomain::DFT(bool inverse)
         }
       }
 
-      if (!inverse) {
+      if (inverse) {
         currentFreq *= demdiv;
       }
+
       temp.set_pixel(i, j, currentFreq);
     }
   }
 
   *cimg = std::move(temp);
-    if (!inverse) {
+
+  if (!inverse) {
     cimg->swap_squares();
   } else {
     cimg->updateImage();

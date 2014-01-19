@@ -68,10 +68,17 @@ void ComplexImage::save_magnitude_image(const char* filename) const {
 
   double maxabs = 0.0;
 
+# pragma omp parallel for private(j) shared(maxabs)
   for (i = 0; i < width_; i++) {
     for (j = 0; j < height_; j++) {
-      if (std::abs(this->get_pixel(i, j)) > maxabs) {
-        maxabs = std::abs(this->get_pixel(i, j));
+      auto temp = std::abs(this->get_pixel(i, j));
+      if (temp > maxabs) {
+#       pragma omp critical
+        {
+          if (temp > maxabs) {
+            maxabs = temp;
+          }
+        }
       }
     }
   }
