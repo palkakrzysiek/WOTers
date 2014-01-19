@@ -15,9 +15,11 @@ ComplexImage::ComplexImage(Image *im) {
   height_ = h;
   data_.reserve(width_*height_);
   int i, j;
-  uint8_t r, g, b;
+
+# pragma omp parallel for private(j)
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
+      uint8_t r, g, b;
       SDL_GetRGB(orgimg->get_pixel(i, j), orgimg->get_surface()->format,
                  &r, &g, &b);
       this->set_pixel(i, j, static_cast<double>(r), 0.0);
@@ -39,15 +41,17 @@ void ComplexImage::set_pixel(uint16_t x, uint16_t y, const complex_type &cplx_nu
 
 ComplexImage::complex_type ComplexImage::get_pixel(uint16_t x, uint16_t y) const
 {
-  auto &pixel = data_[y * height_ + x];
+  const complex_type &pixel = data_[y * height_ + x];
 
   return complex_type(pixel.real(), pixel.imag());
 }
 
 void ComplexImage::swap_squares () {
-  double h_mid = height_ / 2;
-  double w_mid = width_ / 2;
+  int h_mid = height_ / 2;
+  int w_mid = width_ / 2;
   int x, y;
+
+# pragma omp parallel for private(y)
   for (x = 0; x < w_mid ; x++) {
     for (y = 0; y < h_mid; y++) {
       std::swap(data_[y * height_ + x], data_[(y + h_mid) * height_ + (x + w_mid)]);
@@ -61,8 +65,6 @@ void ComplexImage::save_magnitude_image(const char* filename) const {
   Image image(width_, height_, 24);
   int i, j, mag;
   i = j = mag = 0;
-  uint8_t r, g, b, a;
-  r = g = b = a = 0;
 
   double maxabs = 0.0;
 
@@ -73,47 +75,48 @@ void ComplexImage::save_magnitude_image(const char* filename) const {
       }
     }
   }
-  const double logconstant = static_cast<double>(255) / log (1 + maxabs);
 
+  const double logconstant = static_cast<double>(255) / std::log(1 + maxabs);
 
+# pragma omp parallel for private(j)
   for (i = 0; i < width_; i++) {
     for (j = 0; j < height_; j++) {
-      mag = logconstant * log(1 + std::abs(this->get_pixel(i, j)));
-      r = b = g = mag;
+      uint8_t val = trunc(logconstant * std::log(1 + std::abs(this->get_pixel(i, j))));
       image.set_pixel(i, j, SDL_MapRGB(image.get_surface()->format,
-                         trunc(r), trunc(g), trunc(b)));
+                         val, val, val));
     }
   }
+
   image.save(filename);
 }
 
 void ComplexImage::save_phase_shift_image(const char* filename) const {
 
   Image image(width_, height_, 24);
-  int i, j, mag;
-  i = j = mag = 0;
-  uint8_t r, g, b, a;
-  r = g = b = a = 0;
+  int i, j;
+  i = j = 0;
 
+# pragma omp parallel for private(j)
   for (i = 0; i < width_; i++) {
     for (j = 0; j < height_; j++) {
-      mag = log(std::arg(this->get_pixel(i, j)) / 2 / M_PI * 255);
-      r = b = g = mag;
+      uint8_t arg = trunc(std::log(std::arg(this->get_pixel(i, j)) / 2 / M_PI * 255));
       image.set_pixel(i, j, SDL_MapRGB(image.get_surface()->format,
-                         trunc(r), trunc(g), trunc(b)));
+                         arg, arg, arg));
     }
   }
+
   image.save(filename);
 }
 
 void ComplexImage::updateImage() {
   int i, j;
-  uint8_t r, g, b;
+
+# pragma omp parallel for private(j)
   for (i = 0; i < width_; i++) {
     for (j = 0; j < height_; j++) {
-      r = g = b = static_cast<uint8_t>(this->get_pixel(i, j).real());
+      uint8_t r = static_cast<uint8_t>(this->get_pixel(i, j).real());
       orgimg->set_pixel(i, j, SDL_MapRGB(orgimg->get_surface()->format,
-            r, g, b));
+            r, r, r));
     }
   }
 }
