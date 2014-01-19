@@ -92,7 +92,11 @@ class Parser{
         bool setThreshold();
         int getTrescholdValue();
 
+        bool useFreqDomain();
         bool setDFT();
+        bool setFFT();
+
+
 };
 
 #endif

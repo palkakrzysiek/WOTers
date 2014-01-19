@@ -1,84 +1,51 @@
-#include "DFT.h"
+#include "FreqDomain.h"
 #include <cmath>
-#include <complex>
 #include <algorithm>
 #include <iostream>
+#include <utility>      // std::move (objects)
 
-void DFT::perform(Image &image)
+void FreqDomain::DFT(bool inverse)
 {
-  int w = image.get_surface()->w;
-  int h = image.get_surface()->h;
+  int w = cimg->getWidth();
+  int h = cimg->getHeight();
+  printf("%d, %d\n", w, h);
+  int i, j, k, l;
+  uint8_t r, g, b;
+  std::complex<double> currentFreq;
+  const auto J = std::complex<double>(0, 1);
+  const double demdiv = 1.0 / (w*h);
+  const double twoPi = 2.0 * M_PI;
+  const auto eConst = static_cast<double>((inverse?1:-1)) * J * twoPi;
+  ComplexImage temp(w, h);
 
-  Image copy(image);
-
-  std::complex<double> imaginary_unit(0.0, 1.0);
-
-  int i, j;
-
-  // first 1D iteration
-  // # pragma omp parallel for private(j)
-  for (i = 0; i < w; ++i)
-  {
-    for (j = 0; j < h; ++j)
-    {
-      uint8_t r, g, b;
-      std::complex<double> r2, g2, b2;
-
-      for (int k = 0; k < w; ++k)
-      {
-        SDL_GetRGB(image.get_pixel(k, j), image.get_surface()->format,
-                   &r, &g, &b);
-
-        std::complex<double> e = std::exp(imaginary_unit * std::complex<double>(-2.0 *
-                                          M_PI * (double) i * k / w));
-
-        r2 += std::complex<double>(r, 0.0) * e;
-        g2 += std::complex<double>(g, 0.0) * e;
-        b2 += std::complex<double>(b, 0.0) * e;
-      }
-
-      copy.set_pixel(i, j, SDL_MapRGB(copy.get_surface()->format,
-                     trunc(std::abs(r2)),
-                     trunc(std::abs(g2)),
-                     trunc(std::abs(b2))));
-    }
+  if (inverse) {
+    cimg->swap_squares();
   }
 
-  image = std::move(copy);
-//   Image copy2(copy);
-
-  // second  1D operation
-// # pragma omp parallel for private(j)
-  for (j = 0; j < h; ++j)
-  {
-    for (i = 0; i < w; ++i)
-    {
-      uint8_t r, g, b;
-      std::complex<double> r2, g2, b2;
-
-      for (int k = 0; k < h; ++k)
-      {
-        SDL_GetRGB(image.get_pixel(i, k), image.get_surface()->format,
-                   &r, &g, &b);
-
-        std::complex<double> e = std::exp(imaginary_unit * std::complex<double>(-2.0 *
-                                          M_PI * (double) i * k / h));
-
-        r2 += std::complex<double>(r, 0.0) * e;
-        g2 += std::complex<double>(g, 0.0) * e;
-        b2 += std::complex<double>(b, 0.0) * e;
+  for (i = 0; i < w; i++) {
+    for (j = 0; j < h; j++) {
+      currentFreq = std::complex<double>(0, 0);
+      //printf("%f\n", std::abs(cimg->get_pixel(i, j)));
+      for (k = 0; k < w; k++) {
+        for (l = 0; l < h; l++) {
+          currentFreq += cimg->get_pixel(k, l) *
+                         exp(eConst * static_cast<double>(static_cast<double>(i)*k/w + static_cast<double>(j)*l/h));
+        }
       }
 
-      std::cout << "Setting pixel (" << i << ", " << j << ")" << std::endl;
-
-      copy.set_pixel(i, j, SDL_MapRGB(copy.get_surface()->format,
-                     trunc(std::abs(r2)),
-                     trunc(std::abs(g2)),
-                     trunc(std::abs(b2))));
-
-      std::cout << "-----" << std::endl;
+      if (!inverse) {
+        currentFreq *= demdiv;
+      }
+      temp.set_pixel(i, j, currentFreq);
     }
   }
+  *cimg = std::move(temp);
+    if (!inverse) {
+    cimg->swap_squares();
+    cimg->save_magnitude_image("mag.bmp");
+    cimg->save_phase_shift_image("pshift.bmp");
+  } else {
+    cimg->updateImage();
+  }
 
-  image = std::move(copy);
 }

@@ -1,6 +1,7 @@
 #include "Image.h"
 #include "Parser.h"
 #include "Operations.h"
+#include "FreqDomain.h"
 #include "Histogram.h"
 #include <iostream>
 #include <string>
@@ -148,8 +149,17 @@ int main(int argc, char** argv)
     o = new RaleighFPDF(channel, p.getRaleighMinMax());
   }
 
-  if (p.setDFT()) {
-    o = new DFT();
+  if (p.useFreqDomain()) {
+    FreqDomain freqplane(img);
+    printf("complex plane created\n" );
+    if (p.setDFT()) {
+      freqplane.DFT();
+    }
+    //if (p.setIDFT()) {
+      freqplane.IDFT();
+      img.save(p.getOutFilename());
+    //}
+    imageChanged = false;
   }
 
   double result = 0.0;

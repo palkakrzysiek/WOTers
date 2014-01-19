@@ -73,7 +73,8 @@ Parser::Parser(int &argc, char** argv)
     ("rgrow", po::value<int>(), "Region growing, seed as parameter")
     ("threshold", po::value<int>(), "Border of threshold")
 
-    ("dft", "DFT");
+    ("dft", "DFT")
+    ("fft", "FFT");
 
 
   try
@@ -457,4 +458,14 @@ int Parser::getMask()
 bool Parser::setDFT()
 {
   return vm.count("dft");
+}
+
+bool Parser::setFFT()
+{
+  return vm.count("fft");
+}
+
+bool Parser::useFreqDomain()
+{
+  return this->setDFT() || this->setFFT();
 }

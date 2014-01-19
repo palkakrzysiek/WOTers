@@ -2,11 +2,11 @@
 #define __DFT_H__
 
 #include "Operation.h"
+#include "ComplexImage.h"
 
-class DFT : public Operation
-{
+class DFT {
 public:
-  void perform(Image &image);
+  ComplexImage DFT(Image &image, bool inverse = false);
 };
 
 #endif
