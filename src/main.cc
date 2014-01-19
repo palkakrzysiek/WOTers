@@ -150,11 +150,13 @@ int main(int argc, char** argv)
   }
 
   if (p.useFreqDomain()) {
-    FreqDomain freqplane(img);
-    printf("complex plane created\n" );
+    FreqDomain freqplane(&img);
     if (p.setDFT()) {
       freqplane.DFT();
     }
+    freqplane.save_magnitude_spectrum("mag.bmp");
+    freqplane.save_phase_shift_spectrum("phase_shift.bmp");
+
     //if (p.setIDFT()) {
       freqplane.IDFT();
       img.save(p.getOutFilename());
