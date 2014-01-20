@@ -106,7 +106,9 @@ void ComplexImage::save_phase_shift_image(const char* filename) const {
 # pragma omp parallel for private(j)
   for (i = 0; i < width_; i++) {
     for (j = 0; j < height_; j++) {
-      uint8_t arg = trunc(std::log(std::arg(this->get_pixel(i, j)) / 2 / M_PI * 255));
+      uint8_t arg;
+      // std::arg returns values in range [-pi:pi]
+      arg = trunc(std::arg(this->get_pixel(i, j)) / M_PI * 128 + 128);
       image.set_pixel(i, j, SDL_MapRGB(image.get_surface()->format,
                          arg, arg, arg));
     }
