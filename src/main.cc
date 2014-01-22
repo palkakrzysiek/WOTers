@@ -151,14 +151,18 @@ int main(int argc, char** argv)
 
   if (p.useFreqDomain()) {
     FreqDomain freqplane(&img);
-    if (p.setDFT()) {
-      freqplane.DFT();
+    if (p.useFreqDomain()) {
+      if (p.setDFT()) {
+        freqplane.DFT();
+      } else {
+        freqplane.FFT();
+      }
     }
     freqplane.save_magnitude_spectrum("mag.bmp");
     freqplane.save_phase_shift_spectrum("phase_shift.bmp");
 
     //if (p.setIDFT()) {
-      freqplane.IDFT();
+      freqplane.IFFT();
       img.save(p.getOutFilename());
     //}
     imageChanged = false;
