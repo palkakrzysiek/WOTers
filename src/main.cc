@@ -161,10 +161,33 @@ int main(int argc, char** argv)
     freqplane.save_magnitude_spectrum("mag.bmp");
     freqplane.save_phase_shift_spectrum("phase_shift.bmp");
 
-    //if (p.setIDFT()) {
+    if (p.setFDHighPass()) {
+    	freqplane.highPass(p.getFDHighPass());
+  	}
+	if (p.setFDLowPass()) {
+    	freqplane.lowPass(p.getFDLowPass());
+  	}
+ 	if (p.setFDBandPass()) {
+    	freqplane.bandPass(p.getFDBandPass().first, p.getFDBandPass().second);
+  	}
+ 	if (p.setFDBandCut()) {
+    	freqplane.bandCut(p.getFDBandCut().first, p.getFDBandCut().second);
+  	}
+ 	if (p.setFDDirectedHighPass()) {
+    	freqplane.directedHighPass(p.getFDDirectedHighPass().first, p.getFDDirectedHighPass().second);
+  	}
+ 	if (p.setFDPhaseModify()) {
+    	freqplane.phaseModify(p.getFDPhaseModify().first, p.getFDPhaseModify().second);
+  	}
+    freqplane.save_magnitude_spectrum("mag_filtered.bmp");
+    freqplane.save_phase_shift_spectrum("phase_shift_filtered.bmp");
+
+    if (p.setDFT()) {
+      freqplane.IDFT();
+    } else {
       freqplane.IFFT();
-      img.save(p.getOutFilename());
-    //}
+    }
+    img.save(p.getOutFilename());
     imageChanged = false;
   }
 

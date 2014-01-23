@@ -73,8 +73,16 @@ Parser::Parser(int &argc, char** argv)
     ("rgrow", po::value<int>(), "Region growing, seed as parameter")
     ("threshold", po::value<int>(), "Border of threshold")
 
-    ("dft", "DFT")
-    ("fft", "FFT");
+
+    ("fdhpass", po::value<double>(), "High-pass filter (low-cut filter) [radius]")
+    ("fdlpass", po::value<double>(), "Low-pass filter (high-cut filter) [radius]")
+    ("fdbpass", po::value<std::vector<double>>()->multitoken(), "Band-pass filter [radius, radius]")
+    ("fdbcut", po::value<std::vector<double>>()->multitoken(), "Band-cut filter [radius, radius]")
+    ("fddhpass", po::value<std::vector<double>>()->multitoken(), "FD: High-pass filter with detection of edge direction [0.0:360.0, 0.0:180.0]")
+    ("fdpmod", po::value<std::vector<int>>()->multitoken(), "FD: phase modify [x, y]")
+
+    ("dft", "use DFT method")
+    ("fft", "use FFT (default)");
 
 
   try
@@ -465,7 +473,106 @@ bool Parser::setFFT()
   return vm.count("fft");
 }
 
+bool Parser::setFDHighPass()
+{
+  return vm.count("fdhpass");
+}
+
+double Parser::getFDHighPass()
+{
+  double val = vm["fdhpass"].as<double>();
+  return val;
+}
+
+bool Parser::setFDLowPass()
+{
+  return vm.count("fdlpass");
+}
+
+double Parser::getFDLowPass()
+{
+  double val = vm["fdlpass"].as<double>();
+  return val;
+}
+
+bool Parser::setFDBandPass()
+{
+  return vm.count("fdbpass");
+}
+
+
+std::pair<double, double> Parser::getFDBandPass()
+{
+  auto vect = vm["fdbpass"].as<std::vector<double>>();
+
+  if (vect.size() != 2)
+  {
+    std::cerr << "You must specify range" << std::endl;
+    exit(1);
+  }
+
+  return std::make_pair(vect[0], vect[1]);
+}
+
+bool Parser::setFDBandCut()
+{
+  return vm.count("fdbcut");
+}
+
+
+std::pair<double, double> Parser::getFDBandCut()
+{
+  auto vect = vm["fdbcut"].as<std::vector<double>>();
+
+  if (vect.size() != 2 /* && 0 <= value <= 255 */)
+  {
+    std::cerr << "You must specify range" << std::endl;
+    exit(1);
+  }
+
+  return std::make_pair(vect[0], vect[1]);
+}
+
+
+bool Parser::setFDDirectedHighPass()
+{
+  return vm.count("fddhpass");
+}
+
+std::pair<double, double> Parser::getFDDirectedHighPass()
+{
+  auto vect = vm["fddhpass"].as<std::vector<double>>();
+
+  if (vect.size() != 2 /* && 0 <= value <= 255 */)
+  {
+    std::cerr << "You must specify angle and width" << std::endl;
+    exit(1);
+  }
+
+  return std::make_pair(vect[0], vect[1]);
+}
+
+bool Parser::setFDPhaseModify()
+{
+  return vm.count("fdpmod");
+}
+
+std::pair<int, int> Parser::getFDPhaseModify()
+{
+  auto vect = vm["fdpmod"].as<std::vector<int>>();
+
+  if (vect.size() != 2 /* && 0 <= value <= 255 */)
+  {
+    std::cerr << "You must specify 2 parameters" << std::endl;
+    exit(1);
+  }
+
+  return std::make_pair(vect[0], vect[1]);
+}
+
 bool Parser::useFreqDomain()
 {
-  return this->setDFT() || this->setFFT();
+  return this->setDFT() || this->setFFT() || this->setFDPhaseModify() ||
+         this->setFDDirectedHighPass() || this->setFDBandCut() ||
+         this->setFDBandPass() || this->setFDHighPass() || this->setFDLowPass();
 }

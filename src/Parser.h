@@ -96,6 +96,18 @@ class Parser{
         bool setDFT();
         bool setFFT();
 
+        bool setFDLowPass();
+        double getFDLowPass();
+        bool setFDHighPass();
+        double getFDHighPass();
+        bool setFDBandPass();
+        std::pair<double, double> getFDBandPass();
+        bool setFDBandCut();
+        std::pair<double, double> getFDBandCut();
+        bool setFDDirectedHighPass();
+        std::pair<double, double> getFDDirectedHighPass();
+        bool setFDPhaseModify();
+        std::pair<int, int> getFDPhaseModify();
 
 };
 

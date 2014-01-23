@@ -1,0 +1,11 @@
+34.
+1. Label first vertex e.g. L(A) = 0
+2. Note lengths to neighbor vertexes e.g.
+    L(B) = 3
+    L(C) = 5
+    L(D) = 4
+3. Label vertex with the smallest length (in this case L(B))
+    If this vertex is already noted, but with greater distance -- cross it out
+4. Repeat step 2, but do not check vertexes that are already labeled.
+5. If you label last vertex (in this case L(Z)), then length assigned to it is the shortest path.
+

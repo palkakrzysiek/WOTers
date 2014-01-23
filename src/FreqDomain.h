@@ -17,6 +17,13 @@ public:
   void save_magnitude_spectrum(const char* c) {cimg->save_magnitude_image(c);}
   void save_phase_shift_spectrum(const char* c) {cimg->save_phase_shift_image(c);}
 
+  void lowPass(double);
+  void highPass(double);
+  void bandPass(double, double);
+  void bandCut(double, double);
+  void directedHighPass(double, double);
+  void phaseModify(int, int);
+
 private:
   Image *orgimg;
   ComplexImage *cimg;
