@@ -57,7 +57,7 @@ void FreqDomain::bandCut(double r1, double r2) {
   }
 }
 
-void FreqDomain::directedHighPass(double an, double ra) {
+void FreqDomain::directed(double an, double ra) {
   int i, j, w, h;
   w = cimg->getWidth();
   h = cimg->getHeight();
@@ -76,12 +76,41 @@ void FreqDomain::directedHighPass(double an, double ra) {
 
 
       if ( !((angle - range)%360 < carg%360 && carg%360 < (angle + range)%360) &&
-           !((angle - range)%360 < csym%360 && csym%360 < (angle + range)%360) ) {
+           !((angle - range)%360 < csym%360 && csym%360 < (angle + range)%360) &&
+           !(i == w/2 && j == h/2) ) {
         cimg->set_pixel(i, j, 0, 0);
       }
     }
   }
 }
+
+
+//void FreqDomain::directed(double an, double ra) {
+  //int i, j, w, h;
+  //w = cimg->getWidth();
+  //h = cimg->getHeight();
+  //int angle = an;
+  //int range = ra;
+  //angle = (((angle+180)%360) - 180);
+  //range = (range%180);
+  //int carg, csym;
+  //for (i = 0; i < w; i++) {
+    //for (j = 0; j < h; j++) {
+      //carg = (M_PI+std::arg(std::complex<double>(i - w/2, h - j - h/2)))/M_PI*180;
+      //csym = (carg + 180) % 180;
+      //if ( !((angle - range)%180 < carg && carg < (angle + range)%180) &&
+           //!((angle - range)%180 < csym && csym < (angle + range)%180) &&
+           //!(i == w/2 && j == h/2)) {
+        //cimg->set_pixel(i, j, 0, 0);
+      //}
+    //}
+  //}
+//}
+
+
+
+
+
 
 void FreqDomain::phaseModify(int l, int k) {
   int n, m, w, h;

@@ -173,12 +173,12 @@ int main(int argc, char** argv)
  	if (p.setFDBandCut()) {
     	freqplane.bandCut(p.getFDBandCut().first, p.getFDBandCut().second);
   	}
- 	if (p.setFDDirectedHighPass()) {
-    	freqplane.directedHighPass(p.getFDDirectedHighPass().first, p.getFDDirectedHighPass().second);
+ 	if (p.setFDDirected()) {
+    	freqplane.directed(p.getFDDirected().first, p.getFDDirected().second);
   	}
  	if (p.setFDPhaseModify()) {
     	freqplane.phaseModify(p.getFDPhaseModify().first, p.getFDPhaseModify().second);
-  	}
+    }
     freqplane.save_magnitude_spectrum("mag_filtered.bmp");
     freqplane.save_phase_shift_spectrum("phase_shift_filtered.bmp");
 

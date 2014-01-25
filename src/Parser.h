@@ -104,8 +104,8 @@ class Parser{
         std::pair<double, double> getFDBandPass();
         bool setFDBandCut();
         std::pair<double, double> getFDBandCut();
-        bool setFDDirectedHighPass();
-        std::pair<double, double> getFDDirectedHighPass();
+        bool setFDDirected();
+        std::pair<double, double> getFDDirected();
         bool setFDPhaseModify();
         std::pair<int, int> getFDPhaseModify();
 

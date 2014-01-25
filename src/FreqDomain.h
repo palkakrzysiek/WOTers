@@ -21,7 +21,7 @@ public:
   void highPass(double);
   void bandPass(double, double);
   void bandCut(double, double);
-  void directedHighPass(double, double);
+  void directed(double, double);
   void phaseModify(int, int);
 
 private:

@@ -78,7 +78,7 @@ Parser::Parser(int &argc, char** argv)
     ("fdlpass", po::value<double>(), "Low-pass filter (high-cut filter) [radius]")
     ("fdbpass", po::value<std::vector<double>>()->multitoken(), "Band-pass filter [radius, radius]")
     ("fdbcut", po::value<std::vector<double>>()->multitoken(), "Band-cut filter [radius, radius]")
-    ("fddhpass", po::value<std::vector<double>>()->multitoken(), "FD: High-pass filter with detection of edge direction [0.0:360.0, 0.0:180.0]")
+    ("fddirected", po::value<std::vector<double>>()->multitoken(), "FD: Filter with directed angle [0.0:360.0, 0.0:180.0]")
     ("fdpmod", po::value<std::vector<int>>()->multitoken(), "FD: phase modify [x, y]")
 
     ("dft", "use DFT method")
@@ -534,14 +534,14 @@ std::pair<double, double> Parser::getFDBandCut()
 }
 
 
-bool Parser::setFDDirectedHighPass()
+bool Parser::setFDDirected()
 {
-  return vm.count("fddhpass");
+  return vm.count("fddirected");
 }
 
-std::pair<double, double> Parser::getFDDirectedHighPass()
+std::pair<double, double> Parser::getFDDirected()
 {
-  auto vect = vm["fddhpass"].as<std::vector<double>>();
+  auto vect = vm["fddirected"].as<std::vector<double>>();
 
   if (vect.size() != 2 /* && 0 <= value <= 255 */)
   {
@@ -573,6 +573,6 @@ std::pair<int, int> Parser::getFDPhaseModify()
 bool Parser::useFreqDomain()
 {
   return this->setDFT() || this->setFFT() || this->setFDPhaseModify() ||
-         this->setFDDirectedHighPass() || this->setFDBandCut() ||
+         this->setFDDirected() || this->setFDBandCut() ||
          this->setFDBandPass() || this->setFDHighPass() || this->setFDLowPass();
 }
