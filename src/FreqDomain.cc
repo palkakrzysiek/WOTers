@@ -57,55 +57,30 @@ void FreqDomain::bandCut(double r1, double r2) {
   }
 }
 
-void FreqDomain::directed(double an, double ra) {
+void FreqDomain::directed(double angle, double range) {
+
+  // http://stackoverflow.com/questions/9505862/shortest-distance-between-two-degree-marks-on-a-circle
+  auto distance = [](double first, double second)->double{
+      return 180.0 - std::fabs(std::fmod(std::fabs(first - second), 360.0) - 180.0);
+  };
+
   int i, j, w, h;
   w = cimg->getWidth();
   h = cimg->getHeight();
-  int angle = an;
-  int range = ra;
-  //angle = (((angle+180)%360) - 180);
-  angle = (angle+180) % 360;
-  range = (range%360);
-  int carg, csym;
+
+  double carg;
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
       carg = (M_PI+std::arg(std::complex<double>(i - w/2, h - j - h/2)))/M_PI*180;
-      //carg %= 360;
-      csym = (carg + 180);
-
-
-
-      if ( !((angle - range)%360 < carg%360 && carg%360 < (angle + range)%360) &&
-           !((angle - range)%360 < csym%360 && csym%360 < (angle + range)%360) &&
+      if ( !(distance(carg, angle) < range) &&
+           // for symmetry
+           !(distance(carg, angle + 180.0) < range) &&
            !(i == w/2 && j == h/2) ) {
         cimg->set_pixel(i, j, 0, 0);
       }
     }
   }
 }
-
-
-//void FreqDomain::directed(double an, double ra) {
-  //int i, j, w, h;
-  //w = cimg->getWidth();
-  //h = cimg->getHeight();
-  //int angle = an;
-  //int range = ra;
-  //angle = (((angle+180)%360) - 180);
-  //range = (range%180);
-  //int carg, csym;
-  //for (i = 0; i < w; i++) {
-    //for (j = 0; j < h; j++) {
-      //carg = (M_PI+std::arg(std::complex<double>(i - w/2, h - j - h/2)))/M_PI*180;
-      //csym = (carg + 180) % 180;
-      //if ( !((angle - range)%180 < carg && carg < (angle + range)%180) &&
-           //!((angle - range)%180 < csym && csym < (angle + range)%180) &&
-           //!(i == w/2 && j == h/2)) {
-        //cimg->set_pixel(i, j, 0, 0);
-      //}
-    //}
-  //}
-//}
 
 
 
