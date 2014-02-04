@@ -23,12 +23,6 @@ void FreqDomain::fft1d(std::vector<std::complex<double>> *in, bool inverse) {
   int i, j, k, delta, twiddle_factor;
   std::complex<double> W_N, W, t_0, t_1;
 
-  //if (inverse) {
-    //for (i = 0; i < N; i++) {
-      //(*in)[i] = std::complex<double>((*in)[i].imag(), (*in)[i].real());
-    //}
-  //}
-
   delta = N/2; // distance between top and bootom part of "butterfly's wing"
   W_N = std::exp(eConst / static_cast<double>(N));
   for (i = 1; i <= log2(N) ; i++) { // for every stage

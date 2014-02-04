@@ -7,7 +7,7 @@ void FreqDomain::lowPass(double r) {
   h = cimg->getHeight();
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
-      if (pow(i - w/2,2) + pow(j - h/2, 2) > r*r) {
+      if (pow(i - w/2, 2) + pow(j - h/2, 2) > r*r) {
         cimg->set_pixel(i, j, 0, 0);
       }
     }
@@ -20,7 +20,7 @@ void FreqDomain::highPass(double r) {
   h = cimg->getHeight();
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
-      if (pow(i - w/2,2) + pow(j - h/2, 2) < r*r && !(i == w/2 && j == h/2)) {
+      if (pow(i - w/2, 2) + pow(j - h/2, 2) < r*r && !(i == w/2 && j == h/2)) {
         cimg->set_pixel(i, j, 0, 0);
       }
     }
@@ -34,8 +34,8 @@ void FreqDomain::bandPass(double r1, double r2) {
   h = cimg->getHeight();
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
-      if ((pow(i - w/2,2) + pow(j - h/2, 2) < r1*r1 && !(i == w/2 && j == h/2)) ||
-          (pow(i - w/2,2) + pow(j - h/2, 2) > r2*r2)) {
+      if ((pow(i - w/2, 2) + pow(j - h/2, 2) < r1*r1 && !(i == w/2 && j == h/2)) ||
+          (pow(i - w/2, 2) + pow(j - h/2, 2) > r2*r2)) {
         cimg->set_pixel(i, j, 0, 0);
       }
     }
@@ -49,8 +49,8 @@ void FreqDomain::bandCut(double r1, double r2) {
   h = cimg->getHeight();
   for (i = 0; i < w; i++) {
     for (j = 0; j < h; j++) {
-      if ((pow(i - w/2,2) + pow(j - h/2, 2) > r1*r1) &&
-          (pow(i - w/2,2) + pow(j - h/2, 2) < r2*r2)) {
+      if ((pow(i - w/2, 2) + pow(j - h/2, 2) > r1*r1) &&
+          (pow(i - w/2, 2) + pow(j - h/2, 2) < r2*r2)) {
         cimg->set_pixel(i, j, 0, 0);
       }
     }
@@ -81,11 +81,6 @@ void FreqDomain::directed(double angle, double range) {
     }
   }
 }
-
-
-
-
-
 
 void FreqDomain::phaseModify(int l, int k) {
   int n, m, w, h;

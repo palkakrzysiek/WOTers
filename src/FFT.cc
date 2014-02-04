@@ -16,6 +16,10 @@ void FreqDomain::FFT(bool inverse)
     cimg->swap_squares();
   }
 
+  if (w != h) {
+    std::cerr << "width should be equal to height";
+    exit(1);
+  }
   if ((w<2 || w&(w-1)) || (h<2 || h&(h-1))) {
     std::cerr << "width and height must be power of 2";
     exit(1);
