@@ -61,11 +61,10 @@ void Resize::perform(Image &image)
   // manually copying the palette
   if (image.get_surface()->format->BitsPerPixel <= 8)
   {
-    SDL_SetPalette(sptr,
-                   SDL_LOGPAL | SDL_PHYSPAL,
-                   &*image.get_surface()->format->palette->colors,
-                   0,
-                   image.get_surface()->format->palette->ncolors);
+    SDL_SetPaletteColors(sptr->format->palette,
+                         &*image.get_surface()->format->palette->colors,
+                         0,
+                         image.get_surface()->format->palette->ncolors);
   }
 
   Image resized(sptr);

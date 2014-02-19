@@ -206,8 +206,16 @@ uint32_t Image::get_pixel(int x, int y)
 
 void Image::perform_operation(Operation *t)
 {
+  if (SDL_MUSTLOCK(surface)) {
+    SDL_LockSurface(surface);
+  }
+
   t->perform(*this);
   delete t;
+
+  if (SDL_MUSTLOCK(surface)) {
+    SDL_UnlockSurface(surface);
+  }
 }
 
 bool Image::grayscale() const
