@@ -26,8 +26,8 @@ Parser::Parser(int &argc, char** argv)
     ("Hflip", "Horizontal Flip")
     ("Vflip", "Vertical Flip")
     ("Dflip", "Diagonal Flip")
-    ("resize,r", po::value<double>(),
-     "resize by percent of original image [greater then 0]")
+    ("resize,r", po::value<std::vector<double>>()->multitoken(),
+     "resize [scale | width, height]")
 
     ("alpha", po::value<int>(), "Alpha Trimmed Mean Filter [0, 2, 4, 6, 8]")
     ("cmean", po::value<double>(), "contraharmonic mean filter [floating point value]")
@@ -105,13 +105,6 @@ Parser::Parser(int &argc, char** argv)
       exit(0);
     }
 
-    if ( vm.count("resize") && vm["resize"].as<double>() <= 0)
-    {
-      std::cout << "Value of resize argument must by positive! \n\
-        Command Line Image processing tool" << std::endl
-        << desc << std::endl;
-      exit(0);
-    }
     po::notify(vm); // throws on error, so do after help in case
     // there are any problems
   }
@@ -184,9 +177,22 @@ bool Parser::setResize()
 {
   return vm.count("resize");
 }
-double Parser::getResizeValue()
+
+std::tuple<double, int, int> Parser::getResizeValue()
 {
-  return vm["resize"].as<double>() / 100.0;
+  auto vect = vm["resize"].as<std::vector<double>>();
+
+  if (vect.size() == 1)
+  {
+    return std::make_tuple(vect[0] / 100.0, -1, -1);
+  }
+  else if (vect.size() != 2)
+  {
+    std::cerr << "Error: you must give width and height" << std::endl;
+    exit(1);
+  }
+
+  return std::make_tuple(-1.0, static_cast<int>(vect[0]), static_cast<int>(vect[1]));
 }
 
 bool Parser::setAlpha()

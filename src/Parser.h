@@ -1,8 +1,9 @@
 #ifndef __PARSER_H
 #define __PARSER_H
 
-#include "boost/program_options.hpp"
+#include <boost/program_options.hpp>
 #include <utility>
+#include <tuple>
 #include <vector>
 
 namespace
@@ -37,7 +38,7 @@ class Parser{
         bool setVflip();
         bool setDflip();
         bool setResize();
-        double getResizeValue();
+        std::tuple<double, int, int> getResizeValue();
 
         bool setAlpha();
         int getAlphaValue();

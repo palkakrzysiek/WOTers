@@ -1,14 +1,14 @@
 #ifndef __RESIZE_H__
 #define __RESIZE_H__
 
+#include <tuple>
 #include "Operation.h"
 
 class Resize : public Operation
 {
 public:
-  Resize(double scale);
-  Resize(int w, int h, bool kr = true);
-  
+  Resize(const std::tuple<double, int, int> &value);
+
   void perform(Image &image);
 
 private:

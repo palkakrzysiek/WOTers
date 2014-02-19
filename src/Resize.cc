@@ -1,16 +1,12 @@
 #include "Resize.h"
 #include <SDL.h>
-#include <utility>
 
-Resize::Resize(double scale)
-  :
-  scale_x(scale), scale_y(scale), width(0), height(0)
-{
-}
-
-Resize::Resize(int w, int h, bool kr)
-  :
-  width(w), height(h), keep_ratio(kr)
+Resize::Resize(const std::tuple<double, int, int> &value)
+  : scale_x(std::get<0>(value)),
+    scale_y(scale_x),
+    width(std::get<1>(value)),
+    height(std::get<2>(value)),
+    keep_ratio(false)
 {
 }
 
