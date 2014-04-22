@@ -1,11 +1,48 @@
-CXX=g++
+CXX?=g++
 CXXFLAGS=-g -O2 -march=native -std=c++11 -Wall -Wextra -pedantic -fopenmp
 MAIN_CFLAGS=
 LDFLAGS=-fopenmp
 SDL_CFLAGS := $(shell sdl2-config --cflags)
 SDL_LDFLAGS := $(shell sdl2-config --libs) -lSDL2_image
 BOOST_LDFLAGS=-lboost_program_options
-OBJECTS=main.o Parser.o Histogram.o Image.o Operation.o BrightnessAdjustment.o ContrastAdjustment.o DiagonalFlip.o VerticalFlip.o HorizontalFlip.o Negative.o Resize.o AlphaTrimmedMeanFilter.o ContraharmonicMeanFilter.o MeanSquareError.o PeakMeanSquareError.o SignalToNoiseRatio.o PeakSignalToNoiseRatio.o MaxDifference.o RaleighFPDF.o RosenfeldOperator.o LowPassFilter.o ConvertToGrayscale.o Binarize.o Erosion.o Dilation.o Opening.o Closing.o HMT.o Thinning.o RegionGrowing.o Pruning.o ComplexImage.o DFT.o FFT.o FFT1D.o FreqDomain.o
+OBJECTS= \
+	main.o \
+	Parser.o \
+	Histogram.o \
+	Image.o \
+	Operation.o \
+	BrightnessAdjustment.o \
+	ContrastAdjustment.o \
+	DiagonalFlip.o \
+	VerticalFlip.o \
+	HorizontalFlip.o \
+	Negative.o \
+	Resize.o \
+	AlphaTrimmedMeanFilter.o \
+	ContraharmonicMeanFilter.o \
+	MeanSquareError.o \
+	PeakMeanSquareError.o \
+	SignalToNoiseRatio.o \
+	PeakSignalToNoiseRatio.o \
+	MaxDifference.o \
+	RaleighFPDF.o \
+	RosenfeldOperator.o \
+	LowPassFilter.o \
+	ConvertToGrayscale.o \
+	Binarize.o \
+	Erosion.o \
+	Dilation.o \
+	Opening.o \
+	Closing.o \
+	HMT.o \
+	Thinning.o \
+	RegionGrowing.o \
+	Pruning.o \
+	ComplexImage.o \
+	DFT.o \
+	FFT.o \
+	FFT1D.o \
+	FreqDomain.o
 EXECUTABLE=imgproc
 
 all: $(OBJECTS) $(EXECUTABLE)
