@@ -1,5 +1,6 @@
 #include "Parser.h"
 #include "boost/program_options.hpp"
+#include <iostream>
 
 Parser::Parser(int &argc, char** argv)
   : desc("Options")

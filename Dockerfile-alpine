@@ -1,0 +1,9 @@
+FROM alpine:3.9
+
+RUN apk add --no-cache g++ make pkgconfig sdl2-dev sdl2_image-dev boost-dev
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN make -j4
