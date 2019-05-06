@@ -1,0 +1,10 @@
+version: "3"
+services:
+  imgproc_ubuntu:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-ubuntu
+  imgproc_alpine:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-alpine
